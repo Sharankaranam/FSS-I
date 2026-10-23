@@ -54,7 +54,7 @@ export const AcademicInspector: React.FC = () => {
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            9 IT2 Rule Rationales
+            12 IT2 Rule Rationales
           </button>
         </div>
       </div>
@@ -253,55 +253,73 @@ export const AcademicInspector: React.FC = () => {
               id={1}
               condition="Fatigue is Energized AND Stress is Relaxed AND Sleep is Restful"
               consequent="Low Load"
-              rationale="Physiological, emotional, and circadian drivers are all in homeostatic balance. Cognitive capacity is at peak, resulting in minimal cognitive load."
+              rationale="Homeostatic balance across physiological, emotional, and circadian drivers. Peak executive capacity guarantees minimal cognitive load."
             />
             <RuleCard
               id={2}
-              condition="Fatigue is Energized AND Stress is Pressured AND Task is Routine"
-              consequent="Moderate Load"
-              rationale="Vigor offsets deadline pressure when executing low-complexity tasks. Per Yerkes-Dodson law, mild arousal enhances throughput without causing cognitive overload."
+              condition="Fatigue is Energized AND Stress is Relaxed"
+              consequent="Low Load"
+              rationale="Baseline calm combined with optimal vigor preserves high cognitive reserves and low baseline load."
             />
             <RuleCard
               id={3}
-              condition="Fatigue is Drained AND Stress is Relaxed AND Task is Routine"
+              condition="Fatigue is Energized AND Stress is Pressured AND Task is Routine"
               consequent="Moderate Load"
-              rationale="Moderate fatigue reduces processing speed, but low stress and routine task demands prevent working memory bottlenecking."
+              rationale="Vigor offsets deadline pressure for routine task execution (Yerkes-Dodson optimal arousal zone)."
             />
             <RuleCard
               id={4}
-              condition="Fatigue is Drained AND Stress is Pressured"
-              consequent="Critical Load"
-              rationale="Dual strain: physical tiredness combined with emotional pressure creates a compounding cognitive tax, straining prefrontal cortex resources."
+              condition="Fatigue is Energized AND Sleep is Restful AND Task is Intense"
+              consequent="Moderate Load"
+              rationale="Peak physiological energy and complete slow-wave sleep recovery buffer against complex working memory demands."
             />
             <RuleCard
               id={5}
-              condition="Fatigue is Exhausted OR Stress is Overwhelmed"
-              consequent="Critical Load"
-              rationale="Single-point failure rule. Severe exhaustion (Samn-Perelli > 5) or acute emotional distress independently incapacitates executive functioning."
+              condition="Fatigue is Drained AND Stress is Relaxed"
+              consequent="Moderate Load"
+              rationale="Sub-threshold physical exhaustion mildly slows processing speed (15-25%), but low emotional stress keeps load manageable."
             />
             <RuleCard
               id={6}
-              condition="Sleep is Deprived AND Task is Intense"
-              consequent="Critical Load"
-              rationale="Sleep deprivation severely impairs synaptic plasticity and attentional control (Dawson & Reid). Attempting complex tasks under severe sleep debt guarantees error escalation."
+              condition="Sleep is Restless AND Task is Routine"
+              consequent="Moderate Load"
+              rationale="Sub-optimal sleep fragmentation causes minor attentional lapses, but low working-memory demand of routine tasks prevents overload."
             />
             <RuleCard
               id={7}
-              condition="Stress is Overwhelmed AND Task is Challenging"
+              condition="Fatigue is Drained AND Stress is Pressured"
               consequent="Critical Load"
-              rationale="High stress induces attentional tunnel vision. Paired with a challenging task, total mental demand far exceeds available working memory chunks."
+              rationale="Dual strain: physical tiredness and emotional urgency trigger prefrontal cortex hypofunction and compounding cognitive tax."
             />
             <RuleCard
               id={8}
-              condition="Fatigue is Drained AND Sleep is Restless AND Task is Challenging"
+              condition="Fatigue is Exhausted OR Stress is Overwhelmed"
               consequent="Critical Load"
-              rationale="Chronic sub-threshold fatigue and fragmented sleep erode mental resilience. A challenging task tips total cognitive workload past the breakdown threshold."
+              rationale="Single-point failure: severe exhaustion (Samn-Perelli > 5) or acute emotional distress independently incapacitates executive control."
             />
             <RuleCard
               id={9}
-              condition="Fatigue is Energized AND Sleep is Restful AND Task is Intense"
-              consequent="Moderate Load"
-              rationale="High physiological energy and full sleep recovery provide maximum cognitive buffer, enabling the user to handle intense tasks without entering burnout territory."
+              condition="Sleep is Deprived OR (Task is Intense AND Fatigue is Drained)"
+              consequent="Critical Load"
+              rationale="Severe sleep debt or attempting intense 5+ chunk tasks while physically drained forces immediate executive breakdown."
+            />
+            <RuleCard
+              id={10}
+              condition="Fatigue is Drained AND Sleep is Restless AND Task is Challenging"
+              consequent="Critical Load"
+              rationale="Triple sub-threshold debt: somatic tiredness, fragmented sleep, and high analytical demands overwhelm remaining cognitive reserve."
+            />
+            <RuleCard
+              id={11}
+              condition="Stress is Pressured AND Task is Intense"
+              consequent="Critical Load"
+              rationale="Cortisol-induced attentional narrowing paired with maximal working memory demand leads to acute cognitive overload."
+            />
+            <RuleCard
+              id={12}
+              condition="Sleep is Deprived"
+              consequent="Critical Load"
+              rationale="Direct critical trigger: prolonged sleep debt (>24h wakefulness) causes cognitive deficit equivalent to 0.10% BAC (Dawson & Reid, Nature)."
             />
           </div>
         </div>

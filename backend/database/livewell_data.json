@@ -1,0 +1,1970 @@
+{
+  "book_metadata": [
+    {
+      "id": 1,
+      "title": "LIVE WELL: 8 habits to highly effective Health and Happiness",
+      "subtitle": "A Modern Guide to Health, Longevity, and Disease Reversal",
+      "author": "Dr. Murthy Gokula, MD, CMD, Dip ABLM, Dip FAAARM",
+      "co_authors": "Laya Gokula, Vihana Shresta, Taarini Pappula, Neha Chanda",
+      "copyright_year": 2025,
+      "summary": "A clinical and lifestyle medicine guide integrating the Six Pillars of Lifestyle Medicine, the Nine Hallmarks of Longevity, the 8 steps of Ashtanga Yoga, and the 'MY GOAL DO IT' microhabits framework to prevent and reverse chronic disease."
+    }
+  ],
+  "lifestyle_pillars": [
+    {
+      "id": 1,
+      "pillar_number": 1,
+      "name": "Nutrition",
+      "summary": "Whole-food, plant-based diets rich in fiber, antioxidants, and colorful plants.",
+      "cellular_benefits": "Reverses insulin resistance, reduces systemic cytokines (NF-\u03baB, IL-6), feeds beneficial microbiome, and optimizes nutrient sensing.",
+      "clinical_evidence": "American College of Lifestyle Medicine (ACLM), Harvard Medical School lifestyle medicine curricula."
+    },
+    {
+      "id": 2,
+      "pillar_number": 2,
+      "name": "Physical Activity",
+      "summary": "Consistent daily movement combining aerobic activity (150 min/wk), strength training, and mobility.",
+      "cellular_benefits": "Rejuvenates mitochondria, stimulates stem cell mobilization, flushes damaged proteins (autophagy), and enhances insulin sensitivity.",
+      "clinical_evidence": "Aerobic + resistance training increases mitochondrial biogenesis (PGC-1\u03b1)."
+    },
+    {
+      "id": 3,
+      "pillar_number": 3,
+      "name": "Restorative Sleep",
+      "summary": "7\u20139 hours of continuous, restorative sleep supporting slow-wave and REM cycles.",
+      "cellular_benefits": "Maintains DNA repair mechanisms, protects telomere length, improves glymphatic brain waste clearance, and balances cortisol.",
+      "clinical_evidence": "Pittsburgh Sleep Quality Index (PSQI), Dawson & Reid sleep debt models."
+    },
+    {
+      "id": 4,
+      "pillar_number": 4,
+      "name": "Stress Management",
+      "summary": "Mindfulness, diaphragmatic breathwork (Pranayama), yoga, and vagal nerve activation.",
+      "cellular_benefits": "Lowers sympathetic overdrive, reduces HPA-axis cortisol spikes, protects prefrontal cortex executive control, and reduces DNA damage.",
+      "clinical_evidence": "Yerkes-Dodson arousal law, McEwen's allostatic load model."
+    },
+    {
+      "id": 5,
+      "pillar_number": 5,
+      "name": "Avoidance of Harmful Substances",
+      "summary": "Limiting alcohol, eliminating tobacco/vaping, and reducing environmental toxin exposure.",
+      "cellular_benefits": "Decreases toxic load on liver and kidneys, prevents DNA adducts and cellular senescence, and protects mitochondrial membranes.",
+      "clinical_evidence": "WHO and IARC environmental health guidelines."
+    },
+    {
+      "id": 6,
+      "pillar_number": 6,
+      "name": "Social Connection",
+      "summary": "Fostering meaningful, loving relationships and community belonging.",
+      "cellular_benefits": "Reduces loneliness, calms systemic inflammatory signaling, increases oxytocin, and enhances emotional resilience.",
+      "clinical_evidence": "Harvard Study of Adult Development (longest longitudinal health study)."
+    }
+  ],
+  "hallmarks_of_aging": [
+    {
+      "id": 1,
+      "hallmark_number": 1,
+      "name": "Genomic Instability",
+      "biological_mechanism": "Accumulation of DNA lesions and damage over time that impairs cellular transcription.",
+      "disease_reversal_strategy": "DNA repair support via sleep, stress reduction, and antioxidant plant compounds."
+    },
+    {
+      "id": 2,
+      "hallmark_number": 2,
+      "name": "Telomere Shortening",
+      "biological_mechanism": "Erosion of protective chromosome ends with successive cell divisions.",
+      "disease_reversal_strategy": "Preserving telomerase activity through stress reduction, restorative sleep, and plant-based nutrition."
+    },
+    {
+      "id": 3,
+      "hallmark_number": 3,
+      "name": "Epigenetic Alterations",
+      "biological_mechanism": "Inappropriate DNA methylation and histone modifications silencing health genes.",
+      "disease_reversal_strategy": "Folate, polyphenols, and lifestyle practices act as biochemical switches turning on longevity genes."
+    },
+    {
+      "id": 4,
+      "hallmark_number": 4,
+      "name": "Loss of Proteostasis",
+      "biological_mechanism": "Failure of protein folding and accumulation of damaged, toxic protein aggregates.",
+      "disease_reversal_strategy": "Exercise and intermittent fasting activate cellular autophagy to recycle damaged proteins."
+    },
+    {
+      "id": 5,
+      "hallmark_number": 5,
+      "name": "Deregulated Nutrient Sensing",
+      "biological_mechanism": "Insulin resistance, mTOR hyperactivation, and blunted AMPK/sirtuin signaling.",
+      "disease_reversal_strategy": "Low-glycemic whole food plant-based nutrition restores metabolic flexibility and insulin sensitivity."
+    },
+    {
+      "id": 6,
+      "hallmark_number": 6,
+      "name": "Mitochondrial Dysfunction",
+      "biological_mechanism": "Decreased ATP output and increased leak of damaging reactive oxygen species (ROS).",
+      "disease_reversal_strategy": "HIIT exercise, fasting, and cofactors (CoQ10, PQQ) trigger mitochondrial biogenesis."
+    },
+    {
+      "id": 7,
+      "hallmark_number": 7,
+      "name": "Cellular Senescence",
+      "biological_mechanism": "Permanently arrested 'zombie' cells secreting pro-inflammatory cytokines (SASP).",
+      "disease_reversal_strategy": "Exercise, polyphenols (quercetin, fisetin), and fasting induce clearance of senescent cells."
+    },
+    {
+      "id": 8,
+      "hallmark_number": 8,
+      "name": "Stem Cell Exhaustion",
+      "biological_mechanism": "Depletion of regenerative stem cell pools in bone marrow, gut, and brain.",
+      "disease_reversal_strategy": "Regular physical activity, restful sleep, and intermittent fasting stimulate stem cell renewal."
+    },
+    {
+      "id": 9,
+      "hallmark_number": 9,
+      "name": "Altered Intercellular Communication",
+      "biological_mechanism": "Systemic chronic 'inflammaging' and neuroendocrine signaling breakdown.",
+      "disease_reversal_strategy": "Anti-inflammatory nutrition, stress regulation, and social connection restore neuro-immune balance."
+    }
+  ],
+  "pillar_hallmark_map": [
+    {
+      "id": 1,
+      "pillar_id": 1,
+      "hallmark_id": 5,
+      "reversal_mechanism": "Mediterranean & WFPB diets restore insulin sensitivity and optimal nutrient sensing."
+    },
+    {
+      "id": 2,
+      "pillar_id": 1,
+      "hallmark_id": 3,
+      "reversal_mechanism": "Polyphenols and folate provide methyl donors for favorable epigenetic expression."
+    },
+    {
+      "id": 3,
+      "pillar_id": 1,
+      "hallmark_id": 6,
+      "reversal_mechanism": "Antioxidant-rich nutrition quenches ROS and fuels mitochondrial energy production."
+    },
+    {
+      "id": 4,
+      "pillar_id": 2,
+      "hallmark_id": 4,
+      "reversal_mechanism": "Muscle contraction activates proteasomal degradation and cellular autophagy."
+    },
+    {
+      "id": 5,
+      "pillar_id": 2,
+      "hallmark_id": 6,
+      "reversal_mechanism": "Aerobic and resistance exercise upregulates PGC-1\u03b1 for mitochondrial regeneration."
+    },
+    {
+      "id": 6,
+      "pillar_id": 2,
+      "hallmark_id": 7,
+      "reversal_mechanism": "Regular exercise clears senescent immune cells and reduces chronic SASP inflammation."
+    },
+    {
+      "id": 7,
+      "pillar_id": 2,
+      "hallmark_id": 8,
+      "reversal_mechanism": "Physical exertion mobilizes endothelial and mesenchymal stem cells for tissue repair."
+    },
+    {
+      "id": 8,
+      "pillar_id": 3,
+      "hallmark_id": 1,
+      "reversal_mechanism": "Deep delta-wave sleep allows enzymatic DNA repair and reduces oxidative double-strand breaks."
+    },
+    {
+      "id": 9,
+      "pillar_id": 3,
+      "hallmark_id": 2,
+      "reversal_mechanism": "Adequate sleep prevents accelerated telomere attrition from chronic fatigue."
+    },
+    {
+      "id": 10,
+      "pillar_id": 3,
+      "hallmark_id": 4,
+      "reversal_mechanism": "Glymphatic brain clearance during slow-wave sleep flushes out amyloid and misfolded proteins."
+    },
+    {
+      "id": 11,
+      "pillar_id": 4,
+      "hallmark_id": 1,
+      "reversal_mechanism": "Cortisol suppression prevents catecholamine-induced oxidative DNA breaks."
+    },
+    {
+      "id": 12,
+      "pillar_id": 4,
+      "hallmark_id": 3,
+      "reversal_mechanism": "Mindfulness and relaxation prevent adverse stress-induced histone modifications."
+    },
+    {
+      "id": 13,
+      "pillar_id": 4,
+      "hallmark_id": 9,
+      "reversal_mechanism": "Vagal nerve stimulation reduces systemic inflammation and normalizes cytokine communication."
+    },
+    {
+      "id": 14,
+      "pillar_id": 5,
+      "hallmark_id": 1,
+      "reversal_mechanism": "Eliminating carcinogens and toxins stops exogenous DNA adduct formation."
+    },
+    {
+      "id": 15,
+      "pillar_id": 5,
+      "hallmark_id": 6,
+      "reversal_mechanism": "Avoiding heavy metals and alcohol prevents mitochondrial membrane permeability transition."
+    },
+    {
+      "id": 16,
+      "pillar_id": 5,
+      "hallmark_id": 7,
+      "reversal_mechanism": "Reducing toxic burden slows the rate at which damaged somatic cells enter senescence."
+    },
+    {
+      "id": 17,
+      "pillar_id": 6,
+      "hallmark_id": 9,
+      "reversal_mechanism": "Social support suppresses pro-inflammatory transcription factors and promotes oxytocin."
+    },
+    {
+      "id": 18,
+      "pillar_id": 6,
+      "hallmark_id": 7,
+      "reversal_mechanism": "Positive relationships buffer social isolation-induced cellular senescence."
+    },
+    {
+      "id": 19,
+      "pillar_id": 6,
+      "hallmark_id": 8,
+      "reversal_mechanism": "Community emotional security supports immune competence and regenerative capacity."
+    }
+  ],
+  "habits_superpowers": [
+    {
+      "id": 1,
+      "habit_number": 1,
+      "superhero_name": "The Movement Master",
+      "domain": "Physical Activity Super Power",
+      "tagline": "Move your body every day for energy, strong muscles, and mental focus.",
+      "description": "Loves when you move your body daily! Whether walking, dancing, playing sports, or doing yoga, this superhero makes your heart stronger, muscles powerful, and brain sharper.",
+      "superpower_check_questions": "Can you move your body for at least 30 minutes every day? Do you feel strong and energetic?",
+      "morning_routine": "Do 10 jumping jacks or 5 minutes of mobility stretching to activate muscles.",
+      "meal_guidance": "Fuel post-exercise with plant proteins, legumes, and hydration.",
+      "evening_wind_down": "Spend 10 minutes gently moving or walking after dinner to thank your Movement Master.",
+      "synergistic_helpers": "Helps Gut Guardian (improves peristalsis), Energy Maker (creates mitochondria), Sleep Guardian (deepens delta sleep), and Stress Fighter (releases endorphins)."
+    },
+    {
+      "id": 2,
+      "habit_number": 2,
+      "superhero_name": "The Fuel Captain",
+      "domain": "Nutrition Super Power",
+      "tagline": "Feed your body vibrant, colorful whole plants to heal inflammation and stabilize blood sugar.",
+      "description": "In charge of all healthy food you eat. Loves colorful fruits, vegetables, healthy plant proteins, and healthy fats that make body and brain work in harmony.",
+      "superpower_check_questions": "Are you eating lots of colorful vegetables and fruits every day? Do you choose foods that make you feel nourished rather than sluggish?",
+      "morning_routine": "Drink a glass of warm lemon water and enjoy berries or oatmeal.",
+      "meal_guidance": "Feed your cells with a colorful rainbow plate: leafy greens, legumes, whole grains, and healthy fats like walnuts/flaxseed.",
+      "evening_wind_down": "Avoid heavy late-night snacking at least 3 hours before sleep.",
+      "synergistic_helpers": "Supports Gut Guardian (provides fiber for microbiome), Energy Maker (clean cellular fuel), Body Protector (detox antioxidants), and Stress Fighter (stable glucose prevents anxiety)."
+    },
+    {
+      "id": 3,
+      "habit_number": 3,
+      "superhero_name": "The Gut Guardian",
+      "domain": "Digestive Health Super Power",
+      "tagline": "Nurture your microbiome with prebiotics and fermented foods for immunity and mood.",
+      "description": "Protects your tummy and helps you absorb all essential nutrients. Directly connected to the brain via the gut-brain axis; produces over 80% of the body's serotonin for joy and calm.",
+      "superpower_check_questions": "Does your tummy feel comfortable after eating? Do you have regular, smooth bathroom visits? Is your mood calm and stable?",
+      "morning_routine": "Hydrate with clean water before morning meals to awaken digestive enzymes.",
+      "meal_guidance": "Include prebiotic foods (garlic, onion, leeks, asparagus) and fermented foods (kimchi, sauerkraut, kefir).",
+      "evening_wind_down": "Sip soothing chamomile or peppermint tea; allow the gut to rest overnight (12-hour fast).",
+      "synergistic_helpers": "Works with Fuel Captain (processes nutrients), Energy Maker (nutrient absorption), and Stress Fighter (regulates neurotransmitters and gut comfort)."
+    },
+    {
+      "id": 4,
+      "habit_number": 4,
+      "superhero_name": "The Energy Maker",
+      "domain": "Mitochondria Super Power",
+      "tagline": "Supercharge your cellular engines to produce clean ATP and all-day vitality.",
+      "description": "Lives inside every single cell turning fuel into ATP energy. When your mitochondria are healthy, you have boundless, steady energy without crashes.",
+      "superpower_check_questions": "Do you have steady energy throughout the day? Do you wake up feeling refreshed and ready to go?",
+      "morning_routine": "Get 5 minutes of morning sunlight in your eyes to sync mitochondrial circadian clocks.",
+      "meal_guidance": "Incorporate antioxidant cofactors: dark berries, green tea, cruciferous greens, and healthy fats.",
+      "evening_wind_down": "Avoid blue light exposure 1 hour before bed to prevent mitochondrial stress.",
+      "synergistic_helpers": "Strengthens Movement Master (fuels muscle output), Sleep Guardian (regulates energy cycles), and Body Protector (resists oxidative damage)."
+    },
+    {
+      "id": 5,
+      "habit_number": 5,
+      "superhero_name": "The Sleep Guardian",
+      "domain": "Rest & Recovery Super Power",
+      "tagline": "Protect 7\u20139 hours of deep sleep to repair DNA, balance hormones, and restore mental focus.",
+      "description": "Works tirelessly while you sleep to repair damaged tissues, clean metabolic waste from your brain (glymphatic wash), and reset your neuroendocrine clock.",
+      "superpower_check_questions": "Do you sleep 7\u20139 hours every night? Do you wake up rested and ready for the day?",
+      "morning_routine": "Wake up at the same consistent time every day; expose eyes to daylight.",
+      "meal_guidance": "Eat lighter evening meals; avoid caffeine after 12 PM and alcohol before bed.",
+      "evening_wind_down": "Wind down 30 minutes before bed: dim lights, read a physical book, practice 4-7-8 breathing.",
+      "synergistic_helpers": "Empowers Energy Maker (recharges cellular engines), Body Protector (boosts natural killer immune cells), and Stress Fighter (keeps amygdala reactive stress low)."
+    },
+    {
+      "id": 6,
+      "habit_number": 6,
+      "superhero_name": "The Stress Fighter",
+      "domain": "Mental Wellness Super Power",
+      "tagline": "Harness breathwork, yoga, and mindfulness to maintain calm and executive control.",
+      "description": "Teaches you to breathe deeply, think positive thoughts, and stay centered during life's pressures. Protects your prefrontal cortex from toxic cortisol spikes.",
+      "superpower_check_questions": "Do you have reliable ways to calm down when stressed? Can you focus clearly and maintain patience?",
+      "morning_routine": "Take 10 deep diaphragmatic breaths upon waking; write down 3 things you are grateful for.",
+      "meal_guidance": "Practice mindful eating without screens or rushing.",
+      "evening_wind_down": "Do 5 minutes of alternate nostril breathing or restorative yoga before bed.",
+      "synergistic_helpers": "Aids Sleep Guardian (calms sympathetic arousal), Gut Guardian (prevents stress-induced leaky gut), and Movement Master (prevents muscle tension)."
+    },
+    {
+      "id": 7,
+      "habit_number": 7,
+      "superhero_name": "The Connection Champion",
+      "domain": "Social Wellness Super Power",
+      "tagline": "Cultivate deep friendships, family bonds, and community service to live longer.",
+      "description": "Reminds you that genuine human connection is biological medicine. Loving relationships release oxytocin, lower blood pressure, and build lifelong resilience.",
+      "superpower_check_questions": "Do you have people in your life who care about you? Do you spend meaningful time with friends and family regularly?",
+      "morning_routine": "Send an encouraging message or express gratitude to a friend or loved one.",
+      "meal_guidance": "Share meals with family or colleagues without digital distraction.",
+      "evening_wind_down": "Connect with a partner or friend about your day; practice active empathetic listening.",
+      "synergistic_helpers": "Bolsters Stress Fighter (shared burdens reduce cortisol), Sleep Guardian (emotional peace aids rest), and Body Protector (social support boosts immune antibodies)."
+    },
+    {
+      "id": 8,
+      "habit_number": 8,
+      "superhero_name": "The Body Protector",
+      "domain": "Detox & Defense Super Power",
+      "tagline": "Shield your cells from chemicals, pesticides, and pollutants while supporting liver and kidney detox.",
+      "description": "Helps your liver, kidneys, skin, and immune system work together to filter out toxins, fight off infections, and keep your internal biological environment pristine.",
+      "superpower_check_questions": "Is your skin clear and healthy? Do you avoid smoking and excess alcohol? Does your body feel clean and resilient?",
+      "morning_routine": "Drink 16 oz of filtered water immediately upon waking to flush overnight metabolic waste.",
+      "meal_guidance": "Eat cruciferous vegetables (broccoli, cabbage, kale) and drink green tea to stimulate Phase I & II liver detox.",
+      "evening_wind_down": "Take an evening shower or dry brush skin; filter bedroom air.",
+      "synergistic_helpers": "Shields Gut Guardian (protects mucosal barrier), Energy Maker (prevents heavy metal mitochondrial poisoning), and Fuel Captain (absorbs clean nutrition)."
+    }
+  ],
+  "ashtanga_limbs": [
+    {
+      "id": 1,
+      "limb_number": 1,
+      "sanskrit_name": "Yama",
+      "english_name": "Ethical Discipline / Restraints",
+      "core_focus": "Harmonious social conduct, non-violence (Ahimsa), truthfulness, avoiding excess.",
+      "health_impact": "Reduces stress, supports social health, lowers chronic systemic inflammation.",
+      "pathway_type": "Health Transformation"
+    },
+    {
+      "id": 2,
+      "limb_number": 2,
+      "sanskrit_name": "Niyama",
+      "english_name": "Personal Observances",
+      "core_focus": "Self-discipline, purity/cleanliness (Saucha), gratitude, study, and positive routines.",
+      "health_impact": "Builds self-care habits, psychological resilience, and anti-inflammatory lifestyle adherence.",
+      "pathway_type": "Health Transformation"
+    },
+    {
+      "id": 3,
+      "limb_number": 3,
+      "sanskrit_name": "Asana",
+      "english_name": "Physical Postures",
+      "core_focus": "Conscious movement, flexibility, spinal mobility, and strength training.",
+      "health_impact": "Improves muscular strength, glucose uptake, mitochondrial biogenesis, and metabolic health.",
+      "pathway_type": "Health Transformation"
+    },
+    {
+      "id": 4,
+      "limb_number": 4,
+      "sanskrit_name": "Pranayama",
+      "english_name": "Breath Control",
+      "core_focus": "Rhythmic breath modulation (diaphragmatic, alternate nostril, box breathing).",
+      "health_impact": "Lowers sympathetic tone, stimulates vagus nerve, reduces cortisol, and optimizes heart rate variability.",
+      "pathway_type": "Health Transformation"
+    },
+    {
+      "id": 5,
+      "limb_number": 5,
+      "sanskrit_name": "Pratyahara",
+      "english_name": "Sense Withdrawal",
+      "core_focus": "Conscious digital detox, calming sensory overstimulation, mindful hunger awareness.",
+      "health_impact": "Reduces reactivity to unhealthy food and stress cues; enhances mindful eating.",
+      "pathway_type": "Health Transformation"
+    },
+    {
+      "id": 6,
+      "limb_number": 6,
+      "sanskrit_name": "Dharana",
+      "english_name": "Concentration",
+      "core_focus": "Single-pointed focus, eliminating multitasking, cultivating deep mental presence.",
+      "health_impact": "Enhances cognitive working memory efficiency, supports sustainable habit building, and relieves anxiety.",
+      "pathway_type": "Happiness & Inner Peace"
+    },
+    {
+      "id": 7,
+      "limb_number": 7,
+      "sanskrit_name": "Dhyana",
+      "english_name": "Meditation",
+      "core_focus": "Sustained mindful contemplation and awareness without judgment.",
+      "health_impact": "Lowers neuro-inflammation, downregulates amygdala hyperactivity, and promotes neuroplastic healing.",
+      "pathway_type": "Happiness & Inner Peace"
+    },
+    {
+      "id": 8,
+      "limb_number": 8,
+      "sanskrit_name": "Samadhi",
+      "english_name": "Integration / Self-Realization",
+      "core_focus": "Unity of mind, body, and purpose; feeling connected to self and community.",
+      "health_impact": "Fosters existential meaning, allostatic peace, emotional resilience, and holistic longevity.",
+      "pathway_type": "Happiness & Inner Peace"
+    }
+  ],
+  "chronic_disease_drivers": [
+    {
+      "id": 1,
+      "driver_name": "Gut Health",
+      "ashtanga_alignment": "Yama: Mindful eating; Asana: Twists for digestion",
+      "microhabit_example": "Chew food 20 times before swallowing; practice gentle seated spinal twists after meals.",
+      "evidence_impact": "Improves microbiome diversity, heals mucosal integrity, and reduces systemic endotoxemia."
+    },
+    {
+      "id": 2,
+      "driver_name": "Inflammation",
+      "ashtanga_alignment": "Niyama: Daily anti-inflammatory food log; Pranayama: Alternate nostril breathing",
+      "microhabit_example": "Log 3 colors of fruits/veggies daily; practice 5 minutes of Nadi Shodhana breathing.",
+      "evidence_impact": "Lowers pro-inflammatory cytokines (TNF-\u03b1, IL-6, hs-CRP) and improves immune balance."
+    },
+    {
+      "id": 3,
+      "driver_name": "Insulin Resistance",
+      "ashtanga_alignment": "Asana: Post-meal walking/yoga; Dharana: Focus on hunger cues",
+      "microhabit_example": "Take a 10-minute brisk walk immediately after dinner; pause before snacking to rate real hunger.",
+      "evidence_impact": "Stimulates GLUT4 glucose transporter translocation independent of insulin, stabilizing glycemia."
+    },
+    {
+      "id": 4,
+      "driver_name": "Toxins",
+      "ashtanga_alignment": "Yama: Choose toxin-free products; Asana: Sweating practices",
+      "microhabit_example": "Swap plastic storage containers for glass; take an infrared sauna or brisk sweat-inducing walk.",
+      "evidence_impact": "Enhances Phase I/II liver biotransformation and reduces environmental xenobiotic burden."
+    },
+    {
+      "id": 5,
+      "driver_name": "Hormones",
+      "ashtanga_alignment": "Pranayama: Evening breathwork; Asana: Endocrine-supportive poses",
+      "microhabit_example": "Practice 4-7-8 breathing before bed; do legs-up-the-wall (Viparita Karani) to calm adrenals.",
+      "evidence_impact": "Normalizes circadian cortisol rhythm, balances thyroid hormones, and supports reproductive vitality."
+    },
+    {
+      "id": 6,
+      "driver_name": "Epigenetics",
+      "ashtanga_alignment": "Niyama: Gratitude practice; Dhyana: Meditation on healing",
+      "microhabit_example": "Write down 3 specific things you are grateful for each morning; meditate for 10 minutes.",
+      "evidence_impact": "Provides favorable biochemical signals that upregulate longevity genes and downregulate oncogenes."
+    },
+    {
+      "id": 7,
+      "driver_name": "Stem Cells",
+      "ashtanga_alignment": "Asana: HIIT / dynamic yoga; Niyama: Antioxidant-rich foods",
+      "microhabit_example": "Incorporate short bursts of bodyweight squats/HIIT 3x weekly; eat blueberries and green tea.",
+      "evidence_impact": "Stimulates endogenous circulating stem cell mobilization and cellular tissue regeneration."
+    },
+    {
+      "id": 8,
+      "driver_name": "Mitochondria",
+      "ashtanga_alignment": "Asana: Brisk walking / HIIT; Pranayama: Breathwork for oxygenation",
+      "microhabit_example": "Walk briskly outdoors for 20 minutes; practice deep diaphragmatic breath cycles.",
+      "evidence_impact": "Stimulates PGC-1\u03b1-driven mitochondrial biogenesis and enhances cellular ATP generation."
+    }
+  ],
+  "my_goal_do_it_steps": [
+    {
+      "id": 1,
+      "step_order": 1,
+      "letter": "M",
+      "step_name": "Mindset & Meaning",
+      "description": "Set a clear, heartfelt daily intention that connects your habit to your life purpose.",
+      "behavioral_science_principle": "Autonomous motivation theory (Ryan & Deci) \u2014 habits linked to identity endure."
+    },
+    {
+      "id": 2,
+      "step_order": 2,
+      "letter": "Y",
+      "step_name": "You (Personalized Choice)",
+      "description": "Pick a microhabit tailored specifically to your preferences and daily rhythm.",
+      "behavioral_science_principle": "Self-determination theory \u2014 personal autonomy maximizes behavioral adherence."
+    },
+    {
+      "id": 3,
+      "step_order": 3,
+      "letter": "G",
+      "step_name": "Get Specific (SMART Goal)",
+      "description": "Define the exact, measurable, bite-sized action (e.g., 'walk 10 minutes after lunch').",
+      "behavioral_science_principle": "Implementation intentions (Gollwitzer) \u2014 clear 'if-then' plans double success rate."
+    },
+    {
+      "id": 4,
+      "step_order": 4,
+      "letter": "O",
+      "step_name": "One at a Time",
+      "description": "Focus on mastering one tiny microhabit before adding another.",
+      "behavioral_science_principle": "Cognitive load reduction \u2014 avoids willpower exhaustion and decision fatigue."
+    },
+    {
+      "id": 5,
+      "step_order": 5,
+      "letter": "A",
+      "step_name": "Anchor to an Existing Routine",
+      "description": "Attach the new microhabit to an established daily anchor (e.g., 'after brushing teeth, do 10 squats').",
+      "behavioral_science_principle": "Habit stacking (BJ Fogg Tiny Habits) \u2014 piggybacks on existing neural pathways."
+    },
+    {
+      "id": 6,
+      "step_order": 6,
+      "letter": "L",
+      "step_name": "Learn & Leverage Environment",
+      "description": "Design your physical and social environment so healthy choices are frictionless.",
+      "behavioral_science_principle": "Choice architecture (Thaler & Sunstein) \u2014 environment is the invisible hand shaping behavior."
+    },
+    {
+      "id": 7,
+      "step_order": 7,
+      "letter": "D",
+      "step_name": "Do It Daily",
+      "description": "Practice the microhabit every day without exception, keeping the barrier to entry minimal.",
+      "behavioral_science_principle": "Neuroplasticity \u2014 daily repetition builds automatic basal ganglia habit loops."
+    },
+    {
+      "id": 8,
+      "step_order": 8,
+      "letter": "O",
+      "step_name": "Overcome Obstacles with Calm",
+      "description": "When friction arises, pause, breathe deeply, and adjust rather than quit.",
+      "behavioral_science_principle": "Emotional regulation & resilience \u2014 prevents the 'what-the-hell' relapse effect."
+    },
+    {
+      "id": 9,
+      "step_order": 9,
+      "letter": "I",
+      "step_name": "Integrate into Daily Identity",
+      "description": "Celebrate every win and identify as a healthy, vibrant individual.",
+      "behavioral_science_principle": "Identity-based habits (James Clear) \u2014 'I am someone who nourishes my cells daily'."
+    },
+    {
+      "id": 10,
+      "step_order": 10,
+      "letter": "T",
+      "step_name": "Track & Teach",
+      "description": "Log your progress in a journal and teach someone else the principle.",
+      "behavioral_science_principle": "Social accountability & Feynman learning technique \u2014 teaching solidifies mastery."
+    }
+  ],
+  "microhabits_catalog": [
+    {
+      "id": 1,
+      "driver_id": 1,
+      "step_id": 1,
+      "microhabit_text": "Set a daily morning intention: 'I nourish and respect my microbiome.'",
+      "implementation_tip": "Affirmation before breakfast."
+    },
+    {
+      "id": 2,
+      "driver_id": 1,
+      "step_id": 2,
+      "microhabit_text": "Add one new colorful plant-based food to your meals each week.",
+      "implementation_tip": "Aim for 30 unique plants/week."
+    },
+    {
+      "id": 3,
+      "driver_id": 1,
+      "step_id": 3,
+      "microhabit_text": "Eat 1-2 tablespoons of fermented sauerkraut or kimchi with lunch.",
+      "implementation_tip": "Provides live probiotic strains."
+    },
+    {
+      "id": 4,
+      "driver_id": 1,
+      "step_id": 8,
+      "microhabit_text": "Chew each bite of food 20 times before swallowing.",
+      "implementation_tip": "Salivary enzymes prime digestion."
+    },
+    {
+      "id": 5,
+      "driver_id": 1,
+      "step_id": 5,
+      "microhabit_text": "Drink 16 oz of water 30 minutes before every meal.",
+      "implementation_tip": "Hydrates stomach mucosal lining."
+    },
+    {
+      "id": 6,
+      "driver_id": 1,
+      "step_id": 6,
+      "microhabit_text": "Keep prebiotic snacks (nuts, apples, carrots) visible on the counter.",
+      "implementation_tip": "Reduces junk food temptation."
+    },
+    {
+      "id": 7,
+      "driver_id": 1,
+      "step_id": 7,
+      "microhabit_text": "Replace afternoon ultra-processed snack with an apple and walnuts.",
+      "implementation_tip": "Adds pectin and prebiotic fiber."
+    },
+    {
+      "id": 8,
+      "driver_id": 1,
+      "step_id": 8,
+      "microhabit_text": "Take 3 slow deep breaths before putting the first forkful in your mouth.",
+      "implementation_tip": "Activates parasympathetic rest-and-digest."
+    },
+    {
+      "id": 9,
+      "driver_id": 1,
+      "step_id": 9,
+      "microhabit_text": "Reflect each evening on your bowel comfort and digestion clarity.",
+      "implementation_tip": "Track in a notebook."
+    },
+    {
+      "id": 10,
+      "driver_id": 1,
+      "step_id": 10,
+      "microhabit_text": "Share an easy gut-healthy recipe with a friend or family member.",
+      "implementation_tip": "Promotes social accountability."
+    },
+    {
+      "id": 11,
+      "driver_id": 2,
+      "step_id": 1,
+      "microhabit_text": "Set intention: 'My body is calm, cool, and healing every day.'",
+      "implementation_tip": "Morning affirmation."
+    },
+    {
+      "id": 12,
+      "driver_id": 2,
+      "step_id": 2,
+      "microhabit_text": "Add a handful of blueberries or blackberries to breakfast.",
+      "implementation_tip": "Anthocyanins inhibit NF-\u03baB."
+    },
+    {
+      "id": 13,
+      "driver_id": 2,
+      "step_id": 3,
+      "microhabit_text": "Walk briskly for 10 minutes right after lunch.",
+      "implementation_tip": "Lowers postprandial inflammatory spikes."
+    },
+    {
+      "id": 14,
+      "driver_id": 2,
+      "step_id": 8,
+      "microhabit_text": "Take 1/2 teaspoon of turmeric with a pinch of black pepper in food.",
+      "implementation_tip": "Curcuminoids reduce joint pain."
+    },
+    {
+      "id": 15,
+      "driver_id": 2,
+      "step_id": 5,
+      "microhabit_text": "Perform 5 minutes of gentle morning spinal stretching or yoga.",
+      "implementation_tip": "Stimulates lymphatic circulation."
+    },
+    {
+      "id": 16,
+      "driver_id": 2,
+      "step_id": 6,
+      "microhabit_text": "Eliminate soda and sugary beverages from home and pantry.",
+      "implementation_tip": "Removes advanced glycation end-products."
+    },
+    {
+      "id": 17,
+      "driver_id": 2,
+      "step_id": 7,
+      "microhabit_text": "Swap inflammatory trans-fats and fried foods for steamed veggies.",
+      "implementation_tip": "Stops systemic cytokine release."
+    },
+    {
+      "id": 18,
+      "driver_id": 2,
+      "step_id": 8,
+      "microhabit_text": "Practice alternate nostril breathing for 5 minutes when feeling stressed.",
+      "implementation_tip": "Dampens sympathetic overdrive."
+    },
+    {
+      "id": 19,
+      "driver_id": 2,
+      "step_id": 9,
+      "microhabit_text": "Celebrate waking up with less joint stiffness or more energy.",
+      "implementation_tip": "Reinforces positive neuro-circuits."
+    },
+    {
+      "id": 20,
+      "driver_id": 2,
+      "step_id": 10,
+      "microhabit_text": "Teach a family member how turmeric and ginger soothe inflammation.",
+      "implementation_tip": "Spreads healthy practices."
+    },
+    {
+      "id": 21,
+      "driver_id": 3,
+      "step_id": 1,
+      "microhabit_text": "Set intention: 'My cells are vibrant, receptive, and energized.'",
+      "implementation_tip": "Morning mindset."
+    },
+    {
+      "id": 22,
+      "driver_id": 3,
+      "step_id": 2,
+      "microhabit_text": "Start lunch and dinner with a bowl of dark leafy salad or steamed broccoli.",
+      "implementation_tip": "Fiber coats intestine and blunts glucose curve."
+    },
+    {
+      "id": 23,
+      "driver_id": 3,
+      "step_id": 3,
+      "microhabit_text": "Walk 10 minutes immediately after your largest meal of the day.",
+      "implementation_tip": "Activates GLUT4 glucose uptake in skeletal muscle."
+    },
+    {
+      "id": 24,
+      "driver_id": 3,
+      "step_id": 8,
+      "microhabit_text": "Notice how you feel 1 hour after eating \u2014 alert vs. sleepy.",
+      "implementation_tip": "Identifies high-glycemic trigger meals."
+    },
+    {
+      "id": 25,
+      "driver_id": 3,
+      "step_id": 5,
+      "microhabit_text": "Perform 15 bodyweight air squats after sitting for 60 minutes.",
+      "implementation_tip": "Breaks sedentary insulin resistance."
+    },
+    {
+      "id": 26,
+      "driver_id": 3,
+      "step_id": 6,
+      "microhabit_text": "Batch-cook lentils, beans, and steel-cut oats for the week.",
+      "implementation_tip": "Makes complex carbohydrates effortless."
+    },
+    {
+      "id": 27,
+      "driver_id": 3,
+      "step_id": 7,
+      "microhabit_text": "Replace sugary coffee drinks or juices with plain green tea or water.",
+      "implementation_tip": "Stops hepatic fructose overload."
+    },
+    {
+      "id": 28,
+      "driver_id": 3,
+      "step_id": 8,
+      "microhabit_text": "Pause and rate real hunger on a 1-10 scale before snacking.",
+      "implementation_tip": "Stops emotional eating."
+    },
+    {
+      "id": 29,
+      "driver_id": 3,
+      "step_id": 9,
+      "microhabit_text": "Celebrate when 3 PM afternoon energy crashes disappear.",
+      "implementation_tip": "Proof of stabilized blood glucose."
+    },
+    {
+      "id": 30,
+      "driver_id": 3,
+      "step_id": 10,
+      "microhabit_text": "Show a friend how a 10-minute post-meal walk beats afternoon fatigue.",
+      "implementation_tip": "Shared lifestyle intervention."
+    },
+    {
+      "id": 31,
+      "driver_id": 4,
+      "step_id": 1,
+      "microhabit_text": "Set intention: 'I choose purity and cleanliness in my body and home.'",
+      "implementation_tip": "Saucha (purity) practice."
+    },
+    {
+      "id": 32,
+      "driver_id": 4,
+      "step_id": 2,
+      "microhabit_text": "Add a serving of cruciferous vegetables (broccoli, arugula, cabbage) daily.",
+      "implementation_tip": "Sulforaphane boosts Nrf2 liver detox."
+    },
+    {
+      "id": 33,
+      "driver_id": 4,
+      "step_id": 3,
+      "microhabit_text": "Replace 3 plastic food containers with glass or stainless steel.",
+      "implementation_tip": "Eliminates BPA and phthalate leaching."
+    },
+    {
+      "id": 34,
+      "driver_id": 4,
+      "step_id": 8,
+      "microhabit_text": "Filter your drinking and cooking tap water with a carbon or reverse-osmosis filter.",
+      "implementation_tip": "Removes chlorine and heavy metals."
+    },
+    {
+      "id": 35,
+      "driver_id": 4,
+      "step_id": 5,
+      "microhabit_text": "Take a brisk 20-minute walk or exercise to produce a light sweat.",
+      "implementation_tip": "Dermal elimination of xenobiotics."
+    },
+    {
+      "id": 36,
+      "driver_id": 4,
+      "step_id": 6,
+      "microhabit_text": "Switch to fragrance-free, eco-friendly household laundry and surface cleaners.",
+      "implementation_tip": "Reduces indoor volatile organic compounds."
+    },
+    {
+      "id": 37,
+      "driver_id": 4,
+      "step_id": 7,
+      "microhabit_text": "Avoid microwaving food in plastic containers or plastic wraps.",
+      "implementation_tip": "Prevents plasticizers entering warm food."
+    },
+    {
+      "id": 38,
+      "driver_id": 4,
+      "step_id": 8,
+      "microhabit_text": "Spend 10 minutes outdoors breathing fresh morning air.",
+      "implementation_tip": "Clears stagnant indoor air from lungs."
+    },
+    {
+      "id": 39,
+      "driver_id": 4,
+      "step_id": 9,
+      "microhabit_text": "Enjoy clearer skin and reduced morning sinus congestion.",
+      "implementation_tip": "Evidence of lowered toxic burden."
+    },
+    {
+      "id": 40,
+      "driver_id": 4,
+      "step_id": 10,
+      "microhabit_text": "Tell a friend why glass water bottles are superior to single-use plastics.",
+      "implementation_tip": "Empowers community detox."
+    }
+  ],
+  "clinical_quizzes": [
+    {
+      "id": 1,
+      "quiz_code": "INSULIN_RESISTANCE",
+      "title": "Insulin Resistance Screening Quiz (10 Questions)",
+      "chapter_source": "Chapter 3: Combating Insulin Resistance",
+      "target_condition": "Metabolic Dysfunction & Insulin Resistance",
+      "instructions": "Answer 10 clinical screening questions. Give 1 point for every YES. Evaluate your metabolic risk tier.",
+      "scoring_scale_type": "yes_no_count",
+      "max_possible_score": 10
+    },
+    {
+      "id": 2,
+      "quiz_code": "HORMONE_HEALTH",
+      "title": "Hormone Health Screening Questionnaire (10 Questions)",
+      "chapter_source": "Chapter 4: Hormonal Balance for Optimal Health",
+      "target_condition": "Endocrine & Hormonal Imbalance",
+      "instructions": "Answer 10 questions regarding symptoms of hormonal disruption. Score each YES as 1 point.",
+      "scoring_scale_type": "yes_no_count",
+      "max_possible_score": 10
+    },
+    {
+      "id": 3,
+      "quiz_code": "TOXIN_RISK",
+      "title": "Environmental Toxin Exposure & Detox Risk Quiz (10 Questions)",
+      "chapter_source": "Chapter 5: Toxins Health - Reducing Toxins for Better Aging",
+      "target_condition": "Toxic Burden & Xenobiotic Overload",
+      "instructions": "Answer 10 lifestyle exposure questions. Each YES adds 1 point to determine your toxic risk category.",
+      "scoring_scale_type": "yes_no_count",
+      "max_possible_score": 10
+    },
+    {
+      "id": 4,
+      "quiz_code": "GUT_HEALTH",
+      "title": "Gut Health Self-Check Questionnaire (10 Questions)",
+      "chapter_source": "Chapter 6: Gut Health - The Foundation of Wellness",
+      "target_condition": "Microbiome Dysbiosis & Gastrointestinal Integrity",
+      "instructions": "Rate each of the 10 gut symptoms from 0 (Never/Regular) to 3 (Almost Always/Severe). Total score out of 30.",
+      "scoring_scale_type": "likert_4_point",
+      "max_possible_score": 30
+    },
+    {
+      "id": 5,
+      "quiz_code": "GENETICS_EPIGENETICS",
+      "title": "Epigenetic Health Self-Assessment (10 Questions)",
+      "chapter_source": "Chapter 7: Genetics, Epigenetics, and Lifestyle Interventions",
+      "target_condition": "Epigenetic Aging & Lifestyle Gene Signaling",
+      "instructions": "Check 10 daily habits and family markers. Give 1 point for every YES. Total score out of 10.",
+      "scoring_scale_type": "yes_no_count",
+      "max_possible_score": 10
+    },
+    {
+      "id": 6,
+      "quiz_code": "MITOCHONDRIAL_HEALTH",
+      "title": "Mitochondrial Health Risk Score (10 Questions)",
+      "chapter_source": "Chapter 8: Mitochondrial Regeneration for Longevity",
+      "target_condition": "Mitochondrial Energy & ATP Dysfunction",
+      "instructions": "Assess 10 cellular energy markers. Each positive symptom adds 3 points (total score 0 to 30).",
+      "scoring_scale_type": "weighted_points",
+      "max_possible_score": 30
+    },
+    {
+      "id": 7,
+      "quiz_code": "STEM_CELL_VITALITY",
+      "title": "Stem Cell Regeneration Risk Score (11 Questions)",
+      "chapter_source": "Chapter 9: Stem Cell Regeneration for Youthful Vitality",
+      "target_condition": "Regenerative Stem Cell Capacity & Tissue Renewal",
+      "instructions": "Answer 11 regenerative vitality questions. Points assess your body's regenerative reserve (0 to 30).",
+      "scoring_scale_type": "weighted_points",
+      "max_possible_score": 30
+    }
+  ],
+  "quiz_questions": [
+    {
+      "id": 1,
+      "quiz_id": 1,
+      "question_number": 1,
+      "question_text": "Do your parents, brothers, or sisters have type 2 diabetes?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Family History"
+    },
+    {
+      "id": 2,
+      "quiz_id": 1,
+      "question_number": 2,
+      "question_text": "Is your waist circumference greater than 40 inches (men) or 35 inches (women)?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Visceral Adiposity"
+    },
+    {
+      "id": 3,
+      "quiz_id": 1,
+      "question_number": 3,
+      "question_text": "Do you frequently feel tired, drowsy, or sleepy 30\u201360 minutes after eating meals?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Postprandial Glycemia"
+    },
+    {
+      "id": 4,
+      "quiz_id": 1,
+      "question_number": 4,
+      "question_text": "Do you frequently crave refined carbohydrates, bread, chips, or sugary sweets?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Insulin Spikes"
+    },
+    {
+      "id": 5,
+      "quiz_id": 1,
+      "question_number": 5,
+      "question_text": "Do you notice dark velvety skin patches on your neck/armpits (acanthosis nigricans) or skin tags?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Clinical Signs"
+    },
+    {
+      "id": 6,
+      "quiz_id": 1,
+      "question_number": 6,
+      "question_text": "Has a physician told you that your blood pressure is high (\u2265 130/85 mmHg)?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Cardiometabolic"
+    },
+    {
+      "id": 7,
+      "quiz_id": 1,
+      "question_number": 7,
+      "question_text": "Do blood tests show elevated triglycerides (\u2265 150 mg/dL) or low HDL cholesterol (< 40 men, < 50 women)?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Dyslipidemia"
+    },
+    {
+      "id": 8,
+      "quiz_id": 1,
+      "question_number": 8,
+      "question_text": "Is it difficult to lose weight, particularly stubborn fat accumulating around your belly?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Metabolic Flexibility"
+    },
+    {
+      "id": 9,
+      "quiz_id": 1,
+      "question_number": 9,
+      "question_text": "Have you ever been diagnosed with non-alcoholic fatty liver disease (NAFLD) or PCOS?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Organ Manifestation"
+    },
+    {
+      "id": 10,
+      "quiz_id": 1,
+      "question_number": 10,
+      "question_text": "Do you experience frequent urination, excessive thirst, or episodes of blurry vision?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Hyperglycemia"
+    },
+    {
+      "id": 11,
+      "quiz_id": 2,
+      "question_number": 1,
+      "question_text": "Have you experienced changes in your menstrual cycle (women) or diminished libido/drive (men/women)?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Reproductive"
+    },
+    {
+      "id": 12,
+      "quiz_id": 2,
+      "question_number": 2,
+      "question_text": "Do you struggle with frequent unexplained mood swings, anxiety, or irritability?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Neuroendocrine"
+    },
+    {
+      "id": 13,
+      "quiz_id": 2,
+      "question_number": 3,
+      "question_text": "Do you have a personal or family history of thyroid dysfunction (hypo/hyperthyroidism)?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Thyroid"
+    },
+    {
+      "id": 14,
+      "quiz_id": 2,
+      "question_number": 4,
+      "question_text": "Do you frequently feel cold when others are comfortable, or have chronically cold hands/feet?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Basal Metabolism"
+    },
+    {
+      "id": 15,
+      "quiz_id": 2,
+      "question_number": 5,
+      "question_text": "Have you noticed unexplained weight gain or an inability to lose weight despite dieting?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Metabolic Hormones"
+    },
+    {
+      "id": 16,
+      "quiz_id": 2,
+      "question_number": 6,
+      "question_text": "Do you have difficulty falling asleep, staying asleep, or wake up unrefreshed?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Circadian & Cortisol"
+    },
+    {
+      "id": 17,
+      "quiz_id": 2,
+      "question_number": 7,
+      "question_text": "Are you experiencing diffuse hair thinning, loss, or unexpected facial/body hair growth?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Androgens & Thyroid"
+    },
+    {
+      "id": 18,
+      "quiz_id": 2,
+      "question_number": 8,
+      "question_text": "Do you suffer from frequent hot flashes, night sweats, or temperature dysregulation?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Vasomotor"
+    },
+    {
+      "id": 19,
+      "quiz_id": 2,
+      "question_number": 9,
+      "question_text": "Have you developed sudden changes in skin texture, adult acne, or excessive dryness?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Dermatological"
+    },
+    {
+      "id": 20,
+      "quiz_id": 2,
+      "question_number": 10,
+      "question_text": "Are you currently taking any prescription hormone therapies, birth control, or hormone supplements?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Exogenous Hormones"
+    },
+    {
+      "id": 21,
+      "quiz_id": 3,
+      "question_number": 1,
+      "question_text": "Do you regularly consume ultra-processed foods, fast food, or food packaged in plastics?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Dietary Xenobiotics"
+    },
+    {
+      "id": 22,
+      "quiz_id": 3,
+      "question_number": 2,
+      "question_text": "Do you routinely use conventional aerosol sprays, synthetic perfumes, or scented lotions?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Household Chemicals"
+    },
+    {
+      "id": 23,
+      "quiz_id": 3,
+      "question_number": 3,
+      "question_text": "Are you frequently exposed to air pollution, agricultural pesticides, mold, or older paint?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Environmental"
+    },
+    {
+      "id": 24,
+      "quiz_id": 3,
+      "question_number": 4,
+      "question_text": "Do you smoke, vape, or regularly breathe second-hand tobacco or cannabis smoke?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Inhalation Toxins"
+    },
+    {
+      "id": 25,
+      "quiz_id": 3,
+      "question_number": 5,
+      "question_text": "Do you consume alcoholic drinks more than 1\u20132 times per week?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Hepatic Burden"
+    },
+    {
+      "id": 26,
+      "quiz_id": 3,
+      "question_number": 6,
+      "question_text": "Do you use recreational drugs or take frequent over-the-counter NSAIDs/pain medications?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Pharmacological"
+    },
+    {
+      "id": 27,
+      "quiz_id": 3,
+      "question_number": 7,
+      "question_text": "Do you drink unfiltered municipal tap water or water from thin plastic bottles?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Water Quality"
+    },
+    {
+      "id": 28,
+      "quiz_id": 3,
+      "question_number": 8,
+      "question_text": "Are you taking multiple daily pharmaceutical drugs that stress liver or renal pathways?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Medication Load"
+    },
+    {
+      "id": 29,
+      "quiz_id": 3,
+      "question_number": 9,
+      "question_text": "Have you experienced chronic fatigue, skin rashes, or brain fog that doesn't resolve?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Toxin Symptoms"
+    },
+    {
+      "id": 30,
+      "quiz_id": 3,
+      "question_number": 10,
+      "question_text": "Does your family have a significant history of early cancer, neurodegenerative, or autoimmune disease?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Genetic Vulnerability"
+    },
+    {
+      "id": 31,
+      "quiz_id": 4,
+      "question_number": 1,
+      "question_text": "How often do you experience bloating, abdominal distension, or gas after meals?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Digestion"
+    },
+    {
+      "id": 32,
+      "quiz_id": 4,
+      "question_number": 2,
+      "question_text": "How regular are your bowel movements (0 = regular/smooth, 3 = chronic constipation or diarrhea)?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Elimination"
+    },
+    {
+      "id": 33,
+      "quiz_id": 4,
+      "question_number": 3,
+      "question_text": "How many courses of oral antibiotics have you taken over the past 12 months?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Microbiome Disruption"
+    },
+    {
+      "id": 34,
+      "quiz_id": 4,
+      "question_number": 4,
+      "question_text": "Do you suffer from known food intolerances, sensitivities (dairy, gluten), or allergies?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Immune Tolerance"
+    },
+    {
+      "id": 35,
+      "quiz_id": 4,
+      "question_number": 5,
+      "question_text": "How frequently do you experience acid reflux, heartburn, or indigestion?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Upper GI"
+    },
+    {
+      "id": 36,
+      "quiz_id": 4,
+      "question_number": 6,
+      "question_text": "How would you rate your diet in terms of processed foods vs. diverse whole plants?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Diet Quality"
+    },
+    {
+      "id": 37,
+      "quiz_id": 4,
+      "question_number": 7,
+      "question_text": "Have you been diagnosed with or suspected of having IBS, SIBO, IBD, or leaky gut?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Clinical GI"
+    },
+    {
+      "id": 38,
+      "quiz_id": 4,
+      "question_number": 8,
+      "question_text": "Do you suffer from daytime tiredness or post-meal energy slumps?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Systemic Fatigue"
+    },
+    {
+      "id": 39,
+      "quiz_id": 4,
+      "question_number": 9,
+      "question_text": "Do you experience persistent skin breakouts, acne, eczema, or rosacea?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Gut-Skin Axis"
+    },
+    {
+      "id": 40,
+      "quiz_id": 4,
+      "question_number": 10,
+      "question_text": "How often do you experience unexplained mood shifts, anxiety, brain fog, or low mood?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"Never / None (0 pts)\", \"points\": 0}, {\"label\": \"Occasionally / Mild (1 pt)\", \"points\": 1}, {\"label\": \"Frequently / Moderate (2 pts)\", \"points\": 2}, {\"label\": \"Almost Always / Severe (3 pts)\", \"points\": 3}]",
+      "category": "Gut-Brain Axis"
+    },
+    {
+      "id": 41,
+      "quiz_id": 5,
+      "question_number": 1,
+      "question_text": "Does anyone in your family (parents/siblings) have early type 2 diabetes, heart disease, or cancer?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Family History"
+    },
+    {
+      "id": 42,
+      "quiz_id": 5,
+      "question_number": 2,
+      "question_text": "Are you frequently around environmental pollution, cigarette smoke, or chemical fumes?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Environmental Stress"
+    },
+    {
+      "id": 43,
+      "quiz_id": 5,
+      "question_number": 3,
+      "question_text": "Do you feel emotionally stressed, anxious, or pressured on most days of the week?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Allostatic Load"
+    },
+    {
+      "id": 44,
+      "quiz_id": 5,
+      "question_number": 4,
+      "question_text": "Do you consume fewer than 2 full servings of vegetables and fruits on most days?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Methyl Donors Deficit"
+    },
+    {
+      "id": 45,
+      "quiz_id": 5,
+      "question_number": 5,
+      "question_text": "Do you routinely sleep less than 7 hours per night or have fragmented sleep?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Circadian Debt"
+    },
+    {
+      "id": 46,
+      "quiz_id": 5,
+      "question_number": 6,
+      "question_text": "Do you get less than 30 minutes of physical activity or walking on most days?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Physical Inactivity"
+    },
+    {
+      "id": 47,
+      "quiz_id": 5,
+      "question_number": 7,
+      "question_text": "Did you experience significant adverse childhood experiences (ACEs) or severe early life trauma?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Developmental Epigenetics"
+    },
+    {
+      "id": 48,
+      "quiz_id": 5,
+      "question_number": 8,
+      "question_text": "Do you drink sugar-sweetened beverages, sports drinks, or alcohol more than twice a week?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Metabolic Stress"
+    },
+    {
+      "id": 49,
+      "quiz_id": 5,
+      "question_number": 9,
+      "question_text": "Do you frequently drink from soft plastic bottles or handle thermal paper receipts?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Endocrine Disruptors"
+    },
+    {
+      "id": 50,
+      "quiz_id": 5,
+      "question_number": 10,
+      "question_text": "Is it challenging to maintain a healthy body composition or stable weight?",
+      "points_weight": 1,
+      "options_json": "[{\"label\": \"No\", \"points\": 0}, {\"label\": \"Yes\", \"points\": 1}]",
+      "category": "Metabolic Health"
+    },
+    {
+      "id": 51,
+      "quiz_id": 6,
+      "question_number": 1,
+      "question_text": "Low Energy: Do you often feel drained or lack sustained stamina throughout the day?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Cellular ATP"
+    },
+    {
+      "id": 52,
+      "quiz_id": 6,
+      "question_number": 2,
+      "question_text": "Brain Fog: Is it hard to concentrate, think quickly, or maintain sharp mental clarity?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Cerebral Bioenergetics"
+    },
+    {
+      "id": 53,
+      "quiz_id": 6,
+      "question_number": 3,
+      "question_text": "Muscle Performance: Do you experience muscle weakness, exercise intolerance, or slow recovery?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Myocyte Metabolism"
+    },
+    {
+      "id": 54,
+      "quiz_id": 6,
+      "question_number": 4,
+      "question_text": "Metabolic Concerns: Have you been diagnosed with insulin resistance, obesity, or fatty liver?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Metabolic Syndrome"
+    },
+    {
+      "id": 55,
+      "quiz_id": 6,
+      "question_number": 5,
+      "question_text": "Toxin Exposure: Have you had known exposure to heavy metals, mold, or organic pollutants?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Mitochondrial Toxins"
+    },
+    {
+      "id": 56,
+      "quiz_id": 6,
+      "question_number": 6,
+      "question_text": "Diet Quality: Is your diet low in colorful berries, polyphenols, and antioxidant-rich vegetables?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Antioxidant Reserve"
+    },
+    {
+      "id": 57,
+      "quiz_id": 6,
+      "question_number": 7,
+      "question_text": "Headaches: Do you suffer from frequent unexplained headaches or migraines?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Neuronal Energetics"
+    },
+    {
+      "id": 58,
+      "quiz_id": 6,
+      "question_number": 8,
+      "question_text": "Sensory Changes: Have you noticed accelerated changes in visual acuity or hearing?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "High-Energy Tissues"
+    },
+    {
+      "id": 59,
+      "quiz_id": 6,
+      "question_number": 9,
+      "question_text": "Temperature Regulation: Do you struggle to maintain a comfortable body temperature?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Thermogenesis"
+    },
+    {
+      "id": 60,
+      "quiz_id": 6,
+      "question_number": 10,
+      "question_text": "Medication Effects: Are you on medications known to stress mitochondria (statins, certain antibiotics)?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Iatrogenic Burden"
+    },
+    {
+      "id": 61,
+      "quiz_id": 7,
+      "question_number": 1,
+      "question_text": "Do you take an unusually long time to bounce back or recover after strenuous physical exertion?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Recovery"
+    },
+    {
+      "id": 62,
+      "quiz_id": 7,
+      "question_number": 2,
+      "question_text": "Are small skin cuts, bruises, or surgical wounds noticeably slow to heal?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Tissue Regeneration"
+    },
+    {
+      "id": 63,
+      "quiz_id": 7,
+      "question_number": 3,
+      "question_text": "Is your hair thinning rapidly or greying significantly earlier than expected?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Follicular Stem Cells"
+    },
+    {
+      "id": 64,
+      "quiz_id": 7,
+      "question_number": 4,
+      "question_text": "Do you catch frequent seasonal colds, infections, or take weeks to clear common bugs?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Hematopoietic Immunity"
+    },
+    {
+      "id": 65,
+      "quiz_id": 7,
+      "question_number": 5,
+      "question_text": "Do you experience persistent brain fog or notice your memory is not as sharp as it was?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Neurogenesis"
+    },
+    {
+      "id": 66,
+      "quiz_id": 7,
+      "question_number": 6,
+      "question_text": "Are you losing muscle tone or strength despite doing normal daily activities?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Sarcopenia"
+    },
+    {
+      "id": 67,
+      "quiz_id": 7,
+      "question_number": 7,
+      "question_text": "Have you been diagnosed with chronic autoimmune conditions or persistent joint inflammation?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Immune Dysregulation"
+    },
+    {
+      "id": 68,
+      "quiz_id": 7,
+      "question_number": 8,
+      "question_text": "Do you have chronic tummy trouble, irregular bowel habits, or food intolerances?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Intestinal Epithelium"
+    },
+    {
+      "id": 69,
+      "quiz_id": 7,
+      "question_number": 9,
+      "question_text": "Has your weight fluctuated dramatically up or down without intentional dieting?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Metabolic Plasticity"
+    },
+    {
+      "id": 70,
+      "quiz_id": 7,
+      "question_number": 10,
+      "question_text": "Do you spend more than 8 hours of your waking day sitting and physically inactive?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Sedentary Aging"
+    },
+    {
+      "id": 71,
+      "quiz_id": 7,
+      "question_number": 11,
+      "question_text": "Are you subjected to chronic unmanaged stress, ultra-processed diet, or poor sleep?",
+      "points_weight": 3,
+      "options_json": "[{\"label\": \"No (0 pts)\", \"points\": 0}, {\"label\": \"Yes (3 pts)\", \"points\": 3}]",
+      "category": "Stem Cell Exhaustion"
+    }
+  ],
+  "quiz_scoring_rules": [
+    {
+      "id": 1,
+      "quiz_id": 1,
+      "risk_level": "Low",
+      "min_score": 0,
+      "max_score": 2,
+      "label": "Low Risk",
+      "clinical_interpretation": "Optimal insulin sensitivity. Minimal evidence of metabolic resistance.",
+      "recommended_actions": "Maintain colorful plant-forward diet, 150 min/wk physical activity, and routine annual metabolic lab screening."
+    },
+    {
+      "id": 2,
+      "quiz_id": 1,
+      "risk_level": "Moderate",
+      "min_score": 3,
+      "max_score": 5,
+      "label": "Moderate Risk",
+      "clinical_interpretation": "Early metabolic strain. Elevated risk of progressing to pre-diabetes and metabolic syndrome.",
+      "recommended_actions": "Implement 10-minute post-meal walks, prioritize fiber-first meals, eliminate liquid sugars, and request fasting insulin + lipid panel."
+    },
+    {
+      "id": 3,
+      "quiz_id": 1,
+      "risk_level": "High",
+      "min_score": 6,
+      "max_score": 10,
+      "label": "High Risk",
+      "clinical_interpretation": "Significant insulin resistance. High probability of pre-diabetes, visceral adiposity, and metabolic inflammation.",
+      "recommended_actions": "Consult physician for complete metabolic workup (HbA1c, fasting insulin, HOMA-IR, lipid profile, liver panel). Adopt strict whole-food plant-based diet and supervised lifestyle protocol."
+    },
+    {
+      "id": 4,
+      "quiz_id": 2,
+      "risk_level": "Mild",
+      "min_score": 0,
+      "max_score": 3,
+      "label": "Minimal Risk",
+      "clinical_interpretation": "Healthy neuroendocrine balance. Endocrine feedback loops operating well.",
+      "recommended_actions": "Protect consistent sleep schedules (bed by 10 PM), manage daily stress with breathwork, and maintain micronutrient-dense diet."
+    },
+    {
+      "id": 5,
+      "quiz_id": 2,
+      "risk_level": "Moderate",
+      "min_score": 4,
+      "max_score": 6,
+      "label": "Medium Risk",
+      "clinical_interpretation": "Mild to moderate neuroendocrine imbalance affecting thyroid, adrenal cortisol, or sex hormone balance.",
+      "recommended_actions": "Adopt evening wind-down routine to lower cortisol, reduce caffeine and alcohol, increase cruciferous vegetables for estrogen metabolism, and discuss hormone labs with doctor."
+    },
+    {
+      "id": 6,
+      "quiz_id": 2,
+      "risk_level": "Severe",
+      "min_score": 7,
+      "max_score": 10,
+      "label": "High Risk",
+      "clinical_interpretation": "Pronounced hormone disruption significantly impairing sleep, metabolism, and mood.",
+      "recommended_actions": "Comprehensive laboratory evaluation (TSH, Free T3/T4, Cortisol, DHEA-S, sex hormones). Work with an integrative/functional medicine doctor on targeted nutrition and adaptogens."
+    },
+    {
+      "id": 7,
+      "quiz_id": 3,
+      "risk_level": "Mild",
+      "min_score": 0,
+      "max_score": 3,
+      "label": "Mild Risk",
+      "clinical_interpretation": "Low environmental xenobiotic exposure and adequate biological detoxification reserve.",
+      "recommended_actions": "Continue filtered drinking water, eat organic produce where possible, and use clean household personal care products."
+    },
+    {
+      "id": 8,
+      "quiz_id": 3,
+      "risk_level": "Moderate",
+      "min_score": 4,
+      "max_score": 6,
+      "label": "Moderate Risk",
+      "clinical_interpretation": "Substantial ongoing exposure to environmental chemicals, processed packaging, or lifestyle toxins.",
+      "recommended_actions": "Transition food storage from plastic to glass, drink filtered water, add cruciferous vegetables (sulforaphane) to support Phase II liver detox, and sweat weekly."
+    },
+    {
+      "id": 9,
+      "quiz_id": 3,
+      "risk_level": "Severe",
+      "min_score": 7,
+      "max_score": 10,
+      "label": "Severe Risk",
+      "clinical_interpretation": "Heavy toxic burden overwhelming hepatic and renal detoxification pathways.",
+      "recommended_actions": "Work with clinical team to perform detox lab testing (heavy metals, environmental toxins, liver enzymes). Eliminate smoking/alcohol and implement structured lifestyle detox protocol."
+    },
+    {
+      "id": 10,
+      "quiz_id": 4,
+      "risk_level": "Low",
+      "min_score": 0,
+      "max_score": 7,
+      "label": "Awesome Gut Health",
+      "clinical_interpretation": "Robust microbiome diversity, healthy mucosal barrier, and optimal digestion.",
+      "recommended_actions": "Keep enjoying at least 30 diverse plant foods weekly, fermented foods, and staying well hydrated."
+    },
+    {
+      "id": 11,
+      "quiz_id": 4,
+      "risk_level": "Mild",
+      "min_score": 8,
+      "max_score": 15,
+      "label": "Gut Needs TLC",
+      "clinical_interpretation": "Early microbial dysbiosis, mild permeability, or dietary fiber deficiency.",
+      "recommended_actions": "Chew thoroughly (20x/bite), increase prebiotic foods (garlic, onions, asparagus), include daily probiotic foods, and avoid eating under stress."
+    },
+    {
+      "id": 12,
+      "quiz_id": 4,
+      "risk_level": "Moderate",
+      "min_score": 16,
+      "max_score": 23,
+      "label": "Moderate Risk",
+      "clinical_interpretation": "Significant gut dysbiosis causing chronic digestive complaints, fatigue, and systemic inflammation.",
+      "recommended_actions": "Eliminate the 'six poisons' (refined sugar, processed food, dairy, gluten, trans fats). Consider gentle herbal support (ginger, peppermint, licorice) and consult gut specialist."
+    },
+    {
+      "id": 13,
+      "quiz_id": 4,
+      "risk_level": "High",
+      "min_score": 24,
+      "max_score": 30,
+      "label": "High Risk",
+      "clinical_interpretation": "Severe gastrointestinal impairment, marked dysbiosis, and compromised gut-brain communication.",
+      "recommended_actions": "Consult healthcare provider for comprehensive stool testing (GI-MAP/microbiome), food sensitivity testing, and clinical gut restoration protocol (Remove, Replace, Reinoculate, Repair)."
+    },
+    {
+      "id": 14,
+      "quiz_id": 5,
+      "risk_level": "Mild",
+      "min_score": 0,
+      "max_score": 3,
+      "label": "Mild Risk",
+      "clinical_interpretation": "Favorable epigenetic signaling. Daily lifestyle choices support longevity gene expression.",
+      "recommended_actions": "Continue daily movement, restorative sleep, colorful nutrition, and positive stress-reduction routines."
+    },
+    {
+      "id": 15,
+      "quiz_id": 5,
+      "risk_level": "Moderate",
+      "min_score": 4,
+      "max_score": 6,
+      "label": "Moderate Risk",
+      "clinical_interpretation": "Sub-optimal lifestyle habits are triggering pro-inflammatory epigenetic pathways.",
+      "recommended_actions": "Incorporate folate-rich foods (spinach, lentils, asparagus) to support DNA methylation, reduce chemical exposures, and commit to daily mindfulness."
+    },
+    {
+      "id": 16,
+      "quiz_id": 5,
+      "risk_level": "Severe",
+      "min_score": 7,
+      "max_score": 10,
+      "label": "Severe Risk",
+      "clinical_interpretation": "High allostatic burden driving accelerated biological aging and adverse gene transcription.",
+      "recommended_actions": "Structured lifestyle intervention across all 6 lifestyle medicine pillars. Consider biological age testing (epigenetic DNA methylation clock) and personalized physician coaching."
+    },
+    {
+      "id": 17,
+      "quiz_id": 6,
+      "risk_level": "Low",
+      "min_score": 0,
+      "max_score": 10,
+      "label": "Low Risk",
+      "clinical_interpretation": "Mitochondrial density and ATP generation are robust and well-maintained.",
+      "recommended_actions": "Maintain regular aerobic activity, antioxidant-rich whole foods, and consistent circadian rhythms."
+    },
+    {
+      "id": 18,
+      "quiz_id": 6,
+      "risk_level": "Moderate",
+      "min_score": 11,
+      "max_score": 20,
+      "label": "Moderate Risk",
+      "clinical_interpretation": "Mitochondrial efficiency is lagging, leading to brain fog, fatigue, and slow recovery.",
+      "recommended_actions": "Add high-intensity interval training (HIIT) to stimulate mitochondrial biogenesis (PGC-1\u03b1), get morning sunlight, and consider cofactors (CoQ10, alpha-lipoic acid, magnesium)."
+    },
+    {
+      "id": 19,
+      "quiz_id": 6,
+      "risk_level": "High",
+      "min_score": 21,
+      "max_score": 30,
+      "label": "High Risk",
+      "clinical_interpretation": "Substantial mitochondrial dysfunction with elevated oxidative stress and cellular bioenergetic deficit.",
+      "recommended_actions": "Medical evaluation including metabolic labs (lactate, pyruvate, CK, CMP, lipid profile). Implement targeted mitochondrial therapy and clinical antioxidant support."
+    },
+    {
+      "id": 20,
+      "quiz_id": 7,
+      "risk_level": "Low",
+      "min_score": 0,
+      "max_score": 10,
+      "label": "Low Risk",
+      "clinical_interpretation": "Regenerative stem cell pools and tissue repair mechanisms are thriving.",
+      "recommended_actions": "Keep up healthy plant nutrition, regular exercise, deep sleep, and active stress management."
+    },
+    {
+      "id": 21,
+      "quiz_id": 7,
+      "risk_level": "Moderate",
+      "min_score": 11,
+      "max_score": 20,
+      "label": "Moderate Risk",
+      "clinical_interpretation": "Accelerated cellular wear and tear depleting endogenous stem cell renewal.",
+      "recommended_actions": "Incorporate safe intermittent fasting or time-restricted eating, eat polyphenol-rich foods (berries, green tea), and commit to 7-9 hours of nightly restorative sleep."
+    },
+    {
+      "id": 22,
+      "quiz_id": 7,
+      "risk_level": "High",
+      "min_score": 21,
+      "max_score": 30,
+      "label": "High Risk",
+      "clinical_interpretation": "Severe stem cell exhaustion and compromised regenerative resilience.",
+      "recommended_actions": "Work with a longevity medicine physician. Conduct comprehensive biomarker panel (telomere length, inflammatory cytokines, cellular health panels) and aggressive lifestyle rejuvenation."
+    }
+  ],
+  "therapeutic_supplements": [
+    {
+      "id": 1,
+      "name": "Curcumin (Turmeric)",
+      "mechanism_and_evidence": "Potent inhibitor of NF-\u03baB, COX-2, and inflammatory cytokines (TNF-\u03b1, IL-6). Reduces joint pain and cartilage breakdown.",
+      "typical_dosage_and_notes": "500\u20132,000 mg/day (standardized to 95% curcuminoids, enhanced with piperine/black pepper extract for 2000% bioavailability).",
+      "primary_indications": "Chronic inflammation, osteoarthritis, metabolic syndrome, gut permeability.",
+      "fullscript_protocol_name": "Fullscript Joint & Inflammation Protocol"
+    },
+    {
+      "id": 2,
+      "name": "Omega-3 Fatty Acids (EPA/DHA)",
+      "mechanism_and_evidence": "Precursor to specialized pro-resolving mediators (resolvins, protectins). Lowers triglycerides, CRP, and cardiovascular risk.",
+      "typical_dosage_and_notes": "1,000\u20134,000 mg/day of combined EPA/DHA from molecularly distilled fish oil or algae oil.",
+      "primary_indications": "Cardiovascular risk, elevated triglycerides, brain health, arthritis, neuro-inflammation.",
+      "fullscript_protocol_name": "Fullscript Cardiometabolic & Brain Protocol"
+    },
+    {
+      "id": 3,
+      "name": "Ginger (Zingiber officinale)",
+      "mechanism_and_evidence": "Inhibits cyclooxygenase and lipoxygenase pathways, reducing leukotrienes and prostaglandins.",
+      "typical_dosage_and_notes": "1,000\u20132,000 mg/day standardized ginger extract.",
+      "primary_indications": "Digestive discomfort, nausea, joint stiffness, exercise-induced muscle soreness.",
+      "fullscript_protocol_name": "Fullscript GI & Pain Protocol"
+    },
+    {
+      "id": 4,
+      "name": "Boswellia serrata (Frankincense)",
+      "mechanism_and_evidence": "Blocks 5-lipoxygenase (5-LOX) pro-inflammatory enzyme; preserves connective tissue glycosaminoglycans.",
+      "typical_dosage_and_notes": "200\u20131,000 mg/day (standardized to 30\u201365% boswellic acids / AKBA).",
+      "primary_indications": "Osteoarthritis, back pain, inflammatory bowel complaints, asthma.",
+      "fullscript_protocol_name": "Fullscript Joint & Inflammation Protocol"
+    },
+    {
+      "id": 5,
+      "name": "Quercetin",
+      "mechanism_and_evidence": "Flavonoid antioxidant with senolytic properties; stabilizes mast cells, inhibits histamine release, and supports zinc ionophore uptake.",
+      "typical_dosage_and_notes": "200\u2013500 mg/day (often paired with bromelain or vitamin C).",
+      "primary_indications": "Cellular senescence, seasonal allergies, vascular endothelitis, longevity.",
+      "fullscript_protocol_name": "Fullscript Cellular Health Protocol"
+    },
+    {
+      "id": 6,
+      "name": "Coenzyme Q10 (Ubiquinol)",
+      "mechanism_and_evidence": "Essential electron carrier in mitochondrial respiratory chain (Complexes I, II, III). Potent lipophilic antioxidant.",
+      "typical_dosage_and_notes": "100\u2013300 mg/day ubiquinol with fat-containing meal.",
+      "primary_indications": "Mitochondrial dysfunction, statin-induced myopathy, heart failure, cognitive fatigue.",
+      "fullscript_protocol_name": "Fullscript Mitochondrial Vitality Protocol"
+    },
+    {
+      "id": 7,
+      "name": "Magnesium (Glycinate / Malate / Threonate)",
+      "mechanism_and_evidence": "Cofactor in > 300 enzymatic reactions including ATP synthesis, DNA repair, and muscle relaxation.",
+      "typical_dosage_and_notes": "200\u2013400 mg/day elemental magnesium.",
+      "primary_indications": "Insomnia, muscle cramps, anxiety, hypertension, insulin resistance.",
+      "fullscript_protocol_name": "Fullscript Relaxation & Sleep Protocol"
+    },
+    {
+      "id": 8,
+      "name": "Berberine",
+      "mechanism_and_evidence": "Activates AMP-activated protein kinase (AMPK), mimics caloric restriction, lowers glucose and LDL cholesterol.",
+      "typical_dosage_and_notes": "500 mg 2\u20133 times daily before meals.",
+      "primary_indications": "Insulin resistance, type 2 diabetes, dyslipidemia, gut dysbiosis.",
+      "fullscript_protocol_name": "Fullscript Metabolic Power Protocol"
+    },
+    {
+      "id": 9,
+      "name": "Alpha-Lipoic Acid (ALA)",
+      "mechanism_and_evidence": "Universal water- and fat-soluble antioxidant; regenerates glutathione, vitamin C, and coenzyme Q10.",
+      "typical_dosage_and_notes": "300\u2013600 mg/day.",
+      "primary_indications": "Diabetic neuropathy, insulin sensitivity, mitochondrial protection.",
+      "fullscript_protocol_name": "Fullscript Antioxidant & Nerve Protocol"
+    },
+    {
+      "id": 10,
+      "name": "PQQ (Pyrroloquinoline Quinone)",
+      "mechanism_and_evidence": "Stimulates mitochondrial biogenesis via CREB phosphorylation and PGC-1\u03b1 activation.",
+      "typical_dosage_and_notes": "10\u201320 mg/day.",
+      "primary_indications": "Cellular aging, cognitive decline, mitochondrial renewal.",
+      "fullscript_protocol_name": "Fullscript Mitochondrial Vitality Protocol"
+    }
+  ],
+  "lab_biomarkers": [
+    {
+      "id": 1,
+      "test_name": "Comprehensive Metabolic Panel (CMP)",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Liver, Kidneys, Electrolytes, Glucose",
+      "clinical_significance": "Evaluates baseline hepatic enzymes (AST/ALT), kidney filtration (BUN/Creatinine), fasting blood glucose, and electrolyte balance."
+    },
+    {
+      "id": 2,
+      "test_name": "Complete Blood Count (CBC) with Differential",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Hematopoietic & Immune System",
+      "clinical_significance": "Assesses red blood cells, hemoglobin, white blood cell sub-types, and platelet count to screen for anemia and infection."
+    },
+    {
+      "id": 3,
+      "test_name": "Lipid Panel (Standard)",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Cardiovascular & Lipid Metabolism",
+      "clinical_significance": "Measures Total Cholesterol, Triglycerides, HDL, LDL, and Non-HDL cholesterol to evaluate atherogenic risk."
+    },
+    {
+      "id": 4,
+      "test_name": "Hemoglobin A1c (HbA1c)",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Glycemic Control (3-Month Average)",
+      "clinical_significance": "Measures percentage of glycated hemoglobin; standard clinical diagnostic marker for pre-diabetes (5.7\u20136.4%) and diabetes (\u2265 6.5%)."
+    },
+    {
+      "id": 5,
+      "test_name": "High-Sensitivity C-Reactive Protein (hs-CRP)",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Systemic Vascular Inflammation",
+      "clinical_significance": "Acute phase reactant synthesized by liver in response to IL-6. Scores < 1.0 mg/L represent low systemic vascular inflammation."
+    },
+    {
+      "id": 6,
+      "test_name": "Erythrocyte Sedimentation Rate (ESR)",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Systemic Chronic Inflammation",
+      "clinical_significance": "Non-specific rate of red blood cell settling; elevated in autoimmune conditions, infection, and chronic inflammation."
+    },
+    {
+      "id": 7,
+      "test_name": "Fasting Insulin",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Pancreatic Beta-Cell Function & Insulin Resistance",
+      "clinical_significance": "Detects compensatory hyperinsulinemia years before fasting blood glucose rises; used to compute HOMA-IR index."
+    },
+    {
+      "id": 8,
+      "test_name": "Lactate and Pyruvate",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Mitochondrial Energy Metabolism",
+      "clinical_significance": "Elevated lactate/pyruvate ratio indicates impaired mitochondrial oxidative phosphorylation and shift to anaerobic glycolysis."
+    },
+    {
+      "id": 9,
+      "test_name": "Creatine Kinase (CK) & LDH",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Muscle & Tissue Breakdown",
+      "clinical_significance": "Screens for myopathy, muscle damage from statins, or metabolic muscle disease."
+    },
+    {
+      "id": 10,
+      "test_name": "Vitamin D (25-Hydroxyvitamin D)",
+      "coverage_category": "Insurance Covered",
+      "target_system": "Immune, Bone, and Gene Modulation",
+      "clinical_significance": "Hormone precursor regulating thousands of genes. Optimal longevity target is 50\u201380 ng/mL."
+    },
+    {
+      "id": 11,
+      "test_name": "Epigenetic DNA Methylation Age Clock (GrimAge / Horvath)",
+      "coverage_category": "Functional / Out of Pocket",
+      "target_system": "Biological vs. Chronological Aging",
+      "clinical_significance": "Analyzes CpG island methylation patterns across the genome to measure biological pace of aging and mortality risk."
+    },
+    {
+      "id": 12,
+      "test_name": "Leukocyte Telomere Length Assay",
+      "coverage_category": "Functional / Out of Pocket",
+      "target_system": "Cellular Senescence & Longevity",
+      "clinical_significance": "Quantifies mean terminal restriction fragment length of telomeres to benchmark cellular age against age-matched controls."
+    },
+    {
+      "id": 13,
+      "test_name": "Comprehensive Stool Microbiome DNA Panel (GI-MAP)",
+      "coverage_category": "Functional / Out of Pocket",
+      "target_system": "Gastrointestinal Dysbiosis & Permeability",
+      "clinical_significance": "Quantifies abundance of keystone bacteria (Faecalibacterium prausnitzii, Akkermansia muciniphila) and detects dysbiosis or zonulin leaks."
+    },
+    {
+      "id": 14,
+      "test_name": "Organic Acids Test (OAT)",
+      "coverage_category": "Functional / Out of Pocket",
+      "target_system": "Metabolic & Mitochondrial Byproducts",
+      "clinical_significance": "Measures urinary organic acid metabolites reflecting Krebs cycle efficiency, neurotransmitter turnover, and yeast/bacterial overgrowth."
+    },
+    {
+      "id": 15,
+      "test_name": "Environmental Toxins & Heavy Metals Panel",
+      "coverage_category": "Functional / Out of Pocket",
+      "target_system": "Xenobiotic Toxic Burden",
+      "clinical_significance": "Urinary or blood analysis of phthalates, parabens, organophosphates, lead, mercury, arsenic, and cadmium."
+    }
+  ]
+}

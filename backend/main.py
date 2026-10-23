@@ -35,6 +35,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from routers.livewell import router as livewell_router
+app.include_router(livewell_router)
+
 
 class EvaluateLoadRequest(BaseModel):
     user_id: str = Field(default="u_12345", description="User Identifier")
