@@ -6,6 +6,7 @@ import { StateSelectorModal } from '../components/StateSelectorModal';
 import { TaskBoard } from '../components/TaskBoard';
 import { FOUVisualizer } from '../components/FOUVisualizer';
 import { AcademicInspector } from '../components/AcademicInspector';
+import { LiveWellDatabaseViewer } from '../components/LiveWellDatabaseViewer';
 import { evaluateLoad, EvaluateLoadResponse } from '../utils/api';
 import { AlertCircle, RefreshCw, BookOpen, Layers, Sparkles } from 'lucide-react';
 
@@ -126,6 +127,11 @@ export default function Home() {
         {/* 4. SECTION 4: Academic Rationale & Psychometric Foundations */}
         <section>
           <AcademicInspector />
+        </section>
+
+        {/* 5. SECTION 5: Dr. Murthy Gokula LiveWell Clinical Knowledge Base & Quizzes */}
+        <section>
+          <LiveWellDatabaseViewer />
         </section>
 
         {/* Academic Context Footer */}
