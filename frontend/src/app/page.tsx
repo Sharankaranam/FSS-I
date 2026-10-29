@@ -140,9 +140,9 @@ export default function Home() {
             <BookOpen className="w-5 h-5 text-teal-400 shrink-0" />
             <div>
               <div className="font-semibold text-slate-200">
-                Master of Science in Computer Science Thesis
+                Cognitive Workload Management
               </div>
-              <div>University of Neuchâtel &bull; LiveWell Ecosystem Research</div>
+              <div>Interval Type-2 (IT2) Fuzzy Inference Engine</div>
             </div>
           </div>
 

@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
-              Behavioral Load Manager &bull; Master Thesis Project (Univ. of Neuchâtel / LiveWell)
+              Behavioral Load Manager &bull; Dynamic Cognitive Workload Management
             </p>
           </div>
         </div>
