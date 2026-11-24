@@ -106,16 +106,14 @@ export const LiveWellDatabaseViewer: React.FC = () => {
         eyebrow="LiveWell library"
         title="Habits & clinical screening"
         description="Eight habits, seven screening instruments, MY GOAL DO IT microhabits and therapeutic protocols from the LiveWell longevity framework."
-        right={
-          <div className="segmented overflow-x-auto no-scrollbar max-w-full" role="tablist">
-            {TABS.map((t) => (
-              <button key={t.id} aria-pressed={activeTab === t.id} onClick={() => setActiveTab(t.id)} className="shrink-0">
-                {t.label}
-              </button>
-            ))}
-          </div>
-        }
       />
+      <div className="segmented overflow-x-auto no-scrollbar max-w-full mb-5 -mt-1" role="tablist">
+        {TABS.map((t) => (
+          <button key={t.id} aria-pressed={activeTab === t.id} onClick={() => setActiveTab(t.id)} className="shrink-0">
+            {t.label}
+          </button>
+        ))}
+      </div>
 
       {loadError && (
         <div className="card p-4 mb-4 text-[13px] text-danger border-danger/30 bg-danger/5">{loadError}</div>
