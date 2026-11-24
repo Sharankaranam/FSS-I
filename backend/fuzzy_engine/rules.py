@@ -8,11 +8,6 @@ from .it2_sets import (
     OUTPUT_SETS,
 )
 
-# Representative core domain midpoints for linguistic terms
-FATIGUE_CORES = {"Energized": 15.0, "Drained": 50.0, "Exhausted": 87.5}
-STRESS_CORES = {"Relaxed": 17.5, "Pressured": 55.0, "Overwhelmed": 90.0}
-SLEEP_CORES = {"Restful": 15.0, "Restless": 50.0, "Deprived": 87.5}
-TASK_CORES = {"Routine": 17.5, "Challenging": 55.0, "Intense": 90.0}
 
 
 def evaluate_rules(
@@ -31,33 +26,21 @@ def evaluate_rules(
     Guarantees rich multi-rule partial firings and continuous defuzzified scores (0-100).
     """
 
-    # Resolve continuous scalar value for each driver
-    fatigue_val = (
-        fatigue_numeric
-        if fatigue_numeric is not None
-        else FATIGUE_CORES.get(fatigue_state, 50.0)
-    )
-    stress_val = (
-        stress_numeric
-        if stress_numeric is not None
-        else STRESS_CORES.get(stress_state, 55.0)
-    )
-    sleep_val = (
-        sleep_numeric
-        if sleep_numeric is not None
-        else SLEEP_CORES.get(sleep_state, 50.0)
-    )
-    task_val = (
-        task_complexity_numeric
-        if task_complexity_numeric is not None
-        else TASK_CORES.get(task_complexity_state, 55.0)
-    )
+    # Resolve the firing interval of every antecedent set.
+    #  - Numeric input  -> singleton fuzzification at that crisp value.
+    #  - Word input     -> non-singleton fuzzification: the word is an IT2 set and its
+    #                      compatibility with each antecedent keeps the FOU intact.
+    def memberships(sets, word, numeric):
+        if numeric is not None:
+            return {k: s.evaluate_scalar(numeric) for k, s in sets.items()}
+        if word not in sets:
+            raise ValueError(f"Unknown linguistic term '{word}'")
+        return {k: s.compatibility(sets[word]) for k, s in sets.items()}
 
-    # Evaluate membership bounds across all fuzzy sets in each driver
-    fatigue_m = {k: s.evaluate_scalar(fatigue_val) for k, s in FATIGUE_SETS.items()}
-    stress_m = {k: s.evaluate_scalar(stress_val) for k, s in STRESS_SETS.items()}
-    sleep_m = {k: s.evaluate_scalar(sleep_val) for k, s in SLEEP_SETS.items()}
-    task_m = {k: s.evaluate_scalar(task_val) for k, s in TASK_COMPLEXITY_SETS.items()}
+    fatigue_m = memberships(FATIGUE_SETS, fatigue_state, fatigue_numeric)
+    stress_m = memberships(STRESS_SETS, stress_state, stress_numeric)
+    sleep_m = memberships(SLEEP_SETS, sleep_state, sleep_numeric)
+    task_m = memberships(TASK_COMPLEXITY_SETS, task_complexity_state, task_complexity_numeric)
 
     domain = np.linspace(0.0, 100.0, num_domain_points, dtype=np.float64)
     agg_umf = np.zeros(num_domain_points, dtype=np.float64)

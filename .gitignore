@@ -47,3 +47,6 @@ Thumbs.db
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+
+# Per-user planner data (profiles, tasks, check-ins)
+backend/database/planner.db

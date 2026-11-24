@@ -36,7 +36,13 @@ app.add_middleware(
 )
 
 from routers.livewell import router as livewell_router
+from routers.planner import router as planner_router
 app.include_router(livewell_router)
+app.include_router(planner_router)
+
+# Load bands shared with the frontend
+CRITICAL_THRESHOLD = 65.0
+MODERATE_THRESHOLD = 35.0
 
 
 class EvaluateLoadRequest(BaseModel):
@@ -168,7 +174,16 @@ def evaluate_load(req: EvaluateLoadRequest):
     score = km_res["y_crisp"]
 
     # 3. Determine Recommended Action
-    recommended_action = "defer_deep_work" if score > 65.0 else "normal_schedule"
+    # Graded response instead of all-or-nothing:
+    #   > 65  -> defer every deep-work task
+    #   35-65 -> keep at most one deep-work block today
+    #   < 35  -> full schedule
+    if score > CRITICAL_THRESHOLD:
+        recommended_action = "defer_deep_work"
+    elif score > MODERATE_THRESHOLD:
+        recommended_action = "limit_deep_work"
+    else:
+        recommended_action = "normal_schedule"
 
     total_km_iters = max(km_res["iterations_left"], km_res["iterations_right"])
     triggered_count = sum(1 for r in rule_eval["rule_firings"] if r["is_triggered"])

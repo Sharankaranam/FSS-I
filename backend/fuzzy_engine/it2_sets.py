@@ -74,6 +74,27 @@ class IT2FuzzySet:
         lmf_val = min(lmf_val, umf_val)
         return umf_val, lmf_val
 
+    def compatibility(self, word: "IT2FuzzySet", resolution: int = 1001) -> Tuple[float, float]:
+        """
+        Non-singleton (word-to-word) firing interval used when the input is a word rather
+        than a crisp number (Computing with Words). The input word is itself an IT2 set, so
+        its firing against this antecedent is the sup-min intersection:
+
+            upper = sup_x min(UMF_word(x), UMF_self(x))
+            lower = sup_x min(LMF_word(x), LMF_self(x))
+
+        A word fully matches itself ([1, 1]) and partially fires its neighbours
+        (e.g. "Drained" vs "Energized" -> [0, ~0.57]), which preserves the footprint of
+        uncertainty all the way to type-reduction.
+        Returns: (upper, lower)
+        """
+        x = np.linspace(0.0, 100.0, resolution)
+        su, sl = self.evaluate_domain(x)
+        wu, wl = word.evaluate_domain(x)
+        upper = float(np.max(np.minimum(su, wu)))
+        lower = float(np.max(np.minimum(sl, wl)))
+        return upper, min(lower, upper)
+
     def evaluate_domain(self, x_domain: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Evaluates membership values across a domain array.
@@ -186,25 +207,25 @@ TASK_COMPLEXITY_SETS = {
 }
 
 # =====================================================================
-# Output Consequents (Modeled as Type-1 Triangular Sets)
+# Output Consequents (IT2 sets with a real footprint of uncertainty)
 # =====================================================================
 OUTPUT_SETS = {
     "Low": IT2FuzzySet(
         name="Low",
-        umf_params=[0.0, 0.0, 0.0, 40.0],
-        lmf_params=[0.0, 0.0, 0.0, 40.0],
+        umf_params=[0.0, 0.0, 5.0, 45.0],
+        lmf_params=[0.0, 0.0, 0.0, 32.0],
         justification="Optimal mental capacity balance. User can handle complex or routine tasks effortlessly.",
     ),
     "Moderate": IT2FuzzySet(
         name="Moderate",
-        umf_params=[30.0, 50.0, 50.0, 70.0],
-        lmf_params=[30.0, 50.0, 50.0, 70.0],
+        umf_params=[25.0, 45.0, 55.0, 75.0],
+        lmf_params=[35.0, 50.0, 50.0, 65.0],
         justification="Manageable cognitive workload requiring steady pacing to avoid onset of burnout.",
     ),
     "Critical": IT2FuzzySet(
         name="Critical",
-        umf_params=[60.0, 100.0, 100.0, 100.0],
-        lmf_params=[60.0, 100.0, 100.0, 100.0],
+        umf_params=[55.0, 95.0, 100.0, 100.0],
+        lmf_params=[68.0, 100.0, 100.0, 100.0],
         justification="Severe cognitive strain threshold (> 65 score). Forces dynamic schedule reprioritization and task deferral.",
     ),
 }

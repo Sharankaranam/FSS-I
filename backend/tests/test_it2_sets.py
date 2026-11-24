@@ -47,3 +47,22 @@ def test_sleep_and_task_boundaries():
     intense = TASK_COMPLEXITY_SETS["Intense"]
     u, l = intense.evaluate_scalar(100.0)
     assert u == 1.0 and l == 1.0
+
+
+def test_word_compatibility_self_and_neighbours():
+    drained = FATIGUE_SETS["Drained"]
+    # A word fully matches itself
+    assert drained.compatibility(drained) == (1.0, 1.0)
+    # ...and only partially fires a neighbour: lower 0, upper strictly between 0 and 1
+    u, l = FATIGUE_SETS["Energized"].compatibility(drained)
+    assert 0.0 < u < 1.0
+    assert l == 0.0
+    # Non-overlapping words do not fire at all
+    assert FATIGUE_SETS["Exhausted"].compatibility(FATIGUE_SETS["Energized"]) == (0.0, 0.0)
+
+
+def test_output_sets_have_a_footprint_of_uncertainty():
+    domain = np.linspace(0, 100, 101)
+    for name, fset in OUTPUT_SETS.items():
+        umf, lmf = fset.evaluate_domain(domain)
+        assert np.any(umf - lmf > 1e-6), f"Output set {name} has no FOU"

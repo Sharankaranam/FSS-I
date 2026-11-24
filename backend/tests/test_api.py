@@ -60,3 +60,19 @@ def test_evaluate_load_invalid_state():
     }
     response = client.post("/api/v1/evaluate_load", json=payload)
     assert response.status_code == 400
+
+
+def test_linguistic_inputs_keep_a_centroid_interval():
+    """Word inputs must yield a real [y_l, y_r] interval, not a collapsed point."""
+    payload = {
+        "fatigue_state": "Drained",
+        "stress_state": "Pressured",
+        "sleep_state": "Restless",
+        "task_complexity_state": "Challenging",
+    }
+    data = client.post("/api/v1/evaluate_load", json=payload).json()
+    assert data["y_right"] - data["y_left"] > 5.0
+    assert data["y_left"] <= data["cognitive_load_score"] <= data["y_right"]
+    umf = data["fou_curves"]["aggregated_umf"]
+    lmf = data["fou_curves"]["aggregated_lmf"]
+    assert any(u - l > 1e-3 for u, l in zip(umf, lmf))
