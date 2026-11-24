@@ -19,6 +19,8 @@ interface NavigationProps {
   deferredCount: number;
   score: number | null;
   online: boolean | null;
+  /** Renders the profile switcher; `compact` is used in the mobile top bar. */
+  profileControl?: (compact: boolean) => React.ReactNode;
 }
 
 const Brand = () => (
@@ -39,6 +41,7 @@ export const SidebarNav: React.FC<NavigationProps> = ({
   deferredCount,
   score,
   online,
+  profileControl,
 }) => {
   const tone = scoreTone(score);
   return (
@@ -71,6 +74,7 @@ export const SidebarNav: React.FC<NavigationProps> = ({
         </nav>
 
         <div className="mt-auto space-y-3">
+          {profileControl && <div className="-mx-1">{profileControl(false)}</div>}
           <div className="rounded-xl border border-line bg-surface p-3.5">
             <div className="eyebrow">Cognitive load</div>
             <div className="flex items-baseline gap-1 mt-1">
@@ -111,6 +115,7 @@ export const SidebarNav: React.FC<NavigationProps> = ({
               <span className={`num font-display text-xl ${toneText[tone]}`}>{score.toFixed(0)}</span>
             )}
             <ThemeToggle />
+            {profileControl?.(true)}
           </div>
         </div>
         <nav className="flex gap-1 px-3 pb-2 overflow-x-auto no-scrollbar" aria-label="Sections">

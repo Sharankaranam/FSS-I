@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Sunrise, Utensils, MoonStar, RotateCcw, ArrowRight, Loader2 } from 'lucide-react';
+import { Sunrise, Utensils, MoonStar, RotateCcw, ArrowRight, Loader2, Info } from 'lucide-react';
 import {
   fetchLiveWellHabits,
   fetchLiveWellQuizzes,
@@ -27,7 +27,7 @@ const TABS: { id: Tab; label: string }[] = [
 
 const DRIVERS = ['Gut Health', 'Inflammation', 'Insulin Resistance', 'Toxins'];
 
-export const LiveWellDatabaseViewer: React.FC = () => {
+export const LiveWellDatabaseViewer: React.FC<{ userId?: string }> = ({ userId = 'guest' }) => {
   const [activeTab, setActiveTab] = useState<Tab>('habits');
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -90,7 +90,7 @@ export const LiveWellDatabaseViewer: React.FC = () => {
     setQuizSubmitting(true);
     setQuizError(null);
     try {
-      setEvalResult(await evaluateLiveWellQuiz(selectedQuizCode, userAnswers));
+      setEvalResult(await evaluateLiveWellQuiz(selectedQuizCode, userAnswers, userId));
     } catch (e: any) {
       setQuizError(e.message || 'Evaluation failed.');
     } finally {
@@ -185,6 +185,7 @@ export const LiveWellDatabaseViewer: React.FC = () => {
       {/* QUIZZES */}
       {activeTab === 'quizzes' && (
         <div className="space-y-4">
+          <MedicalNotice />
           <div className="flex flex-wrap gap-1.5">
             {quizList.map((q) => (
               <button
@@ -322,6 +323,7 @@ export const LiveWellDatabaseViewer: React.FC = () => {
       {/* SUPPLEMENTS & LABS */}
       {activeTab === 'supplements' && (
         <div className="space-y-6">
+          <MedicalNotice />
           <DataTable
             title="Therapeutic supplements"
             headers={['Supplement', 'Mechanism & evidence', 'Typical dosage', 'Indications']}
@@ -356,6 +358,20 @@ export const LiveWellDatabaseViewer: React.FC = () => {
     </div>
   );
 };
+
+const MedicalNotice = () => (
+  <div role="note" className="flex gap-3 rounded-lg border border-warn/30 bg-warn/[0.06] px-4 py-3 text-[13px] leading-relaxed">
+    <Info className="w-4 h-4 text-warn shrink-0 mt-0.5" />
+    <p>
+      <span className="font-medium">Educational screening, not medical advice.</span>{' '}
+      <span className="text-muted">
+        These questionnaires and protocols come from the LiveWell framework and cannot diagnose any condition. Talk
+        to a qualified clinician before acting on a result, starting a supplement or ordering lab tests, and seek
+        urgent care for severe or sudden symptoms.
+      </span>
+    </p>
+  </div>
+);
 
 const Routine = ({ icon: Icon, title, text }: { icon: React.ElementType; title: string; text?: string }) => (
   <div className="bg-surface p-4">

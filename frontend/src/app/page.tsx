@@ -5,11 +5,15 @@ import { AlertCircle, RefreshCw } from 'lucide-react';
 import { SidebarNav, TabType } from '../components/SidebarNav';
 import { CheckInPanel } from '../components/CheckInPanel';
 import { ScorePanel } from '../components/ScorePanel';
-import { TaskBoard, splitTasks } from '../components/TaskBoard';
+import { TaskBoard } from '../components/TaskBoard';
+import { TrendCard } from '../components/TrendCard';
+import { ProfileSwitcher } from '../components/ProfileSwitcher';
 import { FOUVisualizer } from '../components/FOUVisualizer';
 import { AcademicInspector } from '../components/AcademicInspector';
 import { LiveWellDatabaseViewer } from '../components/LiveWellDatabaseViewer';
 import { evaluateLoad, EvaluateLoadResponse } from '../utils/api';
+import { splitTasks } from '../utils/plan';
+import { usePlanner } from '../utils/usePlanner';
 
 type Numeric = { fatigue_num?: number; stress_num?: number; sleep_num?: number; task_num?: number };
 
@@ -29,21 +33,25 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [hello, setHello] = useState('Hello');
   const [dateLabel, setDateLabel] = useState('Today');
+  const [panelKey, setPanelKey] = useState(0);
   const reqId = useRef(0);
+  const restored = useRef(false);
+  const planner = usePlanner();
 
   const fetchLoadEvaluation = async (
     fatigue: string,
     stress: string,
     sleep: string,
     task: string,
-    numeric?: Numeric
+    numeric?: Numeric,
+    record = true
   ) => {
     const id = ++reqId.current;
     setLoading(true);
     setError(null);
     try {
       const data = await evaluateLoad({
-        user_id: 'u_12345',
+        user_id: planner.profile?.id ?? 'guest',
         fatigue_state: fatigue,
         stress_state: stress,
         sleep_state: sleep,
@@ -59,6 +67,7 @@ export default function Home() {
       setStressState(stress);
       setSleepState(sleep);
       setTaskState(task);
+      if (record) planner.scheduleCheckin(data);
     } catch (err: any) {
       if (id !== reqId.current) return;
       setError(err.message || 'Failed to reach the backend.');
@@ -70,15 +79,31 @@ export default function Home() {
   useEffect(() => {
     setHello(greeting());
     setDateLabel(new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' }));
-    fetchLoadEvaluation('Drained', 'Pressured', 'Restless', 'Challenging');
+    fetchLoadEvaluation('Drained', 'Pressured', 'Restless', 'Challenging', undefined, false);
   }, []);
+
+  // Start from today's latest check-in, if there is one (once per profile).
+  useEffect(() => {
+    if (!planner.profile || planner.tasksLoading || restored.current) return;
+    restored.current = true;
+    const last = planner.checkins[planner.checkins.length - 1];
+    if (last && new Date(last.created_at).toDateString() === new Date().toDateString()) {
+      fetchLoadEvaluation(last.fatigue_state, last.stress_state, last.sleep_state, last.task_complexity_state, undefined, false).then(
+        () => setPanelKey((k) => k + 1)
+      );
+    }
+  }, [planner.profile, planner.tasksLoading, planner.checkins]);
+
+  useEffect(() => {
+    restored.current = false;
+  }, [planner.profile?.id]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [tab]);
 
   const score = apiData?.cognitive_load_score ?? null;
-  const { deferred } = splitTasks(score);
+  const { deferred } = splitTasks(planner.tasks, score);
   const online = error ? false : apiData ? true : null;
 
   return (
@@ -89,6 +114,16 @@ export default function Home() {
         deferredCount={deferred.length}
         score={score}
         online={online}
+        profileControl={(compact) => (
+          <ProfileSwitcher
+            compact={compact}
+            profile={planner.profile}
+            profiles={planner.profiles}
+            onSwitch={planner.switchProfile}
+            onCreate={planner.newProfile}
+            onRename={planner.rename}
+          />
+        )}
       />
 
       <main className="flex-1 min-w-0">
@@ -133,6 +168,7 @@ export default function Home() {
 
               <div className="grid xl:grid-cols-[1fr_360px] gap-6 items-start">
                 <CheckInPanel
+                  key={`${planner.profile?.id ?? 'none'}-${panelKey}`}
                   onEvaluate={fetchLoadEvaluation}
                   loading={loading}
                   currentFatigue={fatigueState}
@@ -150,10 +186,27 @@ export default function Home() {
                       See how this score was computed →
                     </button>
                   )}
+                  <TrendCard checkins={planner.checkins} />
                 </div>
               </div>
 
-              <TaskBoard cognitiveLoadScore={score} recommendedAction={apiData?.recommended_action ?? null} />
+              {planner.error && (
+                <div className="card p-4 flex items-center justify-between gap-3 text-[13.5px]">
+                  <span className="text-muted">Your tasks and history couldn&apos;t be loaded: {planner.error}</span>
+                  <button onClick={planner.retry} className="btn border border-line bg-surface hover:bg-sunken shrink-0">
+                    <RefreshCw className="w-3.5 h-3.5" /> Retry
+                  </button>
+                </div>
+              )}
+
+              <TaskBoard
+                tasks={planner.tasks}
+                loading={planner.tasksLoading}
+                cognitiveLoadScore={score}
+                onAdd={planner.addTask}
+                onUpdate={planner.editTask}
+                onDelete={planner.removeTask}
+              />
             </div>
           )}
 
@@ -169,7 +222,7 @@ export default function Home() {
           )}
           {tab === 'library' && (
             <div className="animate-rise">
-              <LiveWellDatabaseViewer />
+              <LiveWellDatabaseViewer userId={planner.profile?.id ?? 'guest'} />
             </div>
           )}
 

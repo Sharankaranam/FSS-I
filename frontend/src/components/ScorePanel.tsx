@@ -3,6 +3,7 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 import { EvaluateLoadResponse } from '../utils/api';
+import { explainScore } from '../utils/plan';
 import {
   CRITICAL_THRESHOLD,
   MODERATE_THRESHOLD,
@@ -19,6 +20,7 @@ interface ScorePanelProps {
 
 const ACTION_TEXT: Record<string, string> = {
   defer_deep_work: 'Protect your energy: deep-work tasks are deferred to tomorrow. Keep today to routine, low-demand work.',
+  limit_deep_work: 'Pace yourself: keep one short deep-work block today and move the rest to tomorrow.',
   normal_schedule: 'You have capacity today. Keep the full schedule, deep work included.',
 };
 
@@ -88,6 +90,8 @@ export const ScorePanel: React.FC<ScorePanelProps> = ({ apiData, loading }) => {
         </div>
       </div>
 
+      {apiData && <Why data={apiData} />}
+
       {apiData?.recommended_action && (
         <p className="mt-4 text-[13.5px] leading-relaxed text-muted border-l-2 border-line pl-3">
           {ACTION_TEXT[apiData.recommended_action] ?? apiData.recommended_action.replace(/_/g, ' ')}
@@ -111,3 +115,13 @@ const Stat = ({ label, value }: { label: string; value: string }) => (
     <dd className="num font-mono text-[13px] mt-0.5">{value}</dd>
   </div>
 );
+
+const Why = ({ data }: { data: EvaluateLoadResponse }) => {
+  const { reason, certainty } = explainScore(data);
+  return (
+    <div className="mt-5 space-y-1">
+      <p className="text-[13.5px] leading-relaxed">{reason}</p>
+      <p className="text-[12.5px] text-muted leading-relaxed">{certainty}</p>
+    </div>
+  );
+};

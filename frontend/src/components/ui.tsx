@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 
-export const CRITICAL_THRESHOLD = 65;
-export const MODERATE_THRESHOLD = 35;
+import { CRITICAL_THRESHOLD, MODERATE_THRESHOLD } from '../utils/plan';
+export { CRITICAL_THRESHOLD, MODERATE_THRESHOLD };
 
 export type Tone = 'ok' | 'warn' | 'danger';
 
