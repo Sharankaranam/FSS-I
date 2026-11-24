@@ -205,3 +205,78 @@ export async function fetchLiveWellLabs(): Promise<any[]> {
   if (!res.ok) throw new Error('Failed to load labs');
   return res.json();
 }
+
+// ---------------------------------------------------------------------------
+// Planner: profiles, tasks, check-in history
+// ---------------------------------------------------------------------------
+export type LoadType = 'High' | 'Moderate' | 'Low';
+
+export interface Profile {
+  id: string;
+  name: string;
+  created_at: string;
+}
+
+export interface PlannerTask {
+  id: number;
+  user_id: string;
+  title: string;
+  category: string;
+  load_type: LoadType;
+  estimated_mins: number;
+  done: boolean;
+  created_at: string;
+}
+
+export interface Checkin {
+  id: number;
+  user_id: string;
+  created_at: string;
+  fatigue_state: string;
+  stress_state: string;
+  sleep_state: string;
+  task_complexity_state: string;
+  score: number;
+  y_left: number;
+  y_right: number;
+}
+
+export class NotFoundError extends Error {}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
+    ...init,
+    headers: { 'Content-Type': 'application/json', ...(init?.headers || {}) },
+  });
+  if (res.status === 404) throw new NotFoundError(`Not found: ${path}`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    const detail = typeof body.detail === 'string' ? body.detail : `Request failed (${res.status})`;
+    throw new Error(detail);
+  }
+  return (res.status === 204 ? undefined : await res.json()) as T;
+}
+
+export const listProfiles = () => request<Profile[]>('/api/v1/profiles');
+export const getProfile = (id: string) => request<Profile>(`/api/v1/profiles/${id}`);
+export const createProfile = (name: string) =>
+  request<Profile>('/api/v1/profiles', { method: 'POST', body: JSON.stringify({ name }) });
+export const renameProfile = (id: string, name: string) =>
+  request<Profile>(`/api/v1/profiles/${id}`, { method: 'PATCH', body: JSON.stringify({ name }) });
+
+export const listTasks = (uid: string) => request<PlannerTask[]>(`/api/v1/users/${uid}/tasks`);
+export const createTask = (
+  uid: string,
+  task: { title: string; category?: string; load_type: LoadType; estimated_mins: number }
+) => request<PlannerTask>(`/api/v1/users/${uid}/tasks`, { method: 'POST', body: JSON.stringify(task) });
+export const updateTask = (uid: string, id: number, patch: Partial<Omit<PlannerTask, 'id' | 'user_id'>>) =>
+  request<PlannerTask>(`/api/v1/users/${uid}/tasks/${id}`, { method: 'PATCH', body: JSON.stringify(patch) });
+export const deleteTask = (uid: string, id: number) =>
+  request<void>(`/api/v1/users/${uid}/tasks/${id}`, { method: 'DELETE' });
+
+export const listCheckins = (uid: string, days = 7) =>
+  request<Checkin[]>(`/api/v1/users/${uid}/checkins?days=${days}`);
+export const recordCheckin = (
+  uid: string,
+  c: Pick<Checkin, 'fatigue_state' | 'stress_state' | 'sleep_state' | 'task_complexity_state' | 'score' | 'y_left' | 'y_right'>
+) => request<Checkin>(`/api/v1/users/${uid}/checkins`, { method: 'POST', body: JSON.stringify(c) });
