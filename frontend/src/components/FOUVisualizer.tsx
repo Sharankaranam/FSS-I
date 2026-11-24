@@ -1,276 +1,248 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {
-  AreaChart,
+  ComposedChart,
   Area,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
+  ReferenceArea,
 } from 'recharts';
-import { EvaluateLoadResponse } from '../utils/api';
-import { LineChart as LineIcon, Code, CheckCircle, Flame, Info, Sparkles } from 'lucide-react';
+import { EvaluateLoadResponse, RuleFiringDetail } from '../utils/api';
+import { SectionHeader, ToneTag, useTokenColors } from './ui';
 
 interface FOUVisualizerProps {
   apiData: EvaluateLoadResponse | null;
 }
 
 export const FOUVisualizer: React.FC<FOUVisualizerProps> = ({ apiData }) => {
-  if (!apiData) return null;
+  const colors = useTokenColors();
+  const [showInactive, setShowInactive] = useState(false);
 
-  const {
-    cognitive_load_score,
-    y_left,
-    y_right,
-    top_rule_ids,
-    triggered_rules_count,
-    rule_firings,
-    fou_curves,
-  } = apiData;
+  const chartData = useMemo(
+    () =>
+      apiData
+        ? apiData.fou_curves.domain.map((x, i) => {
+            const u = apiData.fou_curves.aggregated_umf[i] || 0;
+            const l = apiData.fou_curves.aggregated_lmf[i] || 0;
+            return { x, UMF: u, LMF: l, band: [l, u] as [number, number] };
+          })
+        : [],
+    [apiData]
+  );
 
-  // Format chart data for Recharts
-  const chartData = fou_curves.domain.map((xVal, idx) => {
-    const umfVal = fou_curves.aggregated_umf[idx] || 0;
-    const lmfVal = fou_curves.aggregated_lmf[idx] || 0;
-    return {
-      x: xVal,
-      UMF: umfVal,
-      LMF: lmfVal,
-      FOU: umfVal - lmfVal,
-    };
-  });
+  if (!apiData || !colors) {
+    return (
+      <div>
+        <SectionHeader eyebrow="Inference" title="Footprint of uncertainty" />
+        <div className="card p-10 text-center text-sm text-muted">Run a check-in to see the inference trace.</div>
+      </div>
+    );
+  }
+
+  const { cognitive_load_score: y, y_left, y_right, rule_firings } = apiData;
+  const sorted = [...rule_firings].sort((a, b) => b.f_upper - a.f_upper || a.rule_id - b.rule_id);
+  const visible = showInactive ? sorted : sorted.filter((r) => r.is_triggered);
+  const inactiveCount = rule_firings.length - rule_firings.filter((r) => r.is_triggered).length;
 
   return (
-    <div className="w-full glass-panel rounded-2xl p-6 mb-8 border border-slate-700/60 shadow-xl">
-      {/* Top Title & Centroid Summary */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full flex items-center gap-1">
-              <Flame className="w-3 h-3 text-amber-400" />
-              {triggered_rules_count} Rules Fired &bull; Top: {top_rule_ids.map((id) => `R${id}`).join(', ')}
-            </span>
-          </div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <LineIcon className="w-5 h-5 text-cyan-400" />
-            IT2 Footprint of Uncertainty (FOU) &amp; Karnik-Mendel Switch Points
-          </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Aggregated UMF vs LMF curves defuzzified via Karnik-Mendel to centroid interval [y_left, y_right].
-          </p>
-        </div>
+    <div className="space-y-6">
+      <SectionHeader
+        eyebrow="Inference"
+        title="Footprint of uncertainty"
+        description="Aggregated upper and lower membership functions, type-reduced with Karnik-Mendel to the centroid interval [yₗ, yᵣ]. The crisp score is its midpoint."
+      />
 
-        {/* Centroid Metrics Badge Pill */}
-        <div className="flex items-center gap-3 bg-slate-900/90 p-3 rounded-xl border border-slate-700/80 text-xs shadow-lg">
-          <div className="text-right">
-            <div className="text-[10px] text-cyan-300 font-bold uppercase tracking-wider">Left Switch (y_left)</div>
-            <div className="font-mono font-extrabold text-cyan-400 text-sm">{y_left.toFixed(2)}</div>
-          </div>
-          <div className="h-7 w-px bg-slate-700" />
-          <div className="text-right">
-            <div className="text-[10px] text-purple-300 font-bold uppercase tracking-wider">Right Switch (y_right)</div>
-            <div className="font-mono font-extrabold text-purple-400 text-sm">{y_right.toFixed(2)}</div>
-          </div>
-          <div className="h-7 w-px bg-slate-700" />
-          <div className="text-right">
-            <div className="text-[10px] text-emerald-300 font-bold uppercase tracking-wider">Y_crisp Score</div>
-            <div className="font-mono font-extrabold text-emerald-400 text-base">{cognitive_load_score.toFixed(2)}</div>
-          </div>
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-px rounded-card overflow-hidden bg-line border border-line">
+        <Metric label="Left switch point yₗ" value={y_left.toFixed(2)} sub={`${apiData.km_iterations_left} KM iterations`} />
+        <Metric label="Right switch point yᵣ" value={y_right.toFixed(2)} sub={`${apiData.km_iterations_right} KM iterations`} />
+        <Metric label="Crisp score (yₗ + yᵣ) / 2" value={y.toFixed(2)} emphasis />
+        <Metric
+          label="Rules fired"
+          value={`${apiData.triggered_rules_count} of ${rule_firings.length}`}
+          sub={`Dominant: ${apiData.top_rule_ids.map((id) => `R${id}`).join(', ') || '—'}`}
+        />
       </div>
 
-      {/* Recharts Area Chart showing UMF and LMF */}
-      <div className="h-72 w-full mb-6 bg-slate-950/80 p-4 rounded-xl border border-slate-800">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-            <defs>
-              <linearGradient id="colorUMF" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
-                <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.0} />
-              </linearGradient>
-              <linearGradient id="colorLMF" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#a855f7" stopOpacity={0.6} />
-                <stop offset="95%" stopColor="#a855f7" stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-            <XAxis
-              dataKey="x"
-              stroke="#64748b"
-              tick={{ fontSize: 11 }}
-              unit=" domain"
-            />
-            <YAxis
-              stroke="#64748b"
-              domain={[0, 1]}
-              tick={{ fontSize: 11 }}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: '#0f172a',
-                borderColor: '#334155',
-                borderRadius: '0.75rem',
-                fontSize: '12px',
-              }}
-              formatter={(value: any) => [
-                typeof value === 'number' ? value.toFixed(4) : value,
-              ]}
-            />
-            {/* UMF Area */}
-            <Area
-              type="monotone"
-              dataKey="UMF"
-              stroke="#06b6d4"
-              strokeWidth={2}
-              fillOpacity={1}
-              fill="url(#colorUMF)"
-              name="Upper Membership (UMF)"
-            />
-            {/* LMF Area */}
-            <Area
-              type="monotone"
-              dataKey="LMF"
-              stroke="#a855f7"
-              strokeWidth={2}
-              fillOpacity={1}
-              fill="url(#colorLMF)"
-              name="Lower Membership (LMF)"
-            />
-
-            {/* Vertical Reference Lines */}
-            <ReferenceLine
-              x={y_left}
-              stroke="#06b6d4"
-              strokeDasharray="4 4"
-              strokeWidth={2}
-              label={{
-                value: `y_l = ${y_left}`,
-                fill: '#06b6d4',
-                fontSize: 11,
-                position: 'top',
-              }}
-            />
-            <ReferenceLine
-              x={y_right}
-              stroke="#a855f7"
-              strokeDasharray="4 4"
-              strokeWidth={2}
-              label={{
-                value: `y_r = ${y_right}`,
-                fill: '#a855f7',
-                fontSize: 11,
-                position: 'top',
-              }}
-            />
-            <ReferenceLine
-              x={cognitive_load_score}
-              stroke="#10b981"
-              strokeWidth={3}
-              label={{
-                value: `Y_crisp = ${cognitive_load_score}`,
-                fill: '#10b981',
-                fontSize: 12,
-                fontWeight: 'bold',
-                position: 'insideTopRight',
-              }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* IT2 Rule Firing Details Table with Top & Triggered Rule Badges */}
-      <div className="mt-6">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-            <Code className="w-4 h-4 text-purple-400" />
-            Rule Evaluation Matrix (Highlighted Top &amp; Triggered Rules)
-          </h3>
-
-          <div className="flex items-center gap-3 text-xs">
-            <span className="flex items-center gap-1 text-amber-300 font-semibold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
-              <Flame className="w-3 h-3 text-amber-400" /> Top Dominant Rule
-            </span>
-            <span className="flex items-center gap-1 text-emerald-300 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
-              <CheckCircle className="w-3 h-3 text-emerald-400" /> Fired Rule
-            </span>
-          </div>
+      <div className="card p-4 sm:p-5">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 mb-3 text-[12px] text-muted">
+          <Legend swatch={<span className="w-3 h-0.5 rounded" style={{ background: colors.accent }} />}>Upper MF</Legend>
+          <Legend swatch={<span className="w-3 h-0.5 rounded" style={{ background: colors.lmf }} />}>Lower MF</Legend>
+          <Legend swatch={<span className="w-3 h-2.5 rounded-sm" style={{ background: colors.accent, opacity: 0.18 }} />}>
+            FOU
+          </Legend>
+          <Legend swatch={<span className="w-3 h-2.5 rounded-sm" style={{ background: colors.ink, opacity: 0.1 }} />}>
+            Centroid interval
+          </Legend>
         </div>
-
-        <div className="overflow-x-auto rounded-xl border border-slate-800 shadow-inner">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-900/90 text-slate-400 font-semibold border-b border-slate-800">
-              <tr>
-                <th className="p-3">Rule #</th>
-                <th className="p-3">Rule Condition</th>
-                <th className="p-3">Consequent</th>
-                <th className="p-3 font-mono text-center">Lower Firing</th>
-                <th className="p-3 font-mono text-center">Upper Firing</th>
-                <th className="p-3 text-center">Rule Status</th>
-                <th className="p-3">Psychometric Rationale</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60 bg-slate-950/40">
-              {rule_firings.map((rf) => {
-                const isTop = rf.is_top_rule;
-                const isTriggered = rf.is_triggered;
-
-                let rowBg = 'text-slate-500 hover:bg-slate-900/40';
-                if (isTop) {
-                  rowBg = 'bg-amber-500/15 text-amber-100 font-semibold ring-1 ring-amber-500/40';
-                } else if (isTriggered) {
-                  rowBg = 'bg-emerald-500/10 text-emerald-100 font-medium';
+        <div className="h-72 sm:h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={chartData} margin={{ top: 22, right: 8, left: -18, bottom: 0 }}>
+              <CartesianGrid stroke={colors.line} strokeDasharray="2 4" vertical={false} />
+              <XAxis
+                dataKey="x"
+                type="number"
+                domain={[0, 100]}
+                ticks={[0, 20, 40, 60, 80, 100]}
+                stroke={colors.faint}
+                tick={{ fontSize: 11, fill: colors.faint }}
+                tickLine={false}
+                axisLine={{ stroke: colors.line }}
+              />
+              <YAxis
+                domain={[0, 1]}
+                ticks={[0, 0.25, 0.5, 0.75, 1]}
+                stroke={colors.faint}
+                tick={{ fontSize: 11, fill: colors.faint }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <Tooltip
+                cursor={{ stroke: colors.faint, strokeDasharray: '3 3' }}
+                contentStyle={{
+                  background: colors.surface,
+                  border: `1px solid ${colors.line}`,
+                  borderRadius: 10,
+                  fontSize: 12,
+                  color: colors.ink,
+                }}
+                labelFormatter={(v) => `x = ${v}`}
+                formatter={(v: any, name: string) =>
+                  name === 'band' ? [null, null] : [typeof v === 'number' ? v.toFixed(3) : v, name]
                 }
-
-                return (
-                  <tr key={rf.rule_id} className={`transition-all ${rowBg}`}>
-                    <td className="p-3 font-mono font-bold">R{rf.rule_id}</td>
-                    <td className="p-3 font-mono text-[11px] max-w-xs">{rf.rule_text}</td>
-                    <td className="p-3">
-                      <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          rf.consequent === 'Critical'
-                            ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                            : rf.consequent === 'Moderate'
-                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                            : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                        }`}
-                      >
-                        {rf.consequent}
-                      </span>
-                    </td>
-                    <td className="p-3 font-mono text-center">{rf.f_lower.toFixed(2)}</td>
-                    <td className="p-3 font-mono text-center">{rf.f_upper.toFixed(2)}</td>
-                    <td className="p-3 text-center">
-                      {isTop ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-500/25 text-amber-300 border border-amber-400 shadow-sm animate-pulse">
-                          <Flame className="w-3 h-3 text-amber-400 shrink-0" />
-                          TOP RULE
-                        </span>
-                      ) : isTriggered ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                          <CheckCircle className="w-3 h-3 text-emerald-400 shrink-0" />
-                          Triggered
-                        </span>
-                      ) : (
-                        <span className="text-slate-600 text-[11px]">Inactive</span>
-                      )}
-                    </td>
-                    <td className="p-3 text-xs leading-normal text-slate-300 max-w-md">
-                      <div className="flex items-start gap-1.5">
-                        <Info className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
-                        <span>{rf.justification}</span>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+              />
+              <ReferenceArea x1={y_left} x2={y_right} fill={colors.ink} fillOpacity={0.06} />
+              <Area
+                type="monotone"
+                dataKey="band"
+                stroke="none"
+                fill={colors.accent}
+                fillOpacity={0.16}
+                isAnimationActive={false}
+                activeDot={false}
+                legendType="none"
+              />
+              <Line type="monotone" dataKey="UMF" stroke={colors.accent} strokeWidth={2} dot={false} animationDuration={350} />
+              <Line type="monotone" dataKey="LMF" stroke={colors.lmf} strokeWidth={2} dot={false} animationDuration={350} />
+              <ReferenceLine
+                x={y_left}
+                stroke={colors.muted}
+                strokeDasharray="3 3"
+                label={{ value: 'yₗ', fill: colors.muted, fontSize: 11, position: 'top' }}
+              />
+              <ReferenceLine
+                x={y_right}
+                stroke={colors.muted}
+                strokeDasharray="3 3"
+                label={{ value: 'yᵣ', fill: colors.muted, fontSize: 11, position: 'top' }}
+              />
+              <ReferenceLine
+                x={y}
+                stroke={colors.ink}
+                strokeWidth={1.5}
+                label={{ value: y.toFixed(1), fill: colors.ink, fontSize: 11, fontWeight: 600, position: 'top' }}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
         </div>
+      </div>
+
+      <div className="card">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-5 pt-4 pb-3 border-b border-line">
+          <div>
+            <h3 className="font-medium">Rule firings</h3>
+            <p className="text-[13px] text-muted mt-0.5">
+              Firing interval [lower, upper] for each rule, strongest first.
+            </p>
+          </div>
+          <button onClick={() => setShowInactive((s) => !s)} className="btn-ghost self-start sm:self-auto">
+            {showInactive ? 'Hide inactive' : `Show ${inactiveCount} inactive`}
+          </button>
+        </div>
+        <ul className="divide-y divide-line">
+          {visible.map((r) => (
+            <RuleRow key={r.rule_id} rule={r} accent={colors.accent} />
+          ))}
+          {visible.length === 0 && <li className="px-5 py-8 text-center text-sm text-faint">No rules fired.</li>}
+        </ul>
       </div>
     </div>
+  );
+};
+
+const Metric = ({ label, value, sub, emphasis }: { label: string; value: string; sub?: string; emphasis?: boolean }) => (
+  <div className="bg-surface px-4 py-3.5">
+    <div className="text-[11.5px] text-faint">{label}</div>
+    <div className={`num mt-1 ${emphasis ? 'font-display text-[26px] leading-none' : 'font-mono text-[18px]'}`}>
+      {value}
+    </div>
+    {sub && <div className="text-[11.5px] text-muted mt-1">{sub}</div>}
+  </div>
+);
+
+const Legend = ({ swatch, children }: { swatch: React.ReactNode; children: React.ReactNode }) => (
+  <span className="flex items-center gap-1.5">
+    {swatch}
+    {children}
+  </span>
+);
+
+/** Renders "A is X AND B is Y" with the operators de-emphasized. */
+const Condition = ({ text }: { text: string }) => (
+  <>
+    {text.split(/\b(AND|OR|IF|THEN)\b/).map((part, i) =>
+      /^(AND|OR|IF|THEN)$/.test(part) ? (
+        <span key={i} className="text-faint text-[11px] font-mono tracking-wide">
+          {` ${part} `}
+        </span>
+      ) : (
+        <span key={i}>{part}</span>
+      )
+    )}
+  </>
+);
+
+const RuleRow = ({ rule, accent }: { rule: RuleFiringDetail; accent: string }) => {
+  const active = rule.is_triggered;
+  return (
+    <li className={`px-5 py-3.5 grid md:grid-cols-[52px_1fr_200px] gap-x-4 gap-y-2 ${active ? '' : 'opacity-55'}`}>
+      <div className="flex md:block items-center gap-2">
+        <span className="font-mono text-[13px] font-medium">R{rule.rule_id}</span>
+        {rule.is_top_rule && <span className="md:block md:mt-1 tag bg-ink text-bg !text-[10px]">Top</span>}
+      </div>
+      <div className="min-w-0">
+        <div className="text-[13.5px] leading-snug">
+          <Condition text={rule.rule_text} /> <span className="text-faint">→</span>{' '}
+          <ToneTag word={rule.consequent} />
+        </div>
+        <p className="text-[12.5px] text-muted mt-1 leading-relaxed">{rule.justification}</p>
+      </div>
+      <div className="md:pt-0.5">
+        <div className="relative h-1.5 rounded-full bg-sunken">
+          <div
+            className="absolute inset-y-0 rounded-full"
+            style={{
+              left: `${rule.f_lower * 100}%`,
+              width: `${Math.max(rule.f_upper - rule.f_lower, 0.01) * 100}%`,
+              background: accent,
+              opacity: 0.35,
+            }}
+          />
+          <div
+            className="absolute inset-y-0 left-0 rounded-full"
+            style={{ width: `${rule.f_lower * 100}%`, background: accent }}
+          />
+        </div>
+        <div className="flex justify-between mt-1.5 font-mono text-[11px] text-faint num">
+          <span>{rule.f_lower.toFixed(2)}</span>
+          <span>{rule.f_upper.toFixed(2)}</span>
+        </div>
+      </div>
+    </li>
   );
 };

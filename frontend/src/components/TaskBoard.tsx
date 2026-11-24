@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Calendar, Clock, AlertTriangle, CheckCircle2, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
+import { ArrowRight, ShieldAlert } from 'lucide-react';
+import { CRITICAL_THRESHOLD, formatMinutes, Tone, toneBg } from './ui';
 
 export interface Task {
   id: string;
@@ -11,239 +12,130 @@ export interface Task {
   estimatedMins: number;
 }
 
-const INITIAL_TASKS: Task[] = [
-  {
-    id: 't1',
-    title: 'Write System Architecture Documentation',
-    category: 'Deep Work',
-    loadType: 'High',
-    estimatedMins: 90,
-  },
-  {
-    id: 't2',
-    title: 'Reply to Team Slack Messages & Emails',
-    category: 'Communication',
-    loadType: 'Low',
-    estimatedMins: 20,
-  },
-  {
-    id: 't3',
-    title: 'Review Pull Requests for Fuzzy Engine',
-    category: 'Code Review',
-    loadType: 'Moderate',
-    estimatedMins: 45,
-  },
-  {
-    id: 't4',
-    title: 'Refactor Karnik-Mendel Matrix Operations',
-    category: 'Deep Work',
-    loadType: 'High',
-    estimatedMins: 120,
-  },
-  {
-    id: 't5',
-    title: 'Organize Desktop & Workspace Files',
-    category: 'Admin',
-    loadType: 'Low',
-    estimatedMins: 15,
-  },
+export const INITIAL_TASKS: Task[] = [
+  { id: 't1', title: 'Write system architecture documentation', category: 'Deep work', loadType: 'High', estimatedMins: 90 },
+  { id: 't2', title: 'Reply to team Slack messages and emails', category: 'Communication', loadType: 'Low', estimatedMins: 20 },
+  { id: 't3', title: 'Review pull requests for the fuzzy engine', category: 'Code review', loadType: 'Moderate', estimatedMins: 45 },
+  { id: 't4', title: 'Refactor Karnik-Mendel matrix operations', category: 'Deep work', loadType: 'High', estimatedMins: 120 },
+  { id: 't5', title: 'Organize desktop and workspace files', category: 'Admin', loadType: 'Low', estimatedMins: 15 },
 ];
+
+const LOAD_TONE: Record<Task['loadType'], Tone> = { High: 'danger', Moderate: 'warn', Low: 'ok' };
+
+export function splitTasks(score: number | null) {
+  const high = score !== null && score > CRITICAL_THRESHOLD;
+  const today = INITIAL_TASKS.filter((t) => !(high && t.loadType === 'High'));
+  const deferred = INITIAL_TASKS.filter((t) => high && t.loadType === 'High');
+  return { high, today, deferred };
+}
 
 interface TaskBoardProps {
   cognitiveLoadScore: number | null;
-  recommendedAction: string | null;
+  recommendedAction?: string | null;
 }
 
-export const TaskBoard: React.FC<TaskBoardProps> = ({
-  cognitiveLoadScore,
-  recommendedAction,
-}) => {
-  const isHighLoad = cognitiveLoadScore !== null && cognitiveLoadScore > 65;
-
-  // Filter tasks into columns based on dynamic CWW score reprioritization
-  const todayTasks = INITIAL_TASKS.filter((task) => {
-    if (isHighLoad && task.loadType === 'High') {
-      return false; // Defer high load tasks
-    }
-    return true;
-  });
-
-  const deferredTasks = INITIAL_TASKS.filter((task) => {
-    if (isHighLoad && task.loadType === 'High') {
-      return true; // Moved to deferred
-    }
-    return false;
-  });
+export const TaskBoard: React.FC<TaskBoardProps> = ({ cognitiveLoadScore }) => {
+  const { high, today, deferred } = splitTasks(cognitiveLoadScore);
+  const sum = (ts: Task[]) => ts.reduce((a, t) => a + t.estimatedMins, 0);
 
   return (
-    <div className="w-full glass-panel rounded-2xl p-6 mb-8 border border-slate-700/60 shadow-xl">
-      {/* Dynamic Load Alert Banner */}
-      {cognitiveLoadScore !== null && (
-        <div
-          className={`mb-6 p-4 rounded-xl border flex items-center justify-between gap-4 transition-all ${
-            isHighLoad
-              ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
-              : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-          }`}
+    <div className="card">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-5 sm:px-6 pt-5 pb-4 border-b border-line">
+        <div>
+          <h3 className="font-medium">Today&apos;s plan</h3>
+          <p className="text-[13px] text-muted mt-0.5">
+            {cognitiveLoadScore === null
+              ? 'Your schedule adapts once a load score is available.'
+              : high
+              ? `Load is above ${CRITICAL_THRESHOLD}, so deep-work tasks moved to tomorrow.`
+              : 'Load is manageable. Your full schedule stays in place.'}
+          </p>
+        </div>
+        {high && (
+          <span className="tag bg-warn/10 text-warn self-start sm:self-center">
+            <ShieldAlert className="w-3.5 h-3.5" /> Shield active
+          </span>
+        )}
+      </div>
+
+      <div className="grid md:grid-cols-2 md:divide-x divide-line">
+        <Column title="Today" meta={`${today.length} tasks · ${formatMinutes(sum(today))}`}>
+          {today.length === 0 ? (
+            <Empty>Nothing scheduled. Rest and recover.</Empty>
+          ) : (
+            today.map((t) => <TaskRow key={t.id} task={t} />)
+          )}
+        </Column>
+        <Column
+          title="Moved to tomorrow"
+          meta={deferred.length ? `${deferred.length} tasks · ${formatMinutes(sum(deferred))}` : 'None'}
+          className="border-t md:border-t-0 border-line"
         >
-          <div className="flex items-center gap-3">
-            {isHighLoad ? (
-              <ShieldAlert className="w-6 h-6 text-amber-400 shrink-0" />
-            ) : (
-              <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
-            )}
-            <div>
-              <div className="font-bold text-sm">
-                {isHighLoad
-                  ? 'High Cognitive Load Detected (> 65.0) — Deep Work Tasks Auto-Deferred!'
-                  : 'Optimal Cognitive Load (&le; 65.0) — Full Schedule Active'}
-              </div>
-              <p className="text-xs text-slate-300 mt-0.5">
-                {isHighLoad
-                  ? `Score of ${cognitiveLoadScore.toFixed(1)} triggered dynamic schedule adjustment. High-load tasks are shifted to tomorrow to prevent fatigue.`
-                  : `Score of ${cognitiveLoadScore.toFixed(1)} indicates balanced energy. You are ready for high-focus deep work!`}
-              </p>
-            </div>
-          </div>
-
-          <div className="hidden sm:block text-right">
-            <span className="text-xs font-mono px-3 py-1 rounded-lg bg-slate-900/60 border border-slate-700">
-              Score: {cognitiveLoadScore.toFixed(1)} / 100
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Kanban Board Columns */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Column 1: Today's Focus */}
-        <div className="bg-slate-900/60 rounded-xl p-4 border border-slate-800 flex flex-col h-full">
-          <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-emerald-400" />
-              <h3 className="font-bold text-slate-200 text-sm">
-                Today&apos;s Focus Schedule
-              </h3>
-            </div>
-            <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-500/20 text-emerald-300 rounded-full border border-emerald-500/30">
-              {todayTasks.length} tasks
-            </span>
-          </div>
-
-          <div className="space-y-3 flex-1">
-            {todayTasks.length === 0 ? (
-              <div className="p-8 text-center text-slate-500 text-xs italic">
-                No active tasks for today. Rest & recover!
-              </div>
-            ) : (
-              todayTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="p-4 rounded-xl glass-panel glass-panel-hover border border-slate-800 flex flex-col justify-between gap-2"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-sm font-semibold text-slate-100">
-                      {task.title}
-                    </span>
-                    <Badge loadType={task.loadType} />
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800/60">
-                    <span className="bg-slate-800/80 px-2 py-0.5 rounded text-[11px]">
-                      {task.category}
-                    </span>
-                    <span className="flex items-center gap-1 font-mono text-slate-300">
-                      <Clock className="w-3 h-3 text-slate-400" />
-                      {task.estimatedMins} min
-                    </span>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Column 2: Deferred / Tomorrow */}
-        <div className="bg-slate-900/60 rounded-xl p-4 border border-slate-800 flex flex-col h-full">
-          <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <h3 className="font-bold text-slate-200 text-sm">
-                Deferred / Tomorrow Schedule
-              </h3>
-            </div>
-            <span className="px-2 py-0.5 text-xs font-semibold bg-amber-500/20 text-amber-300 rounded-full border border-amber-500/30">
-              {deferredTasks.length} deferred
-            </span>
-          </div>
-
-          <div className="space-y-3 flex-1">
-            {deferredTasks.length === 0 ? (
-              <div className="p-8 text-center text-slate-500 text-xs italic border border-dashed border-slate-800 rounded-xl">
-                No tasks deferred. Cognitive load is manageable!
-              </div>
-            ) : (
-              deferredTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="p-4 rounded-xl bg-slate-900/80 border border-amber-500/30 shadow-lg animate-fadeIn flex flex-col justify-between gap-2"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-sm font-semibold text-slate-200 line-through text-slate-400">
-                      {task.title}
-                    </span>
-                    <Badge loadType={task.loadType} deferred />
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs text-amber-400/90 pt-2 border-t border-slate-800">
-                    <span className="flex items-center gap-1 text-[11px] font-medium">
-                      <ArrowRight className="w-3 h-3" />
-                      Moved to Tomorrow
-                    </span>
-                    <span className="font-mono text-slate-400">
-                      {task.estimatedMins} min
-                    </span>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+          {deferred.length === 0 ? (
+            <Empty>No tasks deferred.</Empty>
+          ) : (
+            deferred.map((t) => <TaskRow key={t.id} task={t} deferred />)
+          )}
+        </Column>
       </div>
     </div>
   );
 };
 
-const Badge = ({
-  loadType,
-  deferred = false,
+const Column = ({
+  title,
+  meta,
+  children,
+  className = '',
 }: {
-  loadType: 'High' | 'Moderate' | 'Low';
-  deferred?: boolean;
-}) => {
-  if (loadType === 'High') {
-    return (
-      <span
-        className={`px-2.5 py-0.5 text-[11px] font-bold rounded-md shrink-0 border ${
-          deferred
-            ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
-            : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-        }`}
-      >
-        High Load
-      </span>
-    );
-  }
-  if (loadType === 'Moderate') {
-    return (
-      <span className="px-2.5 py-0.5 text-[11px] font-bold rounded-md shrink-0 bg-amber-500/10 text-amber-400 border border-amber-500/20">
-        Moderate Load
-      </span>
-    );
-  }
-  return (
-    <span className="px-2.5 py-0.5 text-[11px] font-bold rounded-md shrink-0 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-      Low Load
-    </span>
-  );
-};
+  title: string;
+  meta: string;
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <div className={`p-3 sm:p-4 ${className}`}>
+    <div className="flex items-baseline justify-between px-2 pb-2">
+      <span className="text-[13px] font-medium">{title}</span>
+      <span className="text-[12px] text-faint num">{meta}</span>
+    </div>
+    <ul className="space-y-1">{children}</ul>
+  </div>
+);
+
+const Empty = ({ children }: { children: React.ReactNode }) => (
+  <li className="px-3 py-8 text-center text-[13px] text-faint border border-dashed border-line rounded-lg">
+    {children}
+  </li>
+);
+
+const TaskRow = ({ task, deferred = false }: { task: Task; deferred?: boolean }) => (
+  <li
+    className={`group flex items-center gap-3 px-2 py-2.5 rounded-lg hover:bg-sunken transition-colors animate-rise ${
+      deferred ? 'text-muted' : ''
+    }`}
+  >
+    <span
+      className={`w-1 self-stretch rounded-full shrink-0 ${toneBg[LOAD_TONE[task.loadType]]} ${
+        deferred ? 'opacity-40' : 'opacity-80'
+      }`}
+      aria-hidden
+    />
+    <div className="flex-1 min-w-0">
+      <div className={`text-[13.5px] truncate ${deferred ? 'line-through decoration-faint' : ''}`}>{task.title}</div>
+      <div className="flex items-center gap-2 text-[11.5px] text-faint mt-0.5">
+        <span>{task.loadType} load</span>
+        <span>·</span>
+        <span>{task.category}</span>
+        {deferred && (
+          <>
+            <span>·</span>
+            <span className="flex items-center gap-0.5 text-warn">
+              <ArrowRight className="w-3 h-3" /> Tomorrow
+            </span>
+          </>
+        )}
+      </div>
+    </div>
+    <span className="num font-mono text-[12px] text-faint shrink-0">{formatMinutes(task.estimatedMins)}</span>
+  </li>
+);

@@ -1,325 +1,145 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  BookOpen,
-  Brain,
-  ShieldCheck,
-  Layers,
-  Info,
-  CheckCircle2,
-  HelpCircle,
-} from 'lucide-react';
+import { SectionHeader, ToneTag, Tone, useTokenColors } from './ui';
+
+type Trap = [number, number, number, number];
+type SetDef = { name: string; level: string; umf: Trap; lmf: Trap; text: string };
+type Driver = { name: string; source: string; sets: SetDef[] };
+
+const DRIVERS: Driver[] = [
+  {
+    name: 'Fatigue',
+    source: 'Samn-Perelli & Stanford Sleepiness Scale',
+    sets: [
+      { name: 'Energized', level: 'Low', umf: [0, 0, 30, 50], lmf: [0, 0, 20, 40], text: 'Samn-Perelli 1–2 (alert, active). LMF core [0, 20] guarantees full membership for optimal vigor; UMF to 50 captures people who feel functional despite minor fatigue.' },
+      { name: 'Drained', level: 'Moderate', umf: [30, 45, 55, 70], lmf: [40, 50, 50, 60], text: 'Samn-Perelli 3–4 (somewhat tired). Processing speed decelerates by 15–25%. LMF peak centers on the scale midpoint.' },
+      { name: 'Exhausted', level: 'Critical', umf: [55, 75, 100, 100], lmf: [65, 85, 100, 100], text: 'Samn-Perelli 5–7 (impairment). Working memory degrades sharply beyond 75%; LMF core [85, 100] forces critical load.' },
+    ],
+  },
+  {
+    name: 'Stress',
+    source: 'Cohen PSS & Yerkes-Dodson',
+    sets: [
+      { name: 'Relaxed', level: 'Low', umf: [0, 0, 35, 55], lmf: [0, 0, 25, 45], text: 'Parasympathetic dominance (PSS < 10). UMF extends to 55 to allow mild positive eustress.' },
+      { name: 'Pressured', level: 'Moderate', umf: [35, 50, 60, 80], lmf: [45, 55, 55, 70], text: 'Yerkes-Dodson optimal zone. UMF span [35, 80] covers deadline urgency without emotional breakdown.' },
+      { name: 'Overwhelmed', level: 'Critical', umf: [60, 80, 100, 100], lmf: [75, 90, 100, 100], text: 'Acute distress; cortisol impairs prefrontal executive control. LMF core [90, 100] assigns critical load.' },
+    ],
+  },
+  {
+    name: 'Sleep quality',
+    source: 'PSQI & Dawson-Reid circadian debt',
+    sets: [
+      { name: 'Restful', level: 'Low', umf: [0, 0, 30, 50], lmf: [0, 0, 20, 40], text: 'Full REM and slow-wave recovery (PSQI < 5). Maximum synaptic homeostasis and memory consolidation.' },
+      { name: 'Restless', level: 'Moderate', umf: [30, 45, 55, 70], lmf: [40, 50, 50, 60], text: 'Partial fragmentation (PSQI 5–10). Attentional lapses increase by ~30%.' },
+      { name: 'Deprived', level: 'Critical', umf: [55, 75, 100, 100], lmf: [65, 85, 100, 100], text: 'Severe sleep debt (> 24h awake or PSQI > 10). Deficit comparable to 0.10% BAC (Dawson & Reid).' },
+    ],
+  },
+  {
+    name: 'Task complexity',
+    source: 'NASA-TLX & Cowan working memory',
+    sets: [
+      { name: 'Routine', level: 'Low', umf: [0, 0, 35, 55], lmf: [0, 0, 25, 45], text: '1–2 items in Cowan’s 4-chunk model. Admin, repetitive sorting, simple replies.' },
+      { name: 'Challenging', level: 'Moderate', umf: [35, 50, 60, 80], lmf: [45, 55, 55, 70], text: '3–4 items. Code review, analytical writing, structured problem solving.' },
+      { name: 'Intense', level: 'Critical', umf: [60, 80, 100, 100], lmf: [75, 90, 100, 100], text: '5+ items, at capacity. System architecture, complex proofs.' },
+    ],
+  },
+];
+
+const RULES: { id: number; condition: string; consequent: string; rationale: string }[] = [
+  { id: 1, condition: 'Fatigue is Energized AND Stress is Relaxed AND Sleep is Restful', consequent: 'Low', rationale: 'Homeostatic balance across physiological, emotional and circadian drivers. Peak executive capacity.' },
+  { id: 2, condition: 'Fatigue is Energized AND Stress is Relaxed', consequent: 'Low', rationale: 'Baseline calm with optimal vigor preserves high cognitive reserve.' },
+  { id: 3, condition: 'Fatigue is Energized AND Stress is Pressured AND Task is Routine', consequent: 'Moderate', rationale: 'Vigor offsets deadline pressure for routine work (Yerkes-Dodson optimal arousal).' },
+  { id: 4, condition: 'Fatigue is Energized AND Sleep is Restful AND Task is Intense', consequent: 'Moderate', rationale: 'Peak energy and full sleep recovery buffer complex working-memory demand.' },
+  { id: 5, condition: 'Fatigue is Drained AND Stress is Relaxed', consequent: 'Moderate', rationale: 'Mild tiredness slows processing 15–25%, but low stress keeps load manageable.' },
+  { id: 6, condition: 'Sleep is Restless AND Task is Routine', consequent: 'Moderate', rationale: 'Fragmented sleep causes minor lapses; low task demand prevents overload.' },
+  { id: 7, condition: 'Fatigue is Drained AND Stress is Pressured', consequent: 'Critical', rationale: 'Dual strain of tiredness and urgency triggers prefrontal hypofunction.' },
+  { id: 8, condition: 'Fatigue is Exhausted OR Stress is Overwhelmed', consequent: 'Critical', rationale: 'Single-point failure: either severe exhaustion or acute distress incapacitates executive control.' },
+  { id: 9, condition: 'Sleep is Deprived OR (Task is Intense AND Fatigue is Drained)', consequent: 'Critical', rationale: 'Severe sleep debt, or intense work while drained, forces executive breakdown.' },
+  { id: 10, condition: 'Fatigue is Drained AND Sleep is Restless AND Task is Challenging', consequent: 'Critical', rationale: 'Triple sub-threshold debt overwhelms the remaining cognitive reserve.' },
+  { id: 11, condition: 'Stress is Pressured AND Task is Intense', consequent: 'Critical', rationale: 'Cortisol-driven attentional narrowing plus maximal working-memory demand.' },
+  { id: 12, condition: 'Sleep is Deprived', consequent: 'Critical', rationale: 'Prolonged sleep debt (> 24h awake) alone causes a 0.10% BAC-equivalent deficit.' },
+];
+
+const LEVEL_TONE: Record<string, Tone> = { Low: 'ok', Moderate: 'warn', Critical: 'danger' };
 
 export const AcademicInspector: React.FC = () => {
-  const [activeSubTab, setActiveSubTab] = useState<'drivers' | 'rules'>('drivers');
+  const [tab, setTab] = useState<'drivers' | 'rules'>('drivers');
 
   return (
-    <div className="w-full glass-panel rounded-2xl p-6 mb-8 border border-slate-800 shadow-xl">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 text-xs font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-full">
-              System Documentation
-            </span>
+    <div>
+      <SectionHeader
+        eyebrow="Method"
+        title="How the engine reasons"
+        description="Each word is an interval type-2 fuzzy set: a trapezoidal upper and lower membership function whose gap (the footprint of uncertainty) encodes how differently people use that word."
+        right={
+          <div className="segmented" role="tablist">
+            <button aria-pressed={tab === 'drivers'} onClick={() => setTab('drivers')}>
+              Membership sets
+            </button>
+            <button aria-pressed={tab === 'rules'} onClick={() => setTab('rules')}>
+              Rule base
+            </button>
           </div>
-          <h2 className="text-xl font-bold text-white mt-1 flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-teal-400" />
-            Psychometric Data Foundations &amp; IT2 Rule Rationale
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Formal academic justifications for membership parameters, footprints of uncertainty (FOU), and cognitive rule interactions.
-          </p>
-        </div>
+        }
+      />
 
-        {/* Sub-tab Selector */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-950/80 rounded-xl border border-slate-800">
-          <button
-            onClick={() => setActiveSubTab('drivers')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              activeSubTab === 'drivers'
-                ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            4 Driver Membership Sets
-          </button>
-          <button
-            onClick={() => setActiveSubTab('rules')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              activeSubTab === 'rules'
-                ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            12 IT2 Rule Rationales
-          </button>
-        </div>
-      </div>
-
-      {activeSubTab === 'drivers' ? (
-        <div className="space-y-6">
-          {/* Driver 1 Card */}
-          <div className="bg-slate-900/60 rounded-xl p-5 border border-slate-800">
-            <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-              <h3 className="font-bold text-slate-200 text-sm flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                Driver 1: Fatigue Level (Physical &amp; Mental Exhaustion)
-              </h3>
-              <span className="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
-                Samn-Perelli &amp; Stanford Sleepiness Scale
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-emerald-400 mb-1">Energized (Low Fatigue)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [0, 0, 30, 50] | LMF: [0, 0, 20, 40]
+      {tab === 'drivers' ? (
+        <div className="space-y-4">
+          {DRIVERS.map((d, i) => (
+            <div key={d.name} className="card overflow-hidden">
+              <div className="grid lg:grid-cols-[340px_1fr]">
+                <div className="p-5 border-b lg:border-b-0 lg:border-r border-line bg-sunken/40">
+                  <div className="eyebrow">Driver {i + 1}</div>
+                  <h3 className="font-display text-xl mt-0.5">{d.name}</h3>
+                  <div className="text-[12px] text-muted mt-0.5">{d.source}</div>
+                  <MFPlot sets={d.sets} />
                 </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Corresponds to Samn-Perelli levels 1–2 (alert, active). LMF core [0, 20] guarantees 1.0 membership for optimal vigor. UMF upper bound 50 captures subjects who feel fully functional despite minor fatigue.
-                </p>
-              </div>
-
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-amber-400 mb-1">Drained (Moderate Fatigue)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [30, 45, 55, 70] | LMF: [40, 50, 50, 60]
+                <div className="divide-y divide-line">
+                  {d.sets.map((s) => (
+                    <div key={s.name} className="p-4 sm:px-5">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-medium text-[14px]">{s.name}</span>
+                        <ToneTag word={s.level}>{s.level}</ToneTag>
+                        <span className="ml-auto font-mono text-[11px] text-faint">
+                          UMF [{s.umf.join(', ')}] · LMF [{s.lmf.join(', ')}]
+                        </span>
+                      </div>
+                      <p className="text-[13px] text-muted mt-1.5 leading-relaxed">{s.text}</p>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Corresponds to Samn-Perelli levels 3–4 (okay, somewhat tired). Cognitive processing speed decelerates by 15–25%. LMF core [50, 50] centers on the scale midpoint.
-                </p>
-              </div>
-
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-rose-400 mb-1">Exhausted (Severe Fatigue)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [55, 75, 100, 100] | LMF: [65, 85, 100, 100]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Corresponds to Samn-Perelli levels 5–7 (extremely tired, impairment). Working memory capacity degrades exponentially beyond 75%. LMF core [85, 100] forces critical load.
-                </p>
               </div>
             </div>
-          </div>
-
-          {/* Driver 2 Card */}
-          <div className="bg-slate-900/60 rounded-xl p-5 border border-slate-800">
-            <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-              <h3 className="font-bold text-slate-200 text-sm flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                Driver 2: Stress Level (Perceived Psychological Pressure)
-              </h3>
-              <span className="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                Cohen PSS &amp; Yerkes-Dodson Law of Arousal
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-emerald-400 mb-1">Relaxed (Low Stress)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [0, 0, 35, 55] | LMF: [0, 0, 25, 45]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Parasympathetic dominance (PSS &lt; 10). LMF core [0, 25] represents baseline calm. UMF extends to 55 to allow mild positive eustress.
-                </p>
-              </div>
-
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-amber-400 mb-1">Pressured (Moderate Stress)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [35, 50, 60, 80] | LMF: [45, 55, 55, 70]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Optimal performance zone under Yerkes-Dodson. UMF span [35, 80] captures subjective range where users feel deadline urgency without emotional breakdown.
-                </p>
-              </div>
-
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-rose-400 mb-1">Overwhelmed (Acute Distress)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [60, 80, 100, 100] | LMF: [75, 90, 100, 100]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Acute distress where cortisol impairs prefrontal cortex executive control. LMF core [90, 100] ensures immediate critical load assignment.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Driver 3 Card */}
-          <div className="bg-slate-900/60 rounded-xl p-5 border border-slate-800">
-            <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-              <h3 className="font-bold text-slate-200 text-sm flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-400" />
-                Driver 3: Sleep Quality (Restorative Sleep Deficit)
-              </h3>
-              <span className="text-[11px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">
-                PSQI Index &amp; Dawson-Reid Circadian Debt Model
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-emerald-400 mb-1">Restful (Full Recovery)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [0, 0, 30, 50] | LMF: [0, 0, 20, 40]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Full REM &amp; slow-wave sleep recovery (PSQI &lt; 5). Maximum synaptic homeostasis and memory consolidation.
-                </p>
-              </div>
-
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-amber-400 mb-1">Restless (Partial Deficit)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [30, 45, 55, 70] | LMF: [40, 50, 50, 60]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Partial sleep fragmentation (PSQI 5–10). Attentional lapses increase by 30%.
-                </p>
-              </div>
-
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-rose-400 mb-1">Deprived (Severe Sleep Debt)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [55, 75, 100, 100] | LMF: [65, 85, 100, 100]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Severe sleep debt (&gt; 24h wakefulness or PSQI &gt; 10). Cognitive deficit equivalent to 0.10% BAC (Dawson &amp; Reid).
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Driver 4 Card */}
-          <div className="bg-slate-900/60 rounded-xl p-5 border border-slate-800">
-            <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-              <h3 className="font-bold text-slate-200 text-sm flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                Driver 4: Task Complexity (External Mental Demand)
-              </h3>
-              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                NASA Task Load Index (NASA-TLX) &amp; Cowan Working Memory Model
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-emerald-400 mb-1">Routine (Low Demand)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [0, 0, 35, 55] | LMF: [0, 0, 25, 45]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Minimal working memory load (1–2 items in Cowan&apos;s 4-chunk model). Admin, repetitive sorting, simple email replies.
-                </p>
-              </div>
-
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-amber-400 mb-1">Challenging (Moderate Demand)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [35, 50, 60, 80] | LMF: [45, 55, 55, 70]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Moderate working memory load (3–4 items). Code review, analytical writing, structured problem solving.
-                </p>
-              </div>
-
-              <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
-                <div className="font-bold text-rose-400 mb-1">Intense (High Demand)</div>
-                <div className="font-mono text-[11px] text-slate-400 mb-2">
-                  UMF: [60, 80, 100, 100] | LMF: [75, 90, 100, 100]
-                </div>
-                <p className="text-slate-300 text-[11px] leading-relaxed">
-                  High working memory load (5+ items, operating at capacity limit). System architecture design, complex mathematical proofs.
-                </p>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       ) : (
-        <div className="space-y-3">
-          <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800 text-xs leading-relaxed text-slate-300 mb-4">
-            <strong className="text-white block mb-1">Formal Rule Base Rationale in Interval Type-2 Systems:</strong>
-            Rules evaluate antecedent set intervals using Minimum for <code className="text-cyan-400 font-mono">AND</code> intersections and Maximum for <code className="text-amber-400 font-mono">OR</code> unions. The resulting firing interval [Lower, Upper] scales the consequent fuzzy set, which is then aggregated across rules and defuzzified via Karnik-Mendel type-reduction.
+        <div className="space-y-4">
+          <div className="card p-5 text-[13.5px] text-muted leading-relaxed">
+            Antecedents combine with <span className="font-mono text-ink">min</span> for AND and{' '}
+            <span className="font-mono text-ink">max</span> for OR, applied separately to upper and lower memberships. The
+            resulting firing interval scales each rule&apos;s consequent set; consequents are aggregated and then
+            type-reduced by Karnik-Mendel.
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <RuleCard
-              id={1}
-              condition="Fatigue is Energized AND Stress is Relaxed AND Sleep is Restful"
-              consequent="Low Load"
-              rationale="Homeostatic balance across physiological, emotional, and circadian drivers. Peak executive capacity guarantees minimal cognitive load."
-            />
-            <RuleCard
-              id={2}
-              condition="Fatigue is Energized AND Stress is Relaxed"
-              consequent="Low Load"
-              rationale="Baseline calm combined with optimal vigor preserves high cognitive reserves and low baseline load."
-            />
-            <RuleCard
-              id={3}
-              condition="Fatigue is Energized AND Stress is Pressured AND Task is Routine"
-              consequent="Moderate Load"
-              rationale="Vigor offsets deadline pressure for routine task execution (Yerkes-Dodson optimal arousal zone)."
-            />
-            <RuleCard
-              id={4}
-              condition="Fatigue is Energized AND Sleep is Restful AND Task is Intense"
-              consequent="Moderate Load"
-              rationale="Peak physiological energy and complete slow-wave sleep recovery buffer against complex working memory demands."
-            />
-            <RuleCard
-              id={5}
-              condition="Fatigue is Drained AND Stress is Relaxed"
-              consequent="Moderate Load"
-              rationale="Sub-threshold physical exhaustion mildly slows processing speed (15-25%), but low emotional stress keeps load manageable."
-            />
-            <RuleCard
-              id={6}
-              condition="Sleep is Restless AND Task is Routine"
-              consequent="Moderate Load"
-              rationale="Sub-optimal sleep fragmentation causes minor attentional lapses, but low working-memory demand of routine tasks prevents overload."
-            />
-            <RuleCard
-              id={7}
-              condition="Fatigue is Drained AND Stress is Pressured"
-              consequent="Critical Load"
-              rationale="Dual strain: physical tiredness and emotional urgency trigger prefrontal cortex hypofunction and compounding cognitive tax."
-            />
-            <RuleCard
-              id={8}
-              condition="Fatigue is Exhausted OR Stress is Overwhelmed"
-              consequent="Critical Load"
-              rationale="Single-point failure: severe exhaustion (Samn-Perelli > 5) or acute emotional distress independently incapacitates executive control."
-            />
-            <RuleCard
-              id={9}
-              condition="Sleep is Deprived OR (Task is Intense AND Fatigue is Drained)"
-              consequent="Critical Load"
-              rationale="Severe sleep debt or attempting intense 5+ chunk tasks while physically drained forces immediate executive breakdown."
-            />
-            <RuleCard
-              id={10}
-              condition="Fatigue is Drained AND Sleep is Restless AND Task is Challenging"
-              consequent="Critical Load"
-              rationale="Triple sub-threshold debt: somatic tiredness, fragmented sleep, and high analytical demands overwhelm remaining cognitive reserve."
-            />
-            <RuleCard
-              id={11}
-              condition="Stress is Pressured AND Task is Intense"
-              consequent="Critical Load"
-              rationale="Cortisol-induced attentional narrowing paired with maximal working memory demand leads to acute cognitive overload."
-            />
-            <RuleCard
-              id={12}
-              condition="Sleep is Deprived"
-              consequent="Critical Load"
-              rationale="Direct critical trigger: prolonged sleep debt (>24h wakefulness) causes cognitive deficit equivalent to 0.10% BAC (Dawson & Reid, Nature)."
-            />
+          <div className="card divide-y divide-line">
+            {RULES.map((r) => (
+              <div key={r.id} className="px-5 py-3.5 grid sm:grid-cols-[52px_1fr] gap-x-4 gap-y-1">
+                <span className="font-mono text-[13px] font-medium">R{r.id}</span>
+                <div>
+                  <div className="text-[13.5px]">
+                    {r.condition.split(/\b(AND|OR)\b/).map((p, i) =>
+                      p === 'AND' || p === 'OR' ? (
+                        <span key={i} className="font-mono text-[11px] text-faint">{` ${p} `}</span>
+                      ) : (
+                        <span key={i}>{p}</span>
+                      )
+                    )}{' '}
+                    <span className="text-faint">→</span> <ToneTag word={r.consequent}>{r.consequent} load</ToneTag>
+                  </div>
+                  <p className="text-[12.5px] text-muted mt-1">{r.rationale}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -327,33 +147,45 @@ export const AcademicInspector: React.FC = () => {
   );
 };
 
-const RuleCard = ({
-  id,
-  condition,
-  consequent,
-  rationale,
-}: {
-  id: number;
-  condition: string;
-  consequent: string;
-  rationale: string;
-}) => (
-  <div className="p-4 bg-slate-950/60 rounded-xl border border-slate-800/80 flex flex-col justify-between gap-2">
-    <div>
-      <div className="flex items-center justify-between mb-1">
-        <span className="font-mono font-bold text-teal-400">Rule R{id}</span>
-        <span
-          className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-            consequent.includes('Critical')
-              ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-              : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-          }`}
+/** Small SVG plot of the three IT2 trapezoids for one driver. */
+const MFPlot = ({ sets }: { sets: SetDef[] }) => {
+  const colors = useTokenColors();
+  if (!colors) return null;
+  const W = 300;
+  const H = 110;
+  const pad = { l: 4, r: 4, t: 8, b: 18 };
+  const x = (v: number) => pad.l + (v / 100) * (W - pad.l - pad.r);
+  const y = (m: number) => pad.t + (1 - m) * (H - pad.t - pad.b);
+  const trap = (t: Trap) => `${x(t[0])},${y(0)} ${x(t[1])},${y(1)} ${x(t[2])},${y(1)} ${x(t[3])},${y(0)}`;
+  const toneColor = (lvl: string) => colors[LEVEL_TONE[lvl]];
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full mt-4" role="img" aria-label="Membership functions">
+      <line x1={pad.l} x2={W - pad.r} y1={y(0)} y2={y(0)} stroke={colors.line} />
+      {sets.map((s) => {
+        const c = toneColor(s.level);
+        // FOU polygon: UMF outline then LMF reversed
+        const fou = `${trap(s.umf)} ${trap(s.lmf).split(' ').reverse().join(' ')}`;
+        return (
+          <g key={s.name}>
+            <polygon points={fou} fill={c} fillOpacity={0.16} />
+            <polyline points={trap(s.umf)} fill="none" stroke={c} strokeWidth={1.5} />
+            <polyline points={trap(s.lmf)} fill="none" stroke={c} strokeWidth={1} strokeDasharray="3 2" />
+          </g>
+        );
+      })}
+      {[0, 50, 100].map((t) => (
+        <text
+          key={t}
+          x={x(t)}
+          y={H - 4}
+          fontSize={10}
+          fill={colors.faint}
+          textAnchor={t === 0 ? 'start' : t === 100 ? 'end' : 'middle'}
         >
-          {consequent}
-        </span>
-      </div>
-      <div className="font-mono text-[11px] text-slate-300 mb-2">{condition}</div>
-      <p className="text-[11px] text-slate-400 leading-relaxed">{rationale}</p>
-    </div>
-  </div>
-);
+          {t}
+        </text>
+      ))}
+    </svg>
+  );
+};

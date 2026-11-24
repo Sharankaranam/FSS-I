@@ -1,21 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Sparkles,
-  HeartPulse,
-  Dna,
-  ShieldAlert,
-  Activity,
-  CheckCircle2,
-  AlertTriangle,
-  Flame,
-  Pill,
-  TestTube,
-  BookMarked,
-  ArrowRight,
-  RotateCcw,
-} from 'lucide-react';
+import { Sunrise, Utensils, MoonStar, RotateCcw, ArrowRight, Loader2 } from 'lucide-react';
 import {
   fetchLiveWellHabits,
   fetchLiveWellQuizzes,
@@ -28,374 +14,278 @@ import {
   LiveWellQuizDetail,
   LiveWellQuizEvaluationResult,
 } from '../utils/api';
+import { SectionHeader, toneSoft, wordTone } from './ui';
+
+type Tab = 'habits' | 'quizzes' | 'microhabits' | 'supplements';
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: 'habits', label: '8 habits' },
+  { id: 'quizzes', label: 'Screening' },
+  { id: 'microhabits', label: 'Microhabits' },
+  { id: 'supplements', label: 'Supplements & labs' },
+];
+
+const DRIVERS = ['Gut Health', 'Inflammation', 'Insulin Resistance', 'Toxins'];
 
 export const LiveWellDatabaseViewer: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'habits' | 'quizzes' | 'microhabits' | 'supplements'>('habits');
-  
-  // Habits state
+  const [activeTab, setActiveTab] = useState<Tab>('habits');
+  const [loadError, setLoadError] = useState<string | null>(null);
+
   const [habits, setHabits] = useState<LiveWellHabit[]>([]);
   const [selectedHabit, setSelectedHabit] = useState<LiveWellHabit | null>(null);
 
-  // Quizzes state
   const [quizList, setQuizList] = useState<any[]>([]);
   const [selectedQuizCode, setSelectedQuizCode] = useState<string>('INSULIN_RESISTANCE');
   const [activeQuiz, setActiveQuiz] = useState<LiveWellQuizDetail | null>(null);
   const [userAnswers, setUserAnswers] = useState<Record<string, any>>({});
   const [evalResult, setEvalResult] = useState<LiveWellQuizEvaluationResult | null>(null);
-  const [quizSubmitting, setQuizSubmitting] = useState<boolean>(false);
+  const [quizSubmitting, setQuizSubmitting] = useState(false);
+  const [quizError, setQuizError] = useState<string | null>(null);
 
-  // Microhabits state
   const [microhabits, setMicrohabits] = useState<any[]>([]);
   const [selectedDriver, setSelectedDriver] = useState<string>('Gut Health');
 
-  // Supplements & Labs state
   const [supplements, setSupplements] = useState<any[]>([]);
   const [labs, setLabs] = useState<any[]>([]);
 
-  useEffect(() => {
-    // Initial fetch of habits and quiz list
-    fetchLiveWellHabits().then((data) => {
-      setHabits(data);
-      if (data.length > 0) setSelectedHabit(data[0]);
-    }).catch((e) => console.error(e));
+  const fail = (e: any) => {
+    console.error(e);
+    setLoadError('Could not reach the LiveWell database. Make sure the backend is running on port 8000.');
+  };
 
-    fetchLiveWellQuizzes().then((data) => {
-      setQuizList(data);
-    }).catch((e) => console.error(e));
+  useEffect(() => {
+    fetchLiveWellHabits()
+      .then((data) => {
+        setHabits(data);
+        if (data.length > 0) setSelectedHabit(data[0]);
+      })
+      .catch(fail);
+    fetchLiveWellQuizzes().then(setQuizList).catch(fail);
   }, []);
 
-  // When selectedQuizCode changes, fetch its full details
   useEffect(() => {
     if (activeTab === 'quizzes' && selectedQuizCode) {
       setEvalResult(null);
       setUserAnswers({});
-      fetchLiveWellQuiz(selectedQuizCode).then((q) => {
-        setActiveQuiz(q);
-      }).catch((e) => console.error(e));
+      setQuizError(null);
+      fetchLiveWellQuiz(selectedQuizCode).then(setActiveQuiz).catch(fail);
     }
   }, [activeTab, selectedQuizCode]);
 
-  // When microhabits tab activated
   useEffect(() => {
     if (activeTab === 'microhabits') {
-      fetchLiveWellMicrohabits(selectedDriver).then(setMicrohabits).catch(console.error);
+      fetchLiveWellMicrohabits(selectedDriver).then(setMicrohabits).catch(fail);
     }
   }, [activeTab, selectedDriver]);
 
-  // When supplements tab activated
   useEffect(() => {
     if (activeTab === 'supplements') {
-      fetchLiveWellSupplements().then(setSupplements).catch(console.error);
-      fetchLiveWellLabs().then(setLabs).catch(console.error);
+      fetchLiveWellSupplements().then(setSupplements).catch(fail);
+      fetchLiveWellLabs().then(setLabs).catch(fail);
     }
   }, [activeTab]);
-
-  const handleAnswerChange = (qNum: number, value: any) => {
-    setUserAnswers((prev) => ({
-      ...prev,
-      [qNum]: value,
-    }));
-  };
 
   const handleQuizSubmit = async () => {
     if (!selectedQuizCode) return;
     setQuizSubmitting(true);
+    setQuizError(null);
     try {
-      const res = await evaluateLiveWellQuiz(selectedQuizCode, userAnswers);
-      setEvalResult(res);
+      setEvalResult(await evaluateLiveWellQuiz(selectedQuizCode, userAnswers));
     } catch (e: any) {
-      console.error(e);
-      alert('Error evaluating quiz: ' + e.message);
+      setQuizError(e.message || 'Evaluation failed.');
     } finally {
       setQuizSubmitting(false);
     }
   };
 
+  const answered = activeQuiz ? activeQuiz.questions.filter((q) => userAnswers[q.question_number] !== undefined).length : 0;
+
   return (
-    <div className="w-full glass-panel rounded-2xl p-6 mb-8 border border-teal-500/30 shadow-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/95">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full flex items-center gap-1">
-              <HeartPulse className="w-3.5 h-3.5 text-emerald-400" />
-              Dr. Murthy Gokula Clinical Database
-            </span>
-            <span className="text-xs text-slate-400">&bull; LiveWell Longevity Framework</span>
+    <div>
+      <SectionHeader
+        eyebrow="LiveWell library"
+        title="Habits & clinical screening"
+        description="Eight habits, seven screening instruments, MY GOAL DO IT microhabits and therapeutic protocols from the LiveWell longevity framework."
+        right={
+          <div className="segmented overflow-x-auto no-scrollbar max-w-full" role="tablist">
+            {TABS.map((t) => (
+              <button key={t.id} aria-pressed={activeTab === t.id} onClick={() => setActiveTab(t.id)} className="shrink-0">
+                {t.label}
+              </button>
+            ))}
           </div>
-          <h2 className="text-xl font-bold text-white mt-1 flex items-center gap-2">
-            <BookMarked className="w-5 h-5 text-emerald-400" />
-            LIVE WELL: 8 Habits &amp; Clinical Knowledge Engine
-          </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Database of 8 Habits (Superheroes), 7 Clinical Risk Quizzes, MY GOAL DO IT Microhabits, and Therapeutic Protocols.
-          </p>
-        </div>
+        }
+      />
 
-        {/* Tab Buttons */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-950/90 rounded-xl border border-slate-800">
-          <button
-            onClick={() => setActiveTab('habits')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              activeTab === 'habits'
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            8 Superheroes / Habits
-          </button>
-          <button
-            onClick={() => setActiveTab('quizzes')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              activeTab === 'quizzes'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Clinical Quizzes (7)
-          </button>
-          <button
-            onClick={() => setActiveTab('microhabits')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              activeTab === 'microhabits'
-                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            MY GOAL DO IT Habits
-          </button>
-          <button
-            onClick={() => setActiveTab('supplements')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              activeTab === 'supplements'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Supplements &amp; Labs
-          </button>
-        </div>
-      </div>
+      {loadError && (
+        <div className="card p-4 mb-4 text-[13px] text-danger border-danger/30 bg-danger/5">{loadError}</div>
+      )}
 
-      {/* TAB 1: 8 HABITS / SUPERHEROES */}
+      {/* HABITS: master-detail */}
       {activeTab === 'habits' && (
-        <div className="space-y-6">
-          {/* Superhero Selector Chips */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div className="grid lg:grid-cols-[280px_1fr] gap-4">
+          <ul className="card p-1.5 h-fit">
             {habits.map((h) => {
-              const isSelected = selectedHabit?.id === h.id;
+              const sel = selectedHabit?.id === h.id;
               return (
-                <button
-                  key={h.id}
-                  onClick={() => setSelectedHabit(h)}
-                  className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
-                    isSelected
-                      ? 'bg-emerald-500/15 border-emerald-500/50 shadow-md shadow-emerald-500/10'
-                      : 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-950 text-emerald-400 font-bold">
-                      Habit #{h.habit_number}
+                <li key={h.id}>
+                  <button
+                    onClick={() => setSelectedHabit(h)}
+                    className={`w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                      sel ? 'bg-sunken' : 'hover:bg-sunken/60'
+                    }`}
+                  >
+                    <span
+                      className={`num font-mono text-[12px] w-6 h-6 rounded-md grid place-items-center shrink-0 ${
+                        sel ? 'bg-accent text-accent-ink' : 'bg-sunken text-muted'
+                      }`}
+                    >
+                      {h.habit_number}
                     </span>
-                    <Flame className={`w-3.5 h-3.5 ${isSelected ? 'text-emerald-400' : 'text-slate-600'}`} />
-                  </div>
-                  <div className="font-bold text-xs text-white line-clamp-1">{h.superhero_name}</div>
-                  <div className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">{h.domain}</div>
-                </button>
+                    <span className="min-w-0">
+                      <span className="block text-[13.5px] font-medium truncate">{h.superhero_name}</span>
+                      <span className="block text-[12px] text-faint truncate">{h.domain}</span>
+                    </span>
+                  </button>
+                </li>
               );
             })}
-          </div>
+            {habits.length === 0 && !loadError && <li className="p-4 text-[13px] text-faint">Loading…</li>}
+          </ul>
 
-          {/* Selected Superhero Detailed Card */}
           {selectedHabit && (
-            <div className="bg-slate-900/70 rounded-xl p-5 border border-slate-800 space-y-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
-                <div>
-                  <div className="text-xs font-mono text-emerald-400 font-semibold uppercase tracking-wider">
-                    Habit #{selectedHabit.habit_number} &bull; {selectedHabit.domain}
-                  </div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2 mt-0.5">
-                    {selectedHabit.superhero_name}
-                  </h3>
-                  <p className="text-xs text-slate-300 italic mt-0.5">&ldquo;{selectedHabit.tagline}&rdquo;</p>
-                </div>
+            <article key={selectedHabit.id} className="card p-5 sm:p-6 animate-rise">
+              <div className="eyebrow">
+                Habit {selectedHabit.habit_number} · {selectedHabit.domain}
+              </div>
+              <h3 className="font-display text-[28px] leading-tight mt-1">{selectedHabit.superhero_name}</h3>
+              <p className="text-[14px] text-muted italic mt-1">{selectedHabit.tagline}</p>
+              <p className="text-[14px] leading-relaxed mt-4">{selectedHabit.description}</p>
+
+              <div className="mt-5 rounded-lg bg-accent/[0.07] border border-accent/20 p-4">
+                <div className="text-[12px] font-medium text-accent mb-1">Superpower check</div>
+                <p className="text-[13.5px] leading-relaxed">{selectedHabit.superpower_check_questions}</p>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed">{selectedHabit.description}</p>
-
-              {/* Superpower Check */}
-              <div className="bg-emerald-500/10 border border-emerald-500/25 rounded-xl p-4 text-xs">
-                <div className="font-bold text-emerald-300 mb-1 flex items-center gap-1.5">
-                  <Activity className="w-4 h-4 text-emerald-400" />
-                  Your Super Power Check:
-                </div>
-                <p className="text-emerald-100/90 leading-relaxed">{selectedHabit.superpower_check_questions}</p>
+              <div className="grid md:grid-cols-3 gap-px mt-5 rounded-lg overflow-hidden bg-line border border-line">
+                <Routine icon={Sunrise} title="Morning" text={selectedHabit.morning_routine} />
+                <Routine icon={Utensils} title="Meals" text={selectedHabit.meal_guidance} />
+                <Routine icon={MoonStar} title="Evening" text={selectedHabit.evening_wind_down} />
               </div>
 
-              {/* Daily Super Hero Routine */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                <div className="p-3 bg-slate-950/70 rounded-xl border border-slate-800">
-                  <div className="font-bold text-cyan-400 mb-1 flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5" /> Morning Routine
-                  </div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">{selectedHabit.morning_routine}</p>
-                </div>
-
-                <div className="p-3 bg-slate-950/70 rounded-xl border border-slate-800">
-                  <div className="font-bold text-amber-400 mb-1 flex items-center gap-1">
-                    <Flame className="w-3.5 h-3.5" /> Meals &amp; Nutrition
-                  </div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">{selectedHabit.meal_guidance}</p>
-                </div>
-
-                <div className="p-3 bg-slate-950/70 rounded-xl border border-slate-800">
-                  <div className="font-bold text-purple-400 mb-1 flex items-center gap-1">
-                    <HeartPulse className="w-3.5 h-3.5" /> Evening Wind-Down
-                  </div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">{selectedHabit.evening_wind_down}</p>
-                </div>
-              </div>
-
-              {/* Synergy */}
               {selectedHabit.synergistic_helpers && (
-                <div className="text-[11px] text-slate-400 bg-slate-950/40 p-3 rounded-lg border border-slate-800/80">
-                  <strong className="text-slate-300">Team Synergy: </strong>
+                <p className="text-[13px] text-muted mt-5">
+                  <span className="text-ink font-medium">Works well with: </span>
                   {selectedHabit.synergistic_helpers}
-                </div>
+                </p>
               )}
-            </div>
+            </article>
           )}
         </div>
       )}
 
-      {/* TAB 2: CLINICAL SCREENING QUIZZES */}
+      {/* QUIZZES */}
       {activeTab === 'quizzes' && (
-        <div className="space-y-6">
-          {/* Quiz Selector Dropdown / Pills */}
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="space-y-4">
+          <div className="flex flex-wrap gap-1.5">
             {quizList.map((q) => (
               <button
                 key={q.quiz_code}
                 onClick={() => setSelectedQuizCode(q.quiz_code)}
-                className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all text-left flex items-center gap-2 ${
+                className={`px-3 py-1.5 rounded-full text-[12.5px] border transition-colors ${
                   selectedQuizCode === q.quiz_code
-                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50 shadow-md'
-                    : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200'
+                    ? 'border-ink bg-ink text-bg'
+                    : 'border-line text-muted hover:text-ink hover:border-faint'
                 }`}
               >
-                <Dna className="w-3.5 h-3.5 text-cyan-400" />
-                <span>{q.title.split('(')[0]}</span>
+                {q.title.split('(')[0].trim()}
               </button>
             ))}
           </div>
 
           {activeQuiz && (
-            <div className="bg-slate-900/70 rounded-xl p-5 border border-slate-800 space-y-5">
-              <div className="border-b border-slate-800 pb-3">
-                <div className="text-xs font-mono text-cyan-400">{activeQuiz.chapter_source}</div>
-                <h3 className="text-base font-bold text-white mt-0.5">{activeQuiz.title}</h3>
-                <p className="text-xs text-slate-300 mt-1">{activeQuiz.instructions}</p>
+            <div className="card">
+              <div className="px-5 sm:px-6 pt-5 pb-4 border-b border-line">
+                <div className="eyebrow">{activeQuiz.chapter_source}</div>
+                <h3 className="font-display text-xl mt-1">{activeQuiz.title}</h3>
+                <p className="text-[13.5px] text-muted mt-1">{activeQuiz.instructions}</p>
+                <div className="mt-3 flex items-center gap-3">
+                  <div className="flex-1 h-1 rounded-full bg-sunken overflow-hidden">
+                    <div
+                      className="h-full bg-accent transition-all"
+                      style={{ width: `${(answered / Math.max(activeQuiz.questions.length, 1)) * 100}%` }}
+                    />
+                  </div>
+                  <span className="num text-[12px] text-faint">
+                    {answered}/{activeQuiz.questions.length} answered
+                  </span>
+                </div>
               </div>
 
-              {/* Quiz Questions List */}
-              <div className="space-y-3">
-                {activeQuiz.questions.map((q) => {
-                  const currentValue = userAnswers[q.question_number];
-                  return (
-                    <div
-                      key={q.id}
-                      className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs"
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-mono font-bold text-cyan-400">Q{q.question_number}</span>
-                          {q.category && (
-                            <span className="text-[10px] bg-slate-900 text-slate-400 px-1.5 py-0.5 rounded border border-slate-800">
-                              {q.category}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-slate-200 leading-relaxed">{q.question_text}</p>
-                      </div>
-
-                      {/* Options Radio / Buttons */}
-                      <div className="flex items-center gap-2 shrink-0">
-                        {q.options.map((opt, oIdx) => {
-                          const isChecked = currentValue === opt.points;
-                          return (
-                            <button
-                              key={oIdx}
-                              onClick={() => handleAnswerChange(q.question_number, opt.points)}
-                              className={`px-3 py-1.5 rounded-lg font-medium text-xs border transition-all ${
-                                isChecked
-                                  ? 'bg-cyan-500/25 text-cyan-200 border-cyan-500/60 font-bold'
-                                  : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-slate-200'
-                              }`}
-                            >
-                              {opt.label}
-                            </button>
-                          );
-                        })}
+              <ol className="divide-y divide-line">
+                {activeQuiz.questions.map((q) => (
+                  <li
+                    key={q.id}
+                    className="px-5 sm:px-6 py-3.5 flex flex-col md:flex-row md:items-center gap-3 justify-between"
+                  >
+                    <div className="flex gap-3 min-w-0">
+                      <span className="num font-mono text-[12px] text-faint w-6 shrink-0 pt-0.5">{q.question_number}</span>
+                      <div>
+                        <p className="text-[13.5px] leading-relaxed">{q.question_text}</p>
+                        {q.category && <span className="text-[11.5px] text-faint">{q.category}</span>}
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+                    <div className="segmented shrink-0 self-start md:self-auto ml-9 md:ml-0">
+                      {q.options.map((opt, i) => (
+                        <button
+                          key={i}
+                          aria-pressed={userAnswers[q.question_number] === opt.points}
+                          onClick={() => setUserAnswers((p) => ({ ...p, [q.question_number]: opt.points }))}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </li>
+                ))}
+              </ol>
 
-              {/* Submit Button */}
-              <div className="flex items-center justify-between pt-2">
+              <div className="px-5 sm:px-6 py-3.5 border-t border-line flex items-center justify-between gap-3">
                 <button
                   onClick={() => {
                     setUserAnswers({});
                     setEvalResult(null);
                   }}
-                  className="px-3 py-2 text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1"
+                  className="btn-ghost"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" /> Reset Answers
+                  <RotateCcw className="w-3.5 h-3.5" /> Reset
                 </button>
-
-                <button
-                  onClick={handleQuizSubmit}
-                  disabled={quizSubmitting}
-                  className="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50"
-                >
-                  {quizSubmitting ? 'Evaluating...' : 'Evaluate Clinical Risk Score'}
-                  <ArrowRight className="w-4 h-4" />
+                <button onClick={handleQuizSubmit} disabled={quizSubmitting} className="btn-primary">
+                  {quizSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                  Evaluate risk
+                  {!quizSubmitting && <ArrowRight className="w-4 h-4" />}
                 </button>
               </div>
 
-              {/* Evaluated Result Card */}
+              {quizError && <div className="px-6 pb-4 text-[13px] text-danger">{quizError}</div>}
+
               {evalResult && (
-                <div
-                  className={`mt-4 p-5 rounded-xl border text-xs space-y-3 ${
-                    evalResult.risk_level === 'High' || evalResult.risk_level === 'Severe'
-                      ? 'bg-rose-500/10 border-rose-500/40 text-rose-200'
-                      : evalResult.risk_level === 'Moderate'
-                      ? 'bg-amber-500/10 border-amber-500/40 text-amber-200'
-                      : 'bg-emerald-500/10 border-emerald-500/40 text-emerald-200'
-                  }`}
-                >
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <div className="flex items-center gap-2">
-                      <ShieldAlert className="w-4 h-4" />
-                      <span className="font-bold text-sm">
-                        Clinical Evaluation Result: {evalResult.label} ({evalResult.total_score} / {evalResult.max_possible_score} pts)
-                      </span>
-                    </div>
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10">
-                      {evalResult.risk_level} Risk
+                <div className="m-4 sm:m-5 mt-0 sm:mt-0 rounded-lg border border-line overflow-hidden animate-rise">
+                  <div className={`px-4 py-3 flex flex-wrap items-center justify-between gap-2 ${toneSoft[wordTone(evalResult.risk_level)]}`}>
+                    <span className="font-medium text-[14px]">{evalResult.label}</span>
+                    <span className="num text-[13px]">
+                      {evalResult.total_score} / {evalResult.max_possible_score} pts · {evalResult.risk_level} risk
                     </span>
                   </div>
-
-                  <div>
-                    <strong className="block mb-0.5 text-white">Clinical Interpretation:</strong>
-                    <p className="leading-relaxed opacity-90">{evalResult.clinical_interpretation}</p>
-                  </div>
-
-                  <div>
-                    <strong className="block mb-0.5 text-white">Recommended Medical &amp; Lifestyle Actions:</strong>
-                    <p className="leading-relaxed opacity-90">{evalResult.recommended_actions}</p>
+                  <div className="p-4 grid md:grid-cols-2 gap-4 text-[13.5px] leading-relaxed">
+                    <div>
+                      <div className="eyebrow mb-1">Interpretation</div>
+                      <p>{evalResult.clinical_interpretation}</p>
+                    </div>
+                    <div>
+                      <div className="eyebrow mb-1">Recommended actions</div>
+                      <p>{evalResult.recommended_actions}</p>
+                    </div>
                   </div>
                 </div>
               )}
@@ -404,121 +294,123 @@ export const LiveWellDatabaseViewer: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 3: MY GOAL DO IT MICROHABITS */}
+      {/* MICROHABITS */}
       {activeTab === 'microhabits' && (
-        <div className="space-y-5">
-          {/* Driver Filter */}
-          <div className="flex flex-wrap items-center gap-2">
-            {['Gut Health', 'Inflammation', 'Insulin Resistance', 'Toxins'].map((d) => (
-              <button
-                key={d}
-                onClick={() => setSelectedDriver(d)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                  selectedDriver === d
-                    ? 'bg-purple-500/20 text-purple-300 border-purple-500/50'
-                    : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200'
-                }`}
-              >
+        <div className="space-y-4">
+          <div className="segmented overflow-x-auto no-scrollbar max-w-full">
+            {DRIVERS.map((d) => (
+              <button key={d} aria-pressed={selectedDriver === d} onClick={() => setSelectedDriver(d)} className="shrink-0">
                 {d}
               </button>
             ))}
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid sm:grid-cols-2 gap-3">
             {microhabits.map((mh) => (
-              <div key={mh.id} className="p-3.5 bg-slate-900/70 rounded-xl border border-slate-800 text-xs space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-purple-400">
-                    Step {mh.letter}: {mh.step_name}
-                  </span>
-                  <span className="text-[10px] text-slate-400 px-1.5 py-0.5 rounded bg-slate-950">
-                    {mh.driver_name}
-                  </span>
+              <div key={mh.id} className="card p-4 flex gap-3.5">
+                <span className="font-display text-2xl leading-none text-accent w-6 shrink-0">{mh.letter}</span>
+                <div className="min-w-0">
+                  <div className="text-[12px] text-faint">{mh.step_name}</div>
+                  <p className="text-[14px] mt-0.5">{mh.microhabit_text}</p>
+                  {mh.implementation_tip && (
+                    <p className="text-[12.5px] text-muted mt-1.5">Tip: {mh.implementation_tip}</p>
+                  )}
                 </div>
-                <p className="text-slate-200 font-medium">{mh.microhabit_text}</p>
-                {mh.implementation_tip && (
-                  <p className="text-[11px] text-slate-400 italic">Tip: {mh.implementation_tip}</p>
-                )}
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* TAB 4: SUPPLEMENTS & LABS */}
+      {/* SUPPLEMENTS & LABS */}
       {activeTab === 'supplements' && (
-        <div className="space-y-6 text-xs">
-          {/* Supplements Table */}
-          <div>
-            <h3 className="font-bold text-white mb-2 flex items-center gap-2 text-sm">
-              <Pill className="w-4 h-4 text-amber-400" />
-              Evidence-Based Therapeutic Supplements (Table 5 &amp; Fullscript Protocols)
-            </h3>
-            <div className="overflow-x-auto rounded-xl border border-slate-800">
-              <table className="w-full text-left">
-                <thead className="bg-slate-900/90 text-slate-400 font-semibold border-b border-slate-800">
-                  <tr>
-                    <th className="p-3">Supplement</th>
-                    <th className="p-3">Mechanism &amp; Clinical Evidence</th>
-                    <th className="p-3">Typical Dosage &amp; Notes</th>
-                    <th className="p-3">Primary Indications</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60 bg-slate-950/40 text-slate-300">
-                  {supplements.map((s) => (
-                    <tr key={s.id} className="hover:bg-slate-900/40">
-                      <td className="p-3 font-bold text-amber-300 whitespace-nowrap">{s.name}</td>
-                      <td className="p-3 text-[11px] leading-relaxed">{s.mechanism_and_evidence}</td>
-                      <td className="p-3 text-[11px] font-mono text-slate-300">{s.typical_dosage_and_notes}</td>
-                      <td className="p-3 text-[11px] text-slate-400">{s.primary_indications}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Labs Table */}
-          <div className="mt-6">
-            <h3 className="font-bold text-white mb-2 flex items-center gap-2 text-sm">
-              <TestTube className="w-4 h-4 text-cyan-400" />
-              Clinical Laboratory Biomarkers Directory
-            </h3>
-            <div className="overflow-x-auto rounded-xl border border-slate-800">
-              <table className="w-full text-left">
-                <thead className="bg-slate-900/90 text-slate-400 font-semibold border-b border-slate-800">
-                  <tr>
-                    <th className="p-3">Laboratory Test</th>
-                    <th className="p-3">Coverage Category</th>
-                    <th className="p-3">Target Biological System</th>
-                    <th className="p-3">Clinical Significance</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60 bg-slate-950/40 text-slate-300">
-                  {labs.map((l) => (
-                    <tr key={l.id} className="hover:bg-slate-900/40">
-                      <td className="p-3 font-bold text-cyan-300 whitespace-nowrap">{l.test_name}</td>
-                      <td className="p-3">
-                        <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                            l.coverage_category.includes('Insurance')
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                              : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                          }`}
-                        >
-                          {l.coverage_category}
-                        </span>
-                      </td>
-                      <td className="p-3 text-[11px] text-slate-300">{l.target_system}</td>
-                      <td className="p-3 text-[11px] text-slate-400 leading-relaxed">{l.clinical_significance}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div className="space-y-6">
+          <DataTable
+            title="Therapeutic supplements"
+            headers={['Supplement', 'Mechanism & evidence', 'Typical dosage', 'Indications']}
+            rows={supplements.map((s) => [
+              <span key="n" className="font-medium whitespace-nowrap">{s.name}</span>,
+              s.mechanism_and_evidence,
+              <span key="d" className="font-mono text-[12px]">{s.typical_dosage_and_notes}</span>,
+              <span key="i" className="text-muted">{s.primary_indications}</span>,
+            ])}
+            keys={supplements.map((s) => s.id)}
+          />
+          <DataTable
+            title="Lab biomarkers"
+            headers={['Test', 'Coverage', 'Target system', 'Clinical significance']}
+            rows={labs.map((l) => [
+              <span key="n" className="font-medium whitespace-nowrap">{l.test_name}</span>,
+              <span
+                key="c"
+                className={`tag whitespace-nowrap ${
+                  l.coverage_category.includes('Insurance') ? 'bg-ok/10 text-ok' : 'bg-lmf/10 text-lmf'
+                }`}
+              >
+                {l.coverage_category}
+              </span>,
+              l.target_system,
+              <span key="s" className="text-muted">{l.clinical_significance}</span>,
+            ])}
+            keys={labs.map((l) => l.id)}
+          />
         </div>
       )}
     </div>
   );
 };
+
+const Routine = ({ icon: Icon, title, text }: { icon: React.ElementType; title: string; text?: string }) => (
+  <div className="bg-surface p-4">
+    <div className="flex items-center gap-1.5 text-[12px] font-medium text-muted mb-1.5">
+      <Icon className="w-3.5 h-3.5" /> {title}
+    </div>
+    <p className="text-[13px] leading-relaxed">{text || '—'}</p>
+  </div>
+);
+
+const DataTable = ({
+  title,
+  headers,
+  rows,
+  keys,
+}: {
+  title: string;
+  headers: string[];
+  rows: React.ReactNode[][];
+  keys: (string | number)[];
+}) => (
+  <div className="card overflow-hidden">
+    <div className="px-5 py-3.5 border-b border-line font-medium">{title}</div>
+    <div className="overflow-x-auto">
+      <table className="w-full text-left text-[13px]">
+        <thead>
+          <tr className="text-[11.5px] text-faint border-b border-line">
+            {headers.map((h) => (
+              <th key={h} className="px-5 py-2.5 font-medium">
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-line">
+          {rows.map((r, i) => (
+            <tr key={keys[i]} className="align-top hover:bg-sunken/50">
+              {r.map((c, j) => (
+                <td key={j} className="px-5 py-3 leading-relaxed">
+                  {c}
+                </td>
+              ))}
+            </tr>
+          ))}
+          {rows.length === 0 && (
+            <tr>
+              <td colSpan={headers.length} className="px-5 py-8 text-center text-faint">
+                Loading…
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
