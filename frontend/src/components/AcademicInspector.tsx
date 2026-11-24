@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { SectionHeader, ToneTag, Tone, useTokenColors } from './ui';
+import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 
 type Trap = [number, number, number, number];
 type SetDef = { name: string; level: string; umf: Trap; lmf: Trap; text: string };
@@ -64,85 +65,99 @@ const RULES: { id: number; condition: string; consequent: string; rationale: str
 const LEVEL_TONE: Record<string, Tone> = { Low: 'ok', Moderate: 'warn', Critical: 'danger' };
 
 export const AcademicInspector: React.FC = () => {
-  const [tab, setTab] = useState<'drivers' | 'rules'>('drivers');
+  const [tab, setTab] = useState<string>('drivers');
 
   return (
     <div>
       <SectionHeader
-        eyebrow="Method"
         title="How the engine reasons"
-        description="Each word is an interval type-2 fuzzy set: a trapezoidal upper and lower membership function whose gap (the footprint of uncertainty) encodes how differently people use that word."
-        right={
-          <div className="segmented" role="tablist">
-            <button aria-pressed={tab === 'drivers'} onClick={() => setTab('drivers')}>
-              Membership sets
-            </button>
-            <button aria-pressed={tab === 'rules'} onClick={() => setTab('rules')}>
-              Rule base
-            </button>
-          </div>
-        }
+        description="Each word is an interval type-2 fuzzy set: an upper and a lower membership function. The gap between them, the footprint of uncertainty, captures how differently people use that word."
       />
 
-      {tab === 'drivers' ? (
-        <div className="space-y-4">
-          {DRIVERS.map((d, i) => (
-            <div key={d.name} className="card overflow-hidden">
-              <div className="grid lg:grid-cols-[340px_1fr]">
-                <div className="p-5 border-b lg:border-b-0 lg:border-r border-line bg-sunken/40">
-                  <div className="eyebrow">Driver {i + 1}</div>
-                  <h3 className="font-display text-xl mt-0.5">{d.name}</h3>
-                  <div className="text-[12px] text-muted mt-0.5">{d.source}</div>
-                  <MFPlot sets={d.sets} />
-                </div>
-                <div className="divide-y divide-line">
-                  {d.sets.map((s) => (
-                    <div key={s.name} className="p-4 sm:px-5">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-medium text-[14px]">{s.name}</span>
-                        <ToneTag word={s.level}>{s.level}</ToneTag>
-                        <span className="ml-auto font-mono text-[11px] text-faint">
-                          UMF [{s.umf.join(', ')}] · LMF [{s.lmf.join(', ')}]
-                        </span>
-                      </div>
-                      <p className="text-[13px] text-muted mt-1.5 leading-relaxed">{s.text}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <div className="card p-5 text-[13.5px] text-muted leading-relaxed">
-            Antecedents combine with <span className="font-mono text-ink">min</span> for AND and{' '}
-            <span className="font-mono text-ink">max</span> for OR, applied separately to upper and lower memberships. The
-            resulting firing interval scales each rule&apos;s consequent set; consequents are aggregated and then
-            type-reduced by Karnik-Mendel.
-          </div>
-          <div className="card divide-y divide-line">
-            {RULES.map((r) => (
-              <div key={r.id} className="px-5 py-3.5 grid sm:grid-cols-[52px_1fr] gap-x-4 gap-y-1">
-                <span className="font-mono text-[13px] font-medium">R{r.id}</span>
-                <div>
-                  <div className="text-[13.5px]">
-                    {r.condition.split(/\b(AND|OR)\b/).map((p, i) =>
-                      p === 'AND' || p === 'OR' ? (
-                        <span key={i} className="font-mono text-[11px] text-faint">{` ${p} `}</span>
-                      ) : (
-                        <span key={i}>{p}</span>
-                      )
-                    )}{' '}
-                    <span className="text-faint">→</span> <ToneTag word={r.consequent}>{r.consequent} load</ToneTag>
+      <Tabs value={tab} onValueChange={setTab} className="gap-6">
+        <TabsList aria-label="Method sections" className="h-10">
+          <TabsTrigger value="drivers" className="px-4">
+            Membership sets
+          </TabsTrigger>
+          <TabsTrigger value="rules" className="px-4">
+            Rule base
+          </TabsTrigger>
+        </TabsList>
+
+        {tab === 'drivers' ? (
+          <div className="space-y-4" role="tabpanel">
+            {DRIVERS.map((d) => (
+              <section key={d.name} className="card overflow-hidden" aria-labelledby={`driver-${d.name}`}>
+                <div className="grid lg:grid-cols-[340px_1fr]">
+                  <div className="p-5 border-b lg:border-b-0 lg:border-r bg-sunken">
+                    <h2 id={`driver-${d.name}`} className="font-display text-xl tracking-[-0.01em]">
+                      {d.name}
+                    </h2>
+                    <p className="text-xs text-muted-foreground mt-0.5">{d.source}</p>
+                    <MFPlot sets={d.sets} />
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Solid line: upper MF. Dashed: lower MF. Shaded: footprint of uncertainty.
+                    </p>
                   </div>
-                  <p className="text-[12.5px] text-muted mt-1">{r.rationale}</p>
+                  <div className="divide-y">
+                    {d.sets.map((s) => (
+                      <div key={s.name} className="p-4 sm:px-5">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="font-medium text-sm">{s.name}</h3>
+                          <ToneTag word={s.level}>{s.level}</ToneTag>
+                          <span className="ml-auto font-mono text-xs text-muted-foreground">
+                            UMF [{s.umf.join(', ')}] · LMF [{s.lmf.join(', ')}]
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed max-w-[65ch]">{s.text}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </section>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="space-y-4" role="tabpanel">
+            <div className="card p-5 text-sm text-muted-foreground leading-relaxed space-y-2">
+              <p className="max-w-[70ch]">
+                When you pick a word, the engine compares that word&apos;s fuzzy set with every set of the same driver.
+                It matches itself fully and its neighbours partly, so the uncertainty in the words carries through to
+                the result.
+              </p>
+              <p className="max-w-[70ch]">
+                Antecedents then combine with <strong className="font-medium text-foreground">min</strong> for AND
+                and <strong className="font-medium text-foreground">max</strong> for OR, separately for the upper and
+                lower memberships. Each rule&apos;s firing interval scales its output set; the outputs are aggregated
+                and reduced to a range [yₗ, yᵣ] with Karnik-Mendel.
+              </p>
+            </div>
+            <ol className="card divide-y" aria-label="Rules">
+              {RULES.map((r) => (
+                <li key={r.id} className="px-5 py-3.5 grid sm:grid-cols-[52px_1fr] gap-x-4 gap-y-1">
+                  <span className="text-sm font-semibold num">R{r.id}</span>
+                  <div>
+                    <div className="text-sm">
+                      {r.condition.split(/\b(AND|OR)\b/).map((p, i) =>
+                        p === 'AND' || p === 'OR' ? (
+                          <span key={i} className="text-xs font-medium text-muted-foreground">{` ${p} `}</span>
+                        ) : (
+                          <span key={i}>{p}</span>
+                        )
+                      )}{' '}
+                      <span className="text-muted-foreground" aria-label="then">
+                        →
+                      </span>{' '}
+                      <ToneTag word={r.consequent}>{r.consequent} load</ToneTag>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">{r.rationale}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+      </Tabs>
     </div>
   );
 };
@@ -179,7 +194,7 @@ const MFPlot = ({ sets }: { sets: SetDef[] }) => {
           key={t}
           x={x(t)}
           y={H - 4}
-          fontSize={10}
+          fontSize={11}
           fill={colors.faint}
           textAnchor={t === 0 ? 'start' : t === 100 ? 'end' : 'middle'}
         >

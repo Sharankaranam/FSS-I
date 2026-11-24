@@ -20,7 +20,7 @@ function setup(score: number | null) {
   return handlers;
 }
 
-const column = (name: string) => screen.getByText(name, { selector: 'span' }).closest('div')!.parentElement!;
+const column = (name: string) => screen.getByRole('list', { name });
 
 describe('TaskBoard', () => {
   it('moves deep work to tomorrow and shows the shield when load is critical', () => {
@@ -34,7 +34,7 @@ describe('TaskBoard', () => {
     setup(20);
     expect(screen.queryByText('Shield on')).not.toBeInTheDocument();
     expect(within(column('Today')).getByText('Architecture doc')).toBeInTheDocument();
-    expect(screen.getByText('No tasks deferred.')).toBeInTheDocument();
+    expect(screen.getByText(/Nothing deferred/)).toBeInTheDocument();
   });
 
   it('adds a task through the form', async () => {
@@ -42,7 +42,7 @@ describe('TaskBoard', () => {
     const { onAdd } = setup(20);
     await user.click(screen.getByRole('button', { name: /add task/i }));
     await user.type(screen.getByLabelText('Task title'), 'Prepare slides');
-    await user.click(screen.getByRole('button', { name: 'High' }));
+    await user.click(screen.getByRole('radio', { name: 'High' }));
     await user.clear(screen.getByLabelText('Estimated minutes'));
     await user.type(screen.getByLabelText('Estimated minutes'), '50');
     const form = screen.getByLabelText('Task title').closest('form')!;

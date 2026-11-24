@@ -2,94 +2,107 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design tokens — RGB triplets so Tailwind can apply alpha (e.g. bg-accent/10). */
+/*
+ * Design tokens (OKLCH "L C H").
+ * Neutrals are tinted toward the brand teal (hue 175), never pure gray.
+ * Contrast floors: --muted-foreground ≥ 7:1 and --faint ≥ 4.5:1 on --background, --card and --sunken.
+ */
 :root {
-  --bg: 246 245 241;
-  --surface: 255 255 255;
-  --sunken: 240 239 234;
-  --line: 226 224 217;
-  --ink: 28 28 30;
-  --muted: 104 103 98;
-  --faint: 156 154 146;
-  --accent: 15 110 100;
-  --accent-ink: 255 255 255;
-  --ok: 30 130 80;
-  --warn: 184 115 10;
-  --danger: 192 48 56;
-  --lmf: 120 92 200;
+  --background: 0.975 0.005 175;
+  --card: 0.995 0.002 175;
+  --sunken: 0.955 0.007 175;
+  --muted: 0.945 0.008 175;
+  --border: 0.895 0.01 175;
+  --foreground: 0.22 0.014 175;
+  --muted-foreground: 0.44 0.014 175;
+  --faint: 0.5 0.013 175;
+  --primary: 0.47 0.085 178;
+  --primary-foreground: 0.985 0.004 175;
+  --ok: 0.5 0.12 152;
+  --warn: 0.55 0.125 68;
+  --danger: 0.53 0.17 25;
+  --lmf: 0.5 0.15 290;
   color-scheme: light;
 }
 
 .dark {
-  --bg: 15 16 18;
-  --surface: 23 24 27;
-  --sunken: 19 20 23;
-  --line: 44 45 50;
-  --ink: 236 235 230;
-  --muted: 156 155 150;
-  --faint: 104 104 102;
-  --accent: 96 200 182;
-  --accent-ink: 10 30 28;
-  --ok: 92 200 140;
-  --warn: 236 172 70;
-  --danger: 240 110 110;
-  --lmf: 172 150 245;
+  --background: 0.17 0.007 175;
+  --card: 0.205 0.008 175;
+  --sunken: 0.19 0.008 175;
+  --muted: 0.25 0.009 175;
+  --border: 0.3 0.01 175;
+  --foreground: 0.94 0.005 175;
+  --muted-foreground: 0.78 0.01 175;
+  --faint: 0.68 0.011 175;
+  --primary: 0.77 0.105 178;
+  --primary-foreground: 0.2 0.03 178;
+  --ok: 0.78 0.13 152;
+  --warn: 0.81 0.12 75;
+  --danger: 0.73 0.15 25;
+  --lmf: 0.76 0.11 290;
   color-scheme: dark;
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   body {
-    @apply bg-bg text-ink font-sans;
+    @apply bg-background text-foreground font-sans text-[15px] leading-normal;
     min-height: 100vh;
-    font-feature-settings: 'cv11', 'ss01';
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
   ::selection {
-    background: rgb(var(--accent) / 0.25);
+    background: oklch(var(--primary) / 0.22);
+  }
+  input,
+  textarea {
+    caret-color: oklch(var(--primary));
   }
   :focus-visible {
-    outline: 2px solid rgb(var(--accent));
+    outline: 2px solid oklch(var(--primary));
     outline-offset: 2px;
-    border-radius: 6px;
+  }
+  * {
+    scrollbar-color: oklch(var(--border)) transparent;
   }
 }
 
 @layer components {
+  /* One elevation cue only: a border. No shadow on resting cards. */
   .card {
-    @apply bg-surface border border-line rounded-card shadow-card;
+    @apply bg-card border rounded-card;
   }
-  .eyebrow {
-    @apply text-[11px] font-medium uppercase tracking-[0.08em] text-faint;
+  .label {
+    @apply text-xs font-medium text-muted-foreground;
   }
   .num {
     font-variant-numeric: tabular-nums;
   }
+  /* Single-choice button group (driver words, quiz answers, load picker) */
   .segmented {
-    @apply inline-flex p-0.5 rounded-lg bg-sunken border border-line;
+    @apply inline-flex p-[3px] rounded-lg bg-muted;
   }
   .segmented > button {
-    @apply px-3 py-1.5 text-[13px] rounded-md text-muted transition-colors;
+    @apply px-3 py-1.5 text-sm rounded-md text-muted-foreground transition-colors duration-200 ease-out-expo;
   }
   .segmented > button:hover {
-    @apply text-ink;
+    @apply text-foreground;
   }
-  .segmented > button[aria-pressed='true'] {
-    @apply bg-surface text-ink shadow-sm font-medium;
-  }
-  .btn {
-    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-[13px] font-medium transition-colors disabled:opacity-50;
-  }
-  .btn-primary {
-    @apply btn bg-accent text-accent-ink hover:bg-accent/90;
-  }
-  .btn-ghost {
-    @apply btn text-muted hover:text-ink hover:bg-sunken;
-  }
-  .tag {
-    @apply inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium;
+  .segmented > button[aria-pressed='true'],
+  .segmented > button[aria-checked='true'] {
+    @apply bg-card text-foreground shadow-xs font-medium;
   }
 }
 
@@ -102,9 +115,9 @@ input[type='range'].range {
   border-radius: 999px;
   background: linear-gradient(
     to right,
-    rgb(var(--accent)) 0%,
-    rgb(var(--accent)) var(--pct, 50%),
-    rgb(var(--line)) var(--pct, 50%)
+    oklch(var(--primary)) 0%,
+    oklch(var(--primary)) var(--pct, 50%),
+    oklch(var(--border)) var(--pct, 50%)
   );
   cursor: pointer;
 }
@@ -113,16 +126,15 @@ input[type='range'].range::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: rgb(var(--surface));
-  border: 2px solid rgb(var(--accent));
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+  background: oklch(var(--card));
+  border: 2px solid oklch(var(--primary));
 }
 input[type='range'].range::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: rgb(var(--surface));
-  border: 2px solid rgb(var(--accent));
+  background: oklch(var(--card));
+  border: 2px solid oklch(var(--primary));
 }
 
 .no-scrollbar::-webkit-scrollbar {

@@ -28,27 +28,31 @@ export const TrendCard: React.FC<{ checkins: Checkin[] }> = ({ checkins }) => {
   const now = Date.now();
 
   return (
-    <div className="card p-5">
+    <section className="card p-5" aria-labelledby="trend-heading">
       <div className="flex items-baseline justify-between">
-        <div className="eyebrow">Last 7 days</div>
-        <span className="text-[12px] text-faint num">{checkins.length} check-ins</span>
+        <h2 id="trend-heading" className="text-sm font-medium text-muted-foreground">
+          Last 7 days
+        </h2>
+        <span className="text-xs text-muted-foreground num">
+          {checkins.length} {checkins.length === 1 ? 'check-in' : 'check-ins'}
+        </span>
       </div>
 
       {checkins.length === 0 ? (
-        <p className="text-[13px] text-muted mt-3 leading-relaxed">
-          Your check-ins will appear here. Each one is saved automatically; changes within 10 minutes count as a
-          single check-in.
+        <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+          No check-ins yet. Pick your words above and this fills in on its own. Changes within 10 minutes count as
+          one check-in.
         </p>
       ) : (
         <>
           <div className="flex gap-6 mt-2">
             <div>
               <div className={`font-display text-2xl num ${toneText[scoreTone(avg)]}`}>{avg!.toFixed(0)}</div>
-              <div className="text-[11.5px] text-faint">average load</div>
+              <div className="text-xs text-muted-foreground">average load</div>
             </div>
             <div>
               <div className="font-display text-2xl num">{heavyDays}</div>
-              <div className="text-[11.5px] text-faint">{heavyDays === 1 ? 'critical day' : 'critical days'}</div>
+              <div className="text-xs text-muted-foreground">{heavyDays === 1 ? 'critical day' : 'critical days'}</div>
             </div>
           </div>
           {colors && (
@@ -108,6 +112,6 @@ export const TrendCard: React.FC<{ checkins: Checkin[] }> = ({ checkins }) => {
           )}
         </>
       )}
-    </div>
+    </section>
   );
 };

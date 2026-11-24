@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { AlertCircle, ArrowRight, RefreshCw } from 'lucide-react';
+import { Button } from '../components/ui/button';
 import { SidebarNav, TabType } from '../components/SidebarNav';
 import { CheckInPanel } from '../components/CheckInPanel';
 import { ScorePanel } from '../components/ScorePanel';
@@ -135,34 +136,33 @@ export default function Home() {
             >
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-4 h-4 text-danger shrink-0 mt-0.5" />
-                <div className="text-[13.5px]">
+                <div className="text-sm">
                   <div className="font-medium">Can&apos;t reach the inference engine</div>
-                  <div className="text-muted mt-0.5">
-                    {error} Start the FastAPI backend on <span className="font-mono">localhost:8000</span>, then retry.
+                  <div className="text-muted-foreground mt-0.5">
+                    {error} Start the FastAPI backend on localhost:8000, then retry.
                   </div>
                 </div>
               </div>
-              <button
+              <Button
+                variant="outline"
+                size="sm"
+                className="shrink-0"
                 onClick={() => fetchLoadEvaluation(fatigueState, stressState, sleepState, taskState)}
-                className="btn border border-line bg-surface hover:bg-sunken shrink-0"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> Retry
-              </button>
+                <RefreshCw className={loading ? 'animate-spin' : ''} /> Retry connection
+              </Button>
             </div>
           )}
 
           {tab === 'today' && (
-            <div className="space-y-6 animate-rise">
-              <div>
-                <div className="eyebrow mb-1">
-                  {dateLabel}
-                </div>
-                <h1 className="font-display text-[34px] sm:text-[40px] leading-[1.05] tracking-tight">
+            <div className="space-y-6">
+              <div className="pb-2">
+                <h1 className="font-display text-[34px] sm:text-[42px] leading-[1.05] tracking-[-0.025em]">
                   {hello}. Let&apos;s size today to you.
                 </h1>
-                <p className="text-[14.5px] text-muted mt-2 max-w-2xl">
-                  Describe how you feel in plain words. Interval type-2 fuzzy logic turns them into a load score and
-                  reshapes your plan so heavy work lands when you can handle it.
+                <p className="text-[15px] text-muted-foreground mt-3 max-w-[65ch]">
+                  {dateLabel}. Describe how you feel in plain words; the engine turns them into a load score and moves
+                  heavy work to when you can handle it.
                 </p>
               </div>
 
@@ -179,23 +179,20 @@ export default function Home() {
                 <div className="space-y-4 xl:sticky xl:top-10">
                   <ScorePanel apiData={apiData} loading={loading} />
                   {apiData && (
-                    <button
-                      onClick={() => setTab('inference')}
-                      className="w-full text-left text-[13px] text-muted hover:text-ink px-1"
-                    >
-                      See how this score was computed →
-                    </button>
+                    <Button variant="link" className="px-1 h-auto text-muted-foreground hover:text-foreground" onClick={() => setTab('inference')}>
+                      See how this score was computed <ArrowRight />
+                    </Button>
                   )}
                   <TrendCard checkins={planner.checkins} />
                 </div>
               </div>
 
               {planner.error && (
-                <div className="card p-4 flex items-center justify-between gap-3 text-[13.5px]">
-                  <span className="text-muted">Your tasks and history couldn&apos;t be loaded: {planner.error}</span>
-                  <button onClick={planner.retry} className="btn border border-line bg-surface hover:bg-sunken shrink-0">
-                    <RefreshCw className="w-3.5 h-3.5" /> Retry
-                  </button>
+                <div className="card p-4 flex items-center justify-between gap-3 text-sm">
+                  <span className="text-muted-foreground">Your tasks and history couldn&apos;t be loaded: {planner.error}</span>
+                  <Button variant="outline" size="sm" className="shrink-0" onClick={planner.retry}>
+                    <RefreshCw /> Retry
+                  </Button>
                 </div>
               )}
 
@@ -211,22 +208,22 @@ export default function Home() {
           )}
 
           {tab === 'inference' && (
-            <div className="animate-rise">
+            <div>
               <FOUVisualizer apiData={apiData} />
             </div>
           )}
           {tab === 'method' && (
-            <div className="animate-rise">
+            <div>
               <AcademicInspector />
             </div>
           )}
           {tab === 'library' && (
-            <div className="animate-rise">
+            <div>
               <LiveWellDatabaseViewer userId={planner.profile?.id ?? 'guest'} />
             </div>
           )}
 
-          <footer className="mt-16 pt-6 border-t border-line text-[12px] text-faint flex flex-col sm:flex-row justify-between gap-2">
+          <footer className="mt-16 pt-6 border-t text-xs text-muted-foreground flex flex-col sm:flex-row justify-between gap-2">
             <span>Fuzzy Sprint Shield · Computing with Words, IT2 fuzzy inference, Karnik-Mendel type-reduction</span>
             <span>Decision support only, not medical advice.</span>
           </footer>

@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ArrowRight, ShieldAlert, ShieldHalf, Check, Plus, Trash2, Pencil } from 'lucide-react';
-import { CRITICAL_THRESHOLD, MODERATE_THRESHOLD, formatMinutes, Tone, toneBg } from './ui';
+import React, { useId, useState } from 'react';
+import { ArrowRight, ShieldAlert, ShieldHalf, Plus, Trash2, Pencil } from 'lucide-react';
+import { CRITICAL_THRESHOLD, MODERATE_THRESHOLD, formatMinutes, Tone, ToneBadge, toneBg } from './ui';
+import { Button } from './ui/button';
+import { Checkbox } from './ui/checkbox';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 import type { LoadType, PlannerTask } from '../utils/api';
 import { splitTasks } from '../utils/plan';
 
@@ -38,7 +42,7 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
       <li key={t.id} className="px-1 py-2">
         <TaskForm
           initial={t}
-          submitLabel="Save"
+          submitLabel="Save changes"
           onCancel={() => setEditingId(null)}
           onSubmit={async (d) => {
             await onUpdate(t.id, d);
@@ -66,41 +70,44 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
       : mode === 'shielded'
       ? `Load is above ${CRITICAL_THRESHOLD}, so every deep-work task moved to tomorrow.`
       : mode === 'limited'
-      ? `Load is between ${MODERATE_THRESHOLD} and ${CRITICAL_THRESHOLD}: one short deep-work block stays, the rest move to tomorrow.`
+      ? `Load is between ${MODERATE_THRESHOLD} and ${CRITICAL_THRESHOLD}. One short deep-work block stays; the rest move to tomorrow.`
       : 'Load is low. Your full schedule stays in place.';
 
   return (
-    <div className="card">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-5 sm:px-6 pt-5 pb-4 border-b border-line">
+    <section className="card" aria-labelledby="plan-heading">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 sm:px-6 pt-5 pb-4 border-b">
         <div>
-          <h3 className="font-medium">Today&apos;s plan</h3>
-          <p className="text-[13px] text-muted mt-0.5">{summary}</p>
+          <h2 id="plan-heading" className="text-base font-semibold">
+            Today&apos;s plan
+          </h2>
+          <p className="text-sm text-muted-foreground mt-0.5 max-w-[65ch]">{summary}</p>
         </div>
         <div className="flex items-center gap-2 self-start sm:self-center">
           {mode === 'shielded' && (
-            <span className="tag bg-danger/10 text-danger">
-              <ShieldAlert className="w-3.5 h-3.5" /> Shield on
-            </span>
+            <ToneBadge tone="danger">
+              <ShieldAlert /> Shield on
+            </ToneBadge>
           )}
           {mode === 'limited' && (
-            <span className="tag bg-warn/10 text-warn">
-              <ShieldHalf className="w-3.5 h-3.5" /> Partial shield
-            </span>
+            <ToneBadge tone="warn">
+              <ShieldHalf /> Partial shield
+            </ToneBadge>
           )}
-          <button
-            className="btn-ghost !py-1.5"
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => {
               setAdding(true);
               setEditingId(null);
             }}
           >
-            <Plus className="w-4 h-4" /> Add task
-          </button>
+            <Plus /> Add task
+          </Button>
         </div>
       </div>
 
       {adding && (
-        <div className="px-4 sm:px-5 py-3 border-b border-line bg-sunken/40">
+        <div className="px-4 sm:px-5 py-4 border-b bg-sunken">
           <TaskForm
             submitLabel="Add task"
             onCancel={() => setAdding(false)}
@@ -112,7 +119,7 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 md:divide-x divide-line">
+      <div className="grid md:grid-cols-2 md:divide-x">
         <Column title="Today" meta={`${open.length} open · ${formatMinutes(sum(open))}`}>
           {loading && tasks.length === 0 ? (
             <Empty>Loading tasks…</Empty>
@@ -125,16 +132,16 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
         <Column
           title="Moved to tomorrow"
           meta={deferred.length ? `${deferred.length} · ${formatMinutes(sum(deferred))}` : 'None'}
-          className="border-t md:border-t-0 border-line"
+          className="border-t md:border-t-0"
         >
           {deferred.length === 0 ? (
-            <Empty>No tasks deferred.</Empty>
+            <Empty>Nothing deferred. Heavy work stays on today&apos;s plan.</Empty>
           ) : (
             deferred.map((t) => renderTask(t, true))
           )}
         </Column>
       </div>
-    </div>
+    </section>
   );
 };
 
@@ -151,17 +158,17 @@ const Column = ({
 }) => (
   <div className={`p-3 sm:p-4 ${className}`}>
     <div className="flex items-baseline justify-between px-2 pb-2">
-      <span className="text-[13px] font-medium">{title}</span>
-      <span className="text-[12px] text-faint num">{meta}</span>
+      <h3 className="text-sm font-medium">{title}</h3>
+      <span className="text-xs text-muted-foreground num">{meta}</span>
     </div>
-    <ul className="space-y-0.5">{children}</ul>
+    <ul className="space-y-0.5" aria-label={title}>
+      {children}
+    </ul>
   </div>
 );
 
 const Empty = ({ children }: { children: React.ReactNode }) => (
-  <li className="px-3 py-8 text-center text-[13px] text-faint border border-dashed border-line rounded-lg">
-    {children}
-  </li>
+  <li className="px-3 py-8 text-center text-sm text-muted-foreground rounded-lg bg-sunken">{children}</li>
 );
 
 const TaskRow = ({
@@ -178,50 +185,51 @@ const TaskRow = ({
   onDelete: () => void;
 }) => (
   <li
-    className={`group flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-sunken transition-colors ${
-      deferred || task.done ? 'text-muted' : ''
+    className={`group flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-sunken transition-colors duration-150 ${
+      deferred || task.done ? 'text-muted-foreground' : ''
     }`}
   >
-    <button
-      role="checkbox"
-      aria-checked={task.done}
+    <Checkbox
+      checked={task.done}
+      onCheckedChange={onToggle}
       aria-label={task.done ? `Mark "${task.title}" as not done` : `Mark "${task.title}" as done`}
-      onClick={onToggle}
-      className={`w-[18px] h-[18px] rounded-[5px] border grid place-items-center shrink-0 transition-colors ${
-        task.done ? 'bg-accent border-accent text-accent-ink' : 'border-faint/60 hover:border-accent'
-      }`}
-    >
-      {task.done && <Check className="w-3 h-3" strokeWidth={3} />}
-    </button>
+      className="size-[18px] rounded-[5px]"
+    />
     <div className="flex-1 min-w-0">
-      <div className={`text-[13.5px] truncate ${task.done ? 'line-through decoration-faint' : ''}`}>{task.title}</div>
-      <div className="flex items-center gap-2 text-[11.5px] text-faint mt-0.5">
+      <div className={`text-sm truncate ${task.done ? 'line-through decoration-faint' : ''}`}>{task.title}</div>
+      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
         <span className="flex items-center gap-1">
-          <span className={`w-1.5 h-1.5 rounded-full ${toneBg[LOAD_TONE[task.load_type]]}`} />
+          <span className={`size-1.5 rounded-full ${toneBg[LOAD_TONE[task.load_type]]}`} aria-hidden />
           {task.load_type} load
         </span>
-        <span>·</span>
+        <span aria-hidden>·</span>
         <span className="truncate">{task.category}</span>
         {deferred && (
           <>
-            <span>·</span>
+            <span aria-hidden>·</span>
             <span className="flex items-center gap-0.5 text-warn shrink-0">
-              <ArrowRight className="w-3 h-3" /> Tomorrow
+              <ArrowRight className="size-3" /> Tomorrow
             </span>
           </>
         )}
       </div>
     </div>
-    <span className="num font-mono text-[12px] text-faint shrink-0 group-hover:hidden group-focus-within:hidden">
+    <span className="num text-xs text-muted-foreground shrink-0 group-hover:hidden group-focus-within:hidden">
       {formatMinutes(task.estimated_mins)}
     </span>
-    <span className="hidden group-hover:flex group-focus-within:flex items-center gap-0.5 shrink-0">
-      <button onClick={onEdit} className="p-1.5 rounded-md text-faint hover:text-ink hover:bg-surface" aria-label={`Edit "${task.title}"`}>
-        <Pencil className="w-3.5 h-3.5" />
-      </button>
-      <button onClick={onDelete} className="p-1.5 rounded-md text-faint hover:text-danger hover:bg-surface" aria-label={`Delete "${task.title}"`}>
-        <Trash2 className="w-3.5 h-3.5" />
-      </button>
+    <span className="hidden group-hover:flex group-focus-within:flex items-center shrink-0">
+      <Button variant="ghost" size="icon-sm" onClick={onEdit} aria-label={`Edit "${task.title}"`}>
+        <Pencil />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={onDelete}
+        aria-label={`Delete "${task.title}"`}
+        className="hover:text-danger"
+      >
+        <Trash2 />
+      </Button>
     </span>
   </li>
 );
@@ -237,6 +245,7 @@ const TaskForm = ({
   onSubmit: (d: TaskDraft) => Promise<void>;
   onCancel: () => void;
 }) => {
+  const id = useId();
   const [title, setTitle] = useState(initial?.title ?? '');
   const [category, setCategory] = useState(initial?.category ?? '');
   const [load, setLoad] = useState<LoadType>(initial?.load_type ?? 'Moderate');
@@ -254,63 +263,91 @@ const TaskForm = ({
     try {
       await onSubmit({ title: title.trim(), category: category.trim() || 'General', load_type: load, estimated_mins: m });
     } catch (ex: any) {
-      setErr(ex.message || 'Could not save the task.');
+      setErr(`${ex.message || 'Could not save the task.'} Check the backend is running, then try again.`);
       setSaving(false);
     }
   };
 
-  const field = 'bg-surface border border-line rounded-lg px-2.5 py-1.5 text-[13px] focus:outline-none focus:border-accent';
-
   return (
-    <form onSubmit={submit} onKeyDown={(e) => e.key === 'Escape' && onCancel()} className="space-y-2.5">
-      <div className="flex flex-col sm:flex-row gap-2">
-        <input
-          autoFocus
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="What needs doing?"
-          aria-label="Task title"
-          className={`${field} flex-1 min-w-0`}
-        />
-        <input
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          placeholder="Category"
-          aria-label="Category"
-          className={`${field} sm:w-36`}
-        />
-      </div>
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="segmented" role="group" aria-label="Load">
-          {LOADS.map((l) => (
-            <button type="button" key={l} aria-pressed={load === l} onClick={() => setLoad(l)} className="inline-flex items-center gap-1.5">
-              <span className={`w-1.5 h-1.5 rounded-full ${toneBg[LOAD_TONE[l]]}`} />
-              {l}
-            </button>
-          ))}
+    <form
+      onSubmit={submit}
+      onKeyDown={(e) => e.key === 'Escape' && onCancel()}
+      className="space-y-3"
+      aria-label={submitLabel}
+      noValidate
+    >
+      <div className="grid sm:grid-cols-[1fr_10rem] gap-3">
+        <div className="space-y-1.5">
+          <Label htmlFor={`${id}-title`}>Task title</Label>
+          <Input
+            id={`${id}-title`}
+            autoFocus
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g. Draft the methods section"
+            aria-invalid={err === 'Give the task a name.' || undefined}
+            className="bg-card"
+          />
         </div>
-        <label className="flex items-center gap-1.5 text-[12.5px] text-muted">
-          <input
+        <div className="space-y-1.5">
+          <Label htmlFor={`${id}-category`}>Category</Label>
+          <Input
+            id={`${id}-category`}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            placeholder="General"
+            className="bg-card"
+          />
+        </div>
+      </div>
+      <div className="flex flex-wrap items-end gap-3">
+        <div className="space-y-1.5">
+          <span className="text-sm font-medium" id={`${id}-load`}>
+            Load
+          </span>
+          <div className="segmented flex" role="radiogroup" aria-labelledby={`${id}-load`}>
+            {LOADS.map((l) => (
+              <button
+                type="button"
+                role="radio"
+                key={l}
+                aria-checked={load === l}
+                onClick={() => setLoad(l)}
+                className="inline-flex items-center gap-1.5"
+              >
+                <span className={`size-1.5 rounded-full ${toneBg[LOAD_TONE[l]]}`} aria-hidden />
+                {l}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor={`${id}-mins`}>Estimated minutes</Label>
+          <Input
+            id={`${id}-mins`}
             type="number"
+            inputMode="numeric"
             min={1}
             max={1440}
             value={mins}
             onChange={(e) => setMins(e.target.value)}
-            aria-label="Estimated minutes"
-            className={`${field} w-20 num`}
+            className="w-28 num bg-card"
           />
-          min
-        </label>
-        <div className="flex items-center gap-1 ml-auto">
-          <button type="button" onClick={onCancel} className="btn-ghost">
+        </div>
+        <div className="flex items-center gap-2 ml-auto">
+          <Button type="button" variant="ghost" onClick={onCancel}>
             Cancel
-          </button>
-          <button type="submit" disabled={saving} className="btn-primary">
+          </Button>
+          <Button type="submit" disabled={saving}>
             {submitLabel}
-          </button>
+          </Button>
         </div>
       </div>
-      {err && <p className="text-[12.5px] text-danger">{err}</p>}
+      {err && (
+        <p role="alert" className="text-sm text-danger">
+          {err}
+        </p>
+      )}
     </form>
   );
 };

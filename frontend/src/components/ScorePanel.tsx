@@ -31,53 +31,55 @@ export const ScorePanel: React.FC<ScorePanelProps> = ({ apiData, loading }) => {
   const tone = scoreTone(score);
 
   return (
-    <div className="card p-5 sm:p-6">
-      <div className="flex items-center justify-between">
-        <div className="eyebrow">Cognitive load score</div>
+    <section className="card p-5 sm:p-6" aria-labelledby="score-heading" aria-busy={loading}>
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="score-heading" className="text-sm font-medium text-muted-foreground">
+          Your load right now
+        </h2>
         {loading && (
-          <span className="flex items-center gap-1 text-[12px] text-faint">
-            <Loader2 className="w-3 h-3 animate-spin" /> Updating
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground" role="status">
+            <Loader2 className="size-3.5 animate-spin" /> Updating
           </span>
         )}
       </div>
 
-      <div className="flex items-end gap-2 mt-2">
+      <div className="flex items-baseline gap-2 mt-3" aria-live="polite">
         <span
-          className={`font-display num text-[64px] leading-[0.9] tracking-tight transition-colors ${
+          className={`font-display num text-[60px] leading-none tracking-[-0.03em] transition-colors duration-300 ${
             score === null ? 'text-faint' : toneText[tone]
           }`}
         >
-          {score === null ? '—' : score.toFixed(1)}
+          {score === null ? '–' : score.toFixed(1)}
         </span>
-        <span className="text-sm text-faint mb-1.5">/ 100</span>
+        <span className="text-sm text-muted-foreground">
+          / 100 · {score === null ? 'no reading yet' : scoreLabel(score).toLowerCase()}
+        </span>
       </div>
-      <div className="mt-1.5 text-sm font-medium">{score === null ? 'No reading yet' : scoreLabel(score)}</div>
 
-      {/* Scale */}
+      {/* Scale: zones, the centroid interval [yl, yr] and the crisp score */}
       <div className="mt-6" aria-hidden>
-        <div className="relative h-2.5 rounded-full overflow-hidden flex">
-          <div className="bg-ok/20" style={{ width: pct(MODERATE_THRESHOLD) }} />
-          <div className="bg-warn/20" style={{ width: pct(CRITICAL_THRESHOLD - MODERATE_THRESHOLD) }} />
-          <div className="bg-danger/20 flex-1" />
+        <div className="relative h-2 rounded-full overflow-hidden flex">
+          <div className="bg-ok/25" style={{ width: pct(MODERATE_THRESHOLD) }} />
+          <div className="bg-warn/25" style={{ width: pct(CRITICAL_THRESHOLD - MODERATE_THRESHOLD) }} />
+          <div className="bg-danger/25 flex-1" />
           {apiData && (
             <div
-              className="absolute inset-y-0 bg-ink/25 transition-all duration-500"
+              className="absolute inset-y-0 bg-foreground/30 transition-[left,width] duration-500 ease-out-expo"
               style={{ left: pct(apiData.y_left), width: pct(apiData.y_right - apiData.y_left) }}
-              title="Centroid interval [y_l, y_r]"
             />
           )}
         </div>
         <div className="relative h-0">
           {score !== null && (
             <div
-              className="absolute -top-[14px] -translate-x-1/2 transition-all duration-500"
+              className="absolute -top-[13px] -translate-x-1/2 transition-[left] duration-500 ease-out-expo"
               style={{ left: pct(score) }}
             >
-              <div className={`w-[3px] h-[18px] rounded-full ${toneBg[tone]} ring-2 ring-surface`} />
+              <div className={`w-[3px] h-4 rounded-full ${toneBg[tone]} ring-2 ring-card`} />
             </div>
           )}
         </div>
-        <div className="relative mt-2 h-4 text-[10.5px] text-faint num">
+        <div className="relative mt-2 h-4 text-xs text-muted-foreground num">
           {[0, MODERATE_THRESHOLD, CRITICAL_THRESHOLD, 100].map((t) => (
             <span
               key={t}
@@ -93,26 +95,26 @@ export const ScorePanel: React.FC<ScorePanelProps> = ({ apiData, loading }) => {
       {apiData && <Why data={apiData} />}
 
       {apiData?.recommended_action && (
-        <p className="mt-4 text-[13.5px] leading-relaxed text-muted border-l-2 border-line pl-3">
+        <p className="mt-3 text-sm font-medium">
           {ACTION_TEXT[apiData.recommended_action] ?? apiData.recommended_action.replace(/_/g, ' ')}
         </p>
       )}
 
       {apiData && (
-        <dl className="mt-5 grid grid-cols-3 gap-px rounded-lg overflow-hidden bg-line border border-line">
-          <Stat label="Interval" value={`${apiData.y_left.toFixed(1)}–${apiData.y_right.toFixed(1)}`} />
+        <dl className="mt-5 pt-4 border-t grid grid-cols-3 gap-4">
+          <Stat label="Range" value={`${apiData.y_left.toFixed(0)}–${apiData.y_right.toFixed(0)}`} />
           <Stat label="KM iterations" value={String(apiData.km_iterations)} />
-          <Stat label="Rules fired" value={`${apiData.triggered_rules_count}/${apiData.rule_firings.length}`} />
+          <Stat label="Rules fired" value={`${apiData.triggered_rules_count} of ${apiData.rule_firings.length}`} />
         </dl>
       )}
-    </div>
+    </section>
   );
 };
 
 const Stat = ({ label, value }: { label: string; value: string }) => (
-  <div className="bg-surface px-3 py-2.5">
-    <dt className="text-[11px] text-faint">{label}</dt>
-    <dd className="num font-mono text-[13px] mt-0.5">{value}</dd>
+  <div>
+    <dt className="text-xs text-muted-foreground">{label}</dt>
+    <dd className="num text-[15px] font-medium mt-0.5">{value}</dd>
   </div>
 );
 
@@ -120,8 +122,8 @@ const Why = ({ data }: { data: EvaluateLoadResponse }) => {
   const { reason, certainty } = explainScore(data);
   return (
     <div className="mt-5 space-y-1">
-      <p className="text-[13.5px] leading-relaxed">{reason}</p>
-      <p className="text-[12.5px] text-muted leading-relaxed">{certainty}</p>
+      <p className="text-sm leading-relaxed">{reason}</p>
+      <p className="text-sm text-muted-foreground leading-relaxed">{certainty}</p>
     </div>
   );
 };

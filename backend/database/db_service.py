@@ -3,7 +3,8 @@ import sqlite3
 import json
 from typing import Dict, Any, List, Optional
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "livewell.db")
+# FSS_LIVEWELL_DB lets end-to-end tests point at a throwaway copy of the knowledge base.
+DB_PATH = os.environ.get("FSS_LIVEWELL_DB", os.path.join(os.path.dirname(__file__), "livewell.db"))
 
 
 def get_db():

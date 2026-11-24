@@ -15,6 +15,8 @@ import {
 } from 'recharts';
 import { EvaluateLoadResponse, RuleFiringDetail } from '../utils/api';
 import { SectionHeader, ToneTag, useTokenColors } from './ui';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 
 interface FOUVisualizerProps {
   apiData: EvaluateLoadResponse | null;
@@ -39,8 +41,8 @@ export const FOUVisualizer: React.FC<FOUVisualizerProps> = ({ apiData }) => {
   if (!apiData || !colors) {
     return (
       <div>
-        <SectionHeader eyebrow="Inference" title="Footprint of uncertainty" />
-        <div className="card p-10 text-center text-sm text-muted">Run a check-in to see the inference trace.</div>
+        <SectionHeader title="Footprint of uncertainty" />
+        <div className="card p-10 text-center text-sm text-muted-foreground">Run a check-in to see the inference trace.</div>
       </div>
     );
   }
@@ -53,12 +55,11 @@ export const FOUVisualizer: React.FC<FOUVisualizerProps> = ({ apiData }) => {
   return (
     <div className="space-y-6">
       <SectionHeader
-        eyebrow="Inference"
         title="Footprint of uncertainty"
         description="Aggregated upper and lower membership functions, type-reduced with Karnik-Mendel to the centroid interval [yₗ, yᵣ]. The crisp score is its midpoint."
       />
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-px rounded-card overflow-hidden bg-line border border-line">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-px rounded-card overflow-hidden bg-border border">
         <Metric label="Left switch point yₗ" value={y_left.toFixed(2)} sub={`${apiData.km_iterations_left} KM iterations`} />
         <Metric label="Right switch point yᵣ" value={y_right.toFixed(2)} sub={`${apiData.km_iterations_right} KM iterations`} />
         <Metric label="Crisp score (yₗ + yᵣ) / 2" value={y.toFixed(2)} emphasis />
@@ -70,7 +71,7 @@ export const FOUVisualizer: React.FC<FOUVisualizerProps> = ({ apiData }) => {
       </div>
 
       <div className="card p-4 sm:p-5">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 mb-3 text-[12px] text-muted">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 mb-3 text-xs text-muted-foreground">
           <Legend swatch={<span className="w-3 h-0.5 rounded" style={{ background: colors.accent }} />}>Upper MF</Legend>
           <Legend swatch={<span className="w-3 h-0.5 rounded" style={{ background: colors.lmf }} />}>Lower MF</Legend>
           <Legend swatch={<span className="w-3 h-2.5 rounded-sm" style={{ background: colors.accent, opacity: 0.18 }} />}>
@@ -90,7 +91,7 @@ export const FOUVisualizer: React.FC<FOUVisualizerProps> = ({ apiData }) => {
                 domain={[0, 100]}
                 ticks={[0, 20, 40, 60, 80, 100]}
                 stroke={colors.faint}
-                tick={{ fontSize: 11, fill: colors.faint }}
+                tick={{ fontSize: 12, fill: colors.faint }}
                 tickLine={false}
                 axisLine={{ stroke: colors.line }}
               />
@@ -98,7 +99,7 @@ export const FOUVisualizer: React.FC<FOUVisualizerProps> = ({ apiData }) => {
                 domain={[0, 1]}
                 ticks={[0, 0.25, 0.5, 0.75, 1]}
                 stroke={colors.faint}
-                tick={{ fontSize: 11, fill: colors.faint }}
+                tick={{ fontSize: 12, fill: colors.faint }}
                 tickLine={false}
                 axisLine={false}
               />
@@ -133,19 +134,19 @@ export const FOUVisualizer: React.FC<FOUVisualizerProps> = ({ apiData }) => {
                 x={y_left}
                 stroke={colors.muted}
                 strokeDasharray="3 3"
-                label={{ value: 'yₗ', fill: colors.muted, fontSize: 11, position: 'top' }}
+                label={{ value: 'yₗ', fill: colors.muted, fontSize: 12, position: 'top' }}
               />
               <ReferenceLine
                 x={y_right}
                 stroke={colors.muted}
                 strokeDasharray="3 3"
-                label={{ value: 'yᵣ', fill: colors.muted, fontSize: 11, position: 'top' }}
+                label={{ value: 'yᵣ', fill: colors.muted, fontSize: 12, position: 'top' }}
               />
               <ReferenceLine
                 x={y}
                 stroke={colors.ink}
                 strokeWidth={1.5}
-                label={{ value: y.toFixed(1), fill: colors.ink, fontSize: 11, fontWeight: 600, position: 'top' }}
+                label={{ value: y.toFixed(1), fill: colors.ink, fontSize: 12, fontWeight: 600, position: 'top' }}
               />
             </ComposedChart>
           </ResponsiveContainer>
@@ -153,22 +154,28 @@ export const FOUVisualizer: React.FC<FOUVisualizerProps> = ({ apiData }) => {
       </div>
 
       <div className="card">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-5 pt-4 pb-3 border-b border-line">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-5 pt-4 pb-3 border-b">
           <div>
-            <h3 className="font-medium">Rule firings</h3>
-            <p className="text-[13px] text-muted mt-0.5">
+            <h2 className="text-base font-semibold">Rule firings</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">
               Firing interval [lower, upper] for each rule, strongest first.
             </p>
           </div>
-          <button onClick={() => setShowInactive((s) => !s)} className="btn-ghost self-start sm:self-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowInactive((s) => !s)}
+            aria-pressed={showInactive}
+            className="self-start sm:self-auto"
+          >
             {showInactive ? 'Hide inactive' : `Show ${inactiveCount} inactive`}
-          </button>
+          </Button>
         </div>
-        <ul className="divide-y divide-line">
+        <ul className="divide-y divide-border">
           {visible.map((r) => (
             <RuleRow key={r.rule_id} rule={r} accent={colors.accent} />
           ))}
-          {visible.length === 0 && <li className="px-5 py-8 text-center text-sm text-faint">No rules fired.</li>}
+          {visible.length === 0 && <li className="px-5 py-8 text-center text-sm text-muted-foreground">No rules fired for this combination.</li>}
         </ul>
       </div>
     </div>
@@ -177,11 +184,11 @@ export const FOUVisualizer: React.FC<FOUVisualizerProps> = ({ apiData }) => {
 
 const Metric = ({ label, value, sub, emphasis }: { label: string; value: string; sub?: string; emphasis?: boolean }) => (
   <div className="bg-surface px-4 py-3.5">
-    <div className="text-[11.5px] text-faint">{label}</div>
-    <div className={`num mt-1 ${emphasis ? 'font-display text-[26px] leading-none' : 'font-mono text-[18px]'}`}>
+    <div className="text-xs text-muted-foreground">{label}</div>
+    <div className={`num mt-1 ${emphasis ? 'font-display text-[28px] leading-none' : 'text-xl font-medium'}`}>
       {value}
     </div>
-    {sub && <div className="text-[11.5px] text-muted mt-1">{sub}</div>}
+    {sub && <div className="text-xs text-muted-foreground mt-1">{sub}</div>}
   </div>
 );
 
@@ -197,7 +204,7 @@ const Condition = ({ text }: { text: string }) => (
   <>
     {text.split(/\b(AND|OR|IF|THEN)\b/).map((part, i) =>
       /^(AND|OR|IF|THEN)$/.test(part) ? (
-        <span key={i} className="text-faint text-[11px] font-mono tracking-wide">
+        <span key={i} className="text-muted-foreground text-xs font-medium">
           {` ${part} `}
         </span>
       ) : (
@@ -212,15 +219,19 @@ const RuleRow = ({ rule, accent }: { rule: RuleFiringDetail; accent: string }) =
   return (
     <li className={`px-5 py-3.5 grid md:grid-cols-[52px_1fr_200px] gap-x-4 gap-y-2 ${active ? '' : 'opacity-55'}`}>
       <div className="flex md:block items-center gap-2">
-        <span className="font-mono text-[13px] font-medium">R{rule.rule_id}</span>
-        {rule.is_top_rule && <span className="md:block md:mt-1 tag bg-ink text-bg !text-[10px]">Top</span>}
+        <span className="text-sm font-semibold num">R{rule.rule_id}</span>
+        {rule.is_top_rule && (
+          <Badge className="md:mt-1 rounded-md" title="Strongest firing rule">
+            Top
+          </Badge>
+        )}
       </div>
       <div className="min-w-0">
-        <div className="text-[13.5px] leading-snug">
-          <Condition text={rule.rule_text} /> <span className="text-faint">→</span>{' '}
+        <div className="text-sm leading-snug">
+          <Condition text={rule.rule_text} /> <span className="text-muted-foreground" aria-label="then">→</span>{' '}
           <ToneTag word={rule.consequent} />
         </div>
-        <p className="text-[12.5px] text-muted mt-1 leading-relaxed">{rule.justification}</p>
+        <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{rule.justification}</p>
       </div>
       <div className="md:pt-0.5">
         <div className="relative h-1.5 rounded-full bg-sunken">
@@ -238,7 +249,7 @@ const RuleRow = ({ rule, accent }: { rule: RuleFiringDetail; accent: string }) =
             style={{ width: `${rule.f_lower * 100}%`, background: accent }}
           />
         </div>
-        <div className="flex justify-between mt-1.5 font-mono text-[11px] text-faint num">
+        <div className="flex justify-between mt-1.5 text-xs text-muted-foreground num" aria-label={`Firing interval ${rule.f_lower.toFixed(2)} to ${rule.f_upper.toFixed(2)}`}>
           <span>{rule.f_lower.toFixed(2)}</span>
           <span>{rule.f_upper.toFixed(2)}</span>
         </div>

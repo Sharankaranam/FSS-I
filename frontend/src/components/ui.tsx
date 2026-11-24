@@ -2,6 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { cn } from '../lib/utils';
 
 import { CRITICAL_THRESHOLD, MODERATE_THRESHOLD } from '../utils/plan';
 export { CRITICAL_THRESHOLD, MODERATE_THRESHOLD };
@@ -44,8 +47,19 @@ export function wordTone(word: string): Tone {
   return 'ok';
 }
 
+/** Watermelon Badge tinted by load/risk tone. */
+export const ToneBadge: React.FC<{ tone: Tone; className?: string; children: React.ReactNode }> = ({
+  tone,
+  className,
+  children,
+}) => (
+  <Badge variant="outline" className={cn('border-transparent rounded-md font-medium', toneSoft[tone], className)}>
+    {children}
+  </Badge>
+);
+
 export const ToneTag: React.FC<{ word: string; children?: React.ReactNode }> = ({ word, children }) => (
-  <span className={`tag ${toneSoft[wordTone(word)]}`}>{children ?? word}</span>
+  <ToneBadge tone={wordTone(word)}>{children ?? word}</ToneBadge>
 );
 
 /** Reads token colors from CSS so canvas/SVG libraries (Recharts) follow the theme. */
@@ -53,18 +67,18 @@ export function useTokenColors() {
   const read = () => {
     if (typeof window === 'undefined') return null;
     const s = getComputedStyle(document.documentElement);
-    const c = (n: string) => `rgb(${s.getPropertyValue(`--${n}`).trim().split(' ').join(',')})`;
+    const c = (n: string) => `oklch(${s.getPropertyValue(`--${n}`).trim()})`;
     return {
-      accent: c('accent'),
+      accent: c('primary'),
       lmf: c('lmf'),
       ok: c('ok'),
       warn: c('warn'),
       danger: c('danger'),
-      line: c('line'),
-      muted: c('muted'),
+      line: c('border'),
+      muted: c('muted-foreground'),
       faint: c('faint'),
-      surface: c('surface'),
-      ink: c('ink'),
+      surface: c('card'),
+      ink: c('foreground'),
     };
   };
   const [colors, setColors] = useState(read);
@@ -89,28 +103,29 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
     } catch {}
   };
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="icon-sm"
       onClick={toggle}
-      className={`btn-ghost !px-2 ${className}`}
+      className={cn('text-muted-foreground', className)}
       aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}
       title={dark ? 'Light theme' : 'Dark theme'}
     >
-      {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-    </button>
+      {dark ? <Sun /> : <Moon />}
+    </Button>
   );
 };
 
+/** Page-level heading for each view. Renders the view's h1; no kicker label above it. */
 export const SectionHeader: React.FC<{
-  eyebrow?: string;
   title: string;
   description?: string;
   right?: React.ReactNode;
-}> = ({ eyebrow, title, description, right }) => (
-  <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5">
+}> = ({ title, description, right }) => (
+  <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
     <div>
-      {eyebrow && <div className="eyebrow mb-1">{eyebrow}</div>}
-      <h2 className="font-display text-[26px] leading-tight tracking-tight">{title}</h2>
-      {description && <p className="text-sm text-muted mt-1 max-w-2xl">{description}</p>}
+      <h1 className="font-display text-[32px] leading-[1.1] tracking-[-0.02em]">{title}</h1>
+      {description && <p className="text-[15px] text-muted-foreground mt-2 max-w-[65ch]">{description}</p>}
     </div>
     {right}
   </div>

@@ -50,3 +50,9 @@ Thumbs.db
 
 # Per-user planner data (profiles, tasks, check-ins)
 backend/database/planner.db
+
+# Playwright
+frontend/.next-e2e/
+frontend/test-results/
+frontend/playwright-report/
+frontend/e2e/.tmp/

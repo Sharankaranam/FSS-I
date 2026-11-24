@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-const token = (name) => `rgb(var(--${name}) / <alpha-value>)`;
+// Colors are OKLCH triplets ("L C H") defined in globals.css, so Tailwind can add alpha (bg-primary/10).
+const token = (name) => `oklch(var(--${name}) / <alpha-value>)`;
 
 module.exports = {
   darkMode: 'class',
@@ -11,40 +12,47 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        bg: token('bg'),
-        surface: token('surface'),
+        // shadcn / Watermelon UI semantic names
+        background: token('background'),
+        foreground: token('foreground'),
+        card: { DEFAULT: token('card'), foreground: token('foreground') },
+        popover: { DEFAULT: token('card'), foreground: token('foreground') },
+        primary: { DEFAULT: token('primary'), foreground: token('primary-foreground') },
+        secondary: { DEFAULT: token('muted'), foreground: token('foreground') },
+        muted: { DEFAULT: token('muted'), foreground: token('muted-foreground') },
+        accent: { DEFAULT: token('muted'), foreground: token('foreground') },
+        destructive: { DEFAULT: token('danger'), foreground: token('primary-foreground') },
+        border: token('border'),
+        input: token('border'),
+        ring: token('primary'),
+        // App-specific names
+        surface: token('card'),
         sunken: token('sunken'),
-        line: token('line'),
-        ink: token('ink'),
-        muted: token('muted'),
         faint: token('faint'),
-        accent: token('accent'),
-        'accent-ink': token('accent-ink'),
         ok: token('ok'),
         warn: token('warn'),
         danger: token('danger'),
         lmf: token('lmf'),
       },
+      borderColor: { DEFAULT: token('border') },
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
         display: ['var(--font-display)', 'Georgia', 'serif'],
         mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
+      fontSize: {
+        // 12px floor: nothing on screen goes below this
+        xs: ['0.75rem', { lineHeight: '1.1rem' }],
+      },
       borderRadius: {
         card: '14px',
       },
       boxShadow: {
-        card: '0 1px 0 rgb(var(--line) / 0.6), 0 1px 3px rgb(0 0 0 / 0.04)',
-        pop: '0 8px 30px rgb(0 0 0 / 0.12)',
+        xs: '0 1px 2px oklch(0.2 0.02 175 / 0.06)',
+        pop: '0 12px 32px -8px oklch(0.2 0.02 175 / 0.22), 0 2px 6px oklch(0.2 0.02 175 / 0.08)',
       },
-      keyframes: {
-        rise: {
-          from: { opacity: '0', transform: 'translateY(4px)' },
-          to: { opacity: '1', transform: 'translateY(0)' },
-        },
-      },
-      animation: {
-        rise: 'rise 220ms ease-out both',
+      transitionTimingFunction: {
+        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },

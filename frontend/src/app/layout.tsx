@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google';
+import { Instrument_Sans, Fraunces, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-const sans = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
+const sans = Instrument_Sans({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const display = Fraunces({
   subsets: ['latin'],
   variable: '--font-display',

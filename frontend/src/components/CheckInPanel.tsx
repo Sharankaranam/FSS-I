@@ -3,6 +3,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BatteryMedium, Flame, Moon, BrainCircuit } from 'lucide-react';
 import { Tone, toneBg } from './ui';
+import { Switch } from './ui/switch';
+import { Label } from './ui/label';
 
 type Numeric = { fatigue_num?: number; stress_num?: number; sleep_num?: number; task_num?: number };
 
@@ -148,21 +150,22 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({
   );
 
   return (
-    <div className="card">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 sm:px-6 pt-5 pb-4 border-b border-line">
+    <section className="card" aria-labelledby="checkin-heading">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 sm:px-6 pt-5 pb-4 border-b">
         <div>
-          <h3 className="font-medium">How are you right now?</h3>
-          <p className="text-[13px] text-muted mt-0.5">Describe your state in words. The engine updates as you choose.</p>
+          <h2 id="checkin-heading" className="text-base font-semibold">How are you right now?</h2>
+          <p className="text-sm text-muted-foreground mt-0.5">Pick the words that fit. The score updates as you go.</p>
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
           {PRESETS.map((p) => (
             <button
               key={p.label}
               onClick={() => applyPreset(p.values)}
-              className={`px-2.5 py-1 rounded-full text-[12px] border transition-colors ${
+              aria-pressed={activePreset === p}
+              className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-200 ${
                 activePreset === p
-                  ? 'border-ink bg-ink text-bg'
-                  : 'border-line text-muted hover:text-ink hover:border-faint'
+                  ? 'border-foreground bg-foreground text-background'
+                  : 'text-muted-foreground hover:text-foreground hover:border-faint'
               }`}
             >
               {p.label}
@@ -171,7 +174,7 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({
         </div>
       </div>
 
-      <div className="divide-y divide-line">
+      <div className="divide-y divide-border">
         {DRIVERS.map((d) => {
           const Icon = d.icon;
           const selIdx = Math.max(0, d.options.findIndex((o) => o.id === sel[d.key]));
@@ -179,10 +182,10 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({
           return (
             <div key={d.key} className="px-5 sm:px-6 py-4 grid sm:grid-cols-[180px_1fr] gap-3 sm:gap-6">
               <div className="flex items-start gap-2.5">
-                <Icon className="w-4 h-4 mt-0.5 text-muted shrink-0" />
+                <Icon className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
                 <div>
-                  <div className="text-[14px] font-medium">{d.label}</div>
-                  <div className="text-[12px] text-faint">{d.question}</div>
+                  <h3 className="text-sm font-medium">{d.label}</h3>
+                  <div className="text-xs text-muted-foreground">{d.question}</div>
                 </div>
               </div>
 
@@ -204,13 +207,13 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({
                     </button>
                   ))}
                 </div>
-                <p className="mt-2 text-[13px] text-muted">
+                <p className="mt-2 text-sm text-muted-foreground max-w-[65ch]">
                   {current.desc}{' '}
                   <span className="text-faint">{current.justification}</span>
                 </p>
 
                 {numericMode && (
-                  <div className="mt-3 flex items-center gap-3 animate-rise">
+                  <div className="mt-3 flex items-center gap-3">
                     <input
                       type="range"
                       min={0}
@@ -221,7 +224,7 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({
                       style={{ ['--pct' as string]: `${nums[d.key]}%` }}
                       aria-label={`${d.sliderLabel} (0–100)`}
                     />
-                    <span className="num font-mono text-[12px] w-8 text-right">{nums[d.key]}</span>
+                    <span className="num text-sm w-8 text-right">{nums[d.key]}</span>
                   </div>
                 )}
               </div>
@@ -230,26 +233,17 @@ export const CheckInPanel: React.FC<CheckInPanelProps> = ({
         })}
       </div>
 
-      <div className="px-5 sm:px-6 py-3 border-t border-line flex items-center justify-between gap-3">
-        <label className="flex items-center gap-2.5 text-[13px] text-muted cursor-pointer select-none">
-          <button
-            role="switch"
-            aria-checked={numericMode}
-            onClick={toggleNumeric}
-            className={`relative w-8 h-[18px] rounded-full transition-colors ${numericMode ? 'bg-accent' : 'bg-line'}`}
-          >
-            <span
-              className={`absolute top-[2px] left-[2px] w-[14px] h-[14px] rounded-full bg-surface shadow transition-transform ${
-                numericMode ? 'translate-x-[14px]' : ''
-              }`}
-            />
-          </button>
-          Fine-tune with numeric sliders (0–100)
-        </label>
-        <span className="hidden sm:block text-[12px] text-faint">
-          {numericMode ? 'Crisp inputs override word centroids' : 'Pure linguistic mode'}
+      <div className="px-5 sm:px-6 py-3 border-t flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <Switch id="numeric-mode" checked={numericMode} onCheckedChange={toggleNumeric} />
+          <Label htmlFor="numeric-mode" className="font-normal text-muted-foreground cursor-pointer">
+            Fine-tune with sliders (0–100)
+          </Label>
+        </div>
+        <span className="hidden sm:block text-xs text-muted-foreground">
+          {numericMode ? 'Exact values replace the words' : 'Words only'}
         </span>
       </div>
-    </div>
+    </section>
   );
 };
